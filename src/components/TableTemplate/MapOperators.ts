@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GridColDef, getGridNumericOperators, getGridStringOperators } from '@mui/x-data-grid'
 import { EOperator } from './type'
 
 const StringMap = {
   contains: EOperator.Contains,
-  equals: EOperator.Equal,
+  equals: EOperator.Equal
 }
 
 const NumericMap = {
@@ -12,7 +13,7 @@ const NumericMap = {
   '>': EOperator.GreaterThan,
   '>=': EOperator.GreaterThanOrEqual,
   '<': EOperator.LessThan,
-  '<=': EOperator.LessThanOrEqual,
+  '<=': EOperator.LessThanOrEqual
 }
 
 export const getCustomGridNumericOperators = () => {

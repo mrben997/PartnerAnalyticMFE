@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dictionary } from '@reduxjs/toolkit'
 import { ITabAvancedModelMetrics, Order } from './type'
 import { FormatNumber, FormatterUSD } from '../../core/helper'
@@ -20,7 +21,7 @@ export const getComparator: TGetComparator = (order, orderBy) => {
 export const TabAvancedModelMetrics: ITabAvancedModelMetrics[] = [
   { Name: 'Views', Value: 'views', format: (value) => FormatNumber.format(value) },
   { Name: 'Watch time (hours)', Value: 'estimatedMinutesWatched', format: (value) => FormatNumber.format(value) },
-  { Name: 'Estimated partner revenue', Value: 'estimatedRevenue', format: (value) => FormatterUSD().format(value) },
+  { Name: 'Estimated partner revenue', Value: 'estimatedRevenue', format: (value) => FormatterUSD().format(value) }
 ]
 
 const colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe']

@@ -32,12 +32,12 @@ const EnhancedTableHead: FC<IProps> = (props) => {
           <TableSortLabel
             active={orderBy === item.Name}
             direction={orderBy === item.Name ? order : 'asc'}
-            onClick={createSortHandler(item.Name as any)}
+            onClick={createSortHandler(item.Name)}
             sx={{ fontWeight: 'bold' }}
           >
             {getName(item)}
             {orderBy === item.Name ? (
-              <Box component="span" sx={visuallyHidden}>
+              <Box component='span' sx={visuallyHidden}>
                 {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
               </Box>
             ) : null}
@@ -49,9 +49,9 @@ const EnhancedTableHead: FC<IProps> = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell padding='checkbox'>
           <Checkbox
-            color="primary"
+            color='primary'
             indeterminate={numSelected > 0 && numSelected < rowCount}
             // checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}

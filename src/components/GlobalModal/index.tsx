@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Component } from 'react'
 import { Modal, SxProps } from '@mui/material'
 import { OptionModal } from './type'
@@ -10,7 +11,8 @@ interface GlobalModalState {
   ContenModal?: React.JSXElementConstructor<any>
   sx?: SxProps
 }
-type TProps = React.PropsWithChildren<{}>
+interface IProps {}
+type TProps = React.PropsWithChildren<IProps>
 export default class GlobalModal extends Component<TProps, GlobalModalState> implements IGlobalModalContext {
   constructor(props: any) {
     super(props)
@@ -23,8 +25,9 @@ export default class GlobalModal extends Component<TProps, GlobalModalState> imp
     this.setState({ ContenModal: undefined })
   }
   GenerateContent = (): JSX.Element => {
-    const Content = this.state.ContenModal ?? (() => <></>)
+    const Content = this.state.ContenModal ?? React.Fragment
     const Temp = React.forwardRef(() => <Content />)
+    Temp.displayName = 'GlobalContentModal'
     return <Temp />
   }
   render() {

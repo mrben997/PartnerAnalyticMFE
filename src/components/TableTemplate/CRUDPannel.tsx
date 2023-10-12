@@ -13,9 +13,9 @@ interface CRUDPannelProps {
 }
 
 export class CRUDPannel extends Component<CRUDPannelProps> {
-  constructor(props: any) {
-    super(props)
-  }
+  // constructor(props: CRUDPannelProps) {
+  //   super(props)
+  // }
 
   IsMultiple = (state: ITableTemplateState) => {
     return (state.selectionIds?.length ?? 0) > 1
@@ -32,7 +32,7 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
           onClick={that.onEdit}
           key={'Edit'}
           sx={{ width: 100, height: 30 }}
-          color="info"
+          color='info'
           disabled={that.IsMultiple(state)}
           startIcon={<Edit />}
         >
@@ -41,7 +41,7 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
       )
     if (that.props.Delete)
       yield (
-        <Button onClick={that.onDelete} key={'Delete'} sx={{ width: 100, height: 30 }} color="error" startIcon={<Delete />}>
+        <Button onClick={that.onDelete} key={'Delete'} sx={{ width: 100, height: 30 }} color='error' startIcon={<Delete />}>
           Delete
         </Button>
       )
@@ -51,7 +51,7 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
           onClick={that.onDetails}
           key={'Details'}
           sx={{ width: 100, height: 30 }}
-          color="inherit"
+          color='inherit'
           disabled={that.IsMultiple(state)}
           startIcon={<AppRegistrationIcon />}
         >
@@ -63,28 +63,28 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
   onCreate = () => {
     this.ModalContext?.ShowModal({
       ContenModal: () => this.props.Create || <EmptyDiv />,
-      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' }
     })
   }
 
   onEdit = () => {
     this.ModalContext?.ShowModal({
       ContenModal: () => this.props.Edit || <EmptyDiv />,
-      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' }
     })
   }
 
   onDelete = () => {
     this.ModalContext?.ShowModal({
       ContenModal: () => this.props.Delete || <EmptyDiv />,
-      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' }
     })
   }
 
   onDetails = () => {
     this.ModalContext?.ShowModal({
       ContenModal: () => this.props.Details || <EmptyDiv />,
-      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+      sx: { display: 'flex', justifyContent: 'center', alignItems: 'center' }
     })
   }
 
@@ -99,7 +99,13 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
               {({ state }) => {
                 return (
                   <Box
-                    sx={{ height: 50, justifyContent: 'space-between', display: 'flex', padding: '10px', position: 'relative' }}
+                    sx={{
+                      height: 50,
+                      justifyContent: 'space-between',
+                      display: 'flex',
+                      padding: '10px',
+                      position: 'relative'
+                    }}
                   >
                     <Box sx={{ justifyContent: 'space-between', display: 'flex', flex: 1, alignItems: 'center' }}>
                       <Box></Box>
@@ -108,7 +114,7 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
                           onClick={this.onCreate}
                           key={'Create'}
                           sx={{ height: 30 }}
-                          variant="contained"
+                          variant='contained'
                           startIcon={<Add />}
                         >
                           Create
@@ -126,7 +132,7 @@ export class CRUDPannel extends Component<CRUDPannelProps> {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        background: '#e0e0e0',
+                        background: '#e0e0e0'
                       }}
                     >
                       {Array.from(this.getButtons(this, state))}

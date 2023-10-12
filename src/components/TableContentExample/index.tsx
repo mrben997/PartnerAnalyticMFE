@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Component } from 'react'
 import { Dictionary } from '@reduxjs/toolkit'
-import { Box, Typography, Paper, Checkbox } from '@mui/material'
-import { Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material'
+import { Box, Typography, Paper, Checkbox, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import { Order, ResponseQuery, ResponseQuerys } from './type'
 import { TabAvancedModelMetrics, getComparator, stableSort } from './helper'
@@ -38,7 +38,7 @@ export default class TableContentExample extends Component<TableContentProps, Ta
       order: 'desc',
       page: 0,
       dense: false,
-      rowsPerPage: 50,
+      rowsPerPage: 50
     }
   }
 
@@ -98,10 +98,10 @@ export default class TableContentExample extends Component<TableContentProps, Ta
     const labelId = `enhanced-table-checkbox-${0}`
 
     return (
-      <TableRow hover role="checkbox" tabIndex={-1} key={this.getRowId(row)}>
-        <TableCell padding="checkbox">
+      <TableRow hover role='checkbox' tabIndex={-1} key={this.getRowId(row)}>
+        <TableCell padding='checkbox'>
           <Checkbox
-            color="primary"
+            color='primary'
             inputProps={{ 'aria-labelledby': labelId }}
             checkedIcon={<CheckBoxIcon sx={{ color: 'black' }} />}
             onChange={(e) => this.props.SetShowTotal(e.currentTarget.checked)}
@@ -134,14 +134,14 @@ export default class TableContentExample extends Component<TableContentProps, Ta
         <TableRow
           hover
           onClick={(event) => this.handleClick(event, this.getRowId(row))}
-          role="checkbox"
+          role='checkbox'
           aria-checked={isItemSelected}
           tabIndex={-1}
           key={this.getRowId(row)}
           selected={isItemSelected}
         >
           <TableCell
-            padding="checkbox"
+            padding='checkbox'
             // sx={this.props.HasSelect || indexColor < 0 ? {} : { borderLeft: '2px solid ' + color }}
             sx={this.props.HasSelect || indexColor < 0 ? {} : { borderLeft: '2px solid ' + 'red' }}
           >
@@ -186,7 +186,7 @@ export default class TableContentExample extends Component<TableContentProps, Ta
         <Paper sx={{ width: '100%', mb: 2 }}>
           <EnhancedTableToolbar numSelected={this.getChartLines().length} />
           <TableContainer>
-            <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={this.state.dense ? 'small' : 'medium'}>
+            <Table sx={{ minWidth: 750 }} aria-labelledby='tableTitle' size={this.state.dense ? 'small' : 'medium'}>
               <EnhancedTableHead
                 numSelected={this.props.ChartKeys.length}
                 order={this.state.order}

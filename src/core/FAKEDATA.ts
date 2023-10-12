@@ -22,12 +22,12 @@ const generateValues = (min?: number, max?: number) => {
 
 const generateTopData = (): ITopData[] => {
   const max = faker.number.int({ min: 7, max: 10 })
-  let arr = []
+  const arr: ITopData[] = []
   for (let index = 0; index < max; index++) {
     const elm: ITopData = {
       title: faker.internet.userName(),
       value: faker.number.int({ min: 0, max: 10000 }),
-      imageUrl: faker.image.url(),
+      imageUrl: faker.image.url()
     }
     arr.push(elm)
   }
@@ -50,7 +50,7 @@ const genarateAvancedModeData = (): ChartData<'line', number[], string> => {
         pointBackgroundColor: colors[0],
         pointHoverBackgroundColor: 'rgb(255, 99, 132)',
         pointHoverBorderColor: 'white',
-        pointRadius: (ctx, options) => 0,
+        pointRadius: () => 0
       },
       {
         label: 'Dataset 2',
@@ -62,15 +62,15 @@ const genarateAvancedModeData = (): ChartData<'line', number[], string> => {
         pointBackgroundColor: colors[1],
         pointHoverBackgroundColor: 'rgb(255, 99, 132)',
         pointHoverBorderColor: 'white',
-        pointRadius: (ctx, options) => 0,
-      },
-    ],
+        pointRadius: () => 0
+      }
+    ]
   }
   return data
 }
 
 const genarateTableTopData = (): ITableData[] => {
-  let arr: ITableData[] = []
+  const arr: ITableData[] = []
   for (let index = 0; index < 20; index++) {
     arr.push({ id: 'Id-' + (index + 1), title: faker.person.fullName() })
   }
@@ -84,8 +84,8 @@ const FAKEDATA: IFakeData = {
     details: [
       { title: 'Views', total: 0, value: generateValues() },
       { title: 'Watch time (hours)', total: 0, value: generateValues() },
-      { title: 'Estimated partner revenue', total: 0, value: generateValues() },
-    ],
+      { title: 'Estimated partner revenue', total: 0, value: generateValues() }
+    ]
   },
   lineChartAvancedMode: {
     labels: MOUNTH_LABELS,
@@ -94,15 +94,15 @@ const FAKEDATA: IFakeData = {
       { title: 'Traffic source', total: 0, value: generateValues() },
       { title: 'Geography', total: 0, value: generateValues() },
       { title: 'Cities', total: 0, value: generateValues() },
-      { title: 'View age', total: 0, value: generateValues() },
-    ],
+      { title: 'View age', total: 0, value: generateValues() }
+    ]
   },
   dates: ['Last 7 day', 'Last 14 day', 'Last 28 day', 'Last 90 day'],
   networks: ['Dino Collab', 'Super Super Network'],
   topData1: generateTopData(),
   topData2: generateTopData(),
   avancedMode: genarateAvancedModeData(),
-  tableTopData: genarateTableTopData(),
+  tableTopData: genarateTableTopData()
 }
 
 export default FAKEDATA

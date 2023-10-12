@@ -12,12 +12,12 @@ class TableFormatterBase {
     }
   }
 
-  date = (args: any) => new Date(args).toLocaleString()
+  date = (args: string) => new Date(args).toLocaleString()
 
   tooltip = (args: string) => {
     if (!args) return <></>
     return (
-      <Tooltip title={args} placement="top">
+      <Tooltip title={args} placement='top'>
         <Typography noWrap>{args}</Typography>
       </Tooltip>
     )
@@ -34,22 +34,22 @@ class TableFormatterBase {
 
   chips = (args: string[], name: string) => {
     const chipElements = args.map((e, i) => (
-      <Chip key={i} label={e} size="small" variant="outlined" sx={{ '& .MuiChip-label': { mt: '2px' } }} />
+      <Chip key={i} label={e} size='small' variant='outlined' sx={{ '& .MuiChip-label': { mt: '2px' } }} />
     ))
     return (
       <HtmlTooltip
-        placement="bottom"
+        placement='bottom'
         title={
           <Stack sx={{ gap: '4px', py: '6px', minWidth: '200px', maxWidth: '400px ' }}>
             <TooltipHeaderText>{name}</TooltipHeaderText>
-            <Stack direction="row" spacing={1} sx={{ gap: '4px', flexWrap: 'wrap' }}>
+            <Stack direction='row' spacing={1} sx={{ gap: '4px', flexWrap: 'wrap' }}>
               {chipElements}
             </Stack>
           </Stack>
         }
       >
         <Stack
-          direction="row"
+          direction='row'
           sx={{ gap: '4px', flex: 1, alignItems: 'center', height: '100%', width: '100%', overflow: 'hidden' }}
         >
           {chipElements}
@@ -61,9 +61,9 @@ class TableFormatterBase {
 export const TableFormatter = new TableFormatterBase()
 export default TableFormatter
 
-const TooltipHeaderText = styled((props: TypographyProps) => <Typography variant="subtitle1" {...props} />)({
+const TooltipHeaderText = styled((props: TypographyProps) => <Typography variant='subtitle1' {...props} />)({
   color: '#0095ff',
-  fontWeight: 700,
+  fontWeight: 700
 })
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -75,6 +75,6 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
     maxWidth: 500,
     minHeight: 120,
     fontSize: theme.typography.pxToRem(12),
-    border: '1px solid #dadde9',
-  },
+    border: '1px solid #dadde9'
+  }
 }))

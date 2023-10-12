@@ -1,8 +1,20 @@
 import React, { Component } from 'react'
 import { Box, SxProps, Theme, styled } from '@mui/material'
-import { DataGrid, GridPaginationModel, GridToolbar } from '@mui/x-data-grid'
-import { GridSortModel, GridColDef, GridValidRowModel, DataGridProps, GridRowModel } from '@mui/x-data-grid'
-import { GridCallbackDetails, GridFilterModel, GridPaginationInitialState, GridFeatureMode } from '@mui/x-data-grid'
+import {
+  DataGrid,
+  GridPaginationModel,
+  GridToolbar,
+  GridSortModel,
+  GridColDef,
+  GridValidRowModel,
+  DataGridProps,
+  GridRowModel,
+  GridCallbackDetails,
+  GridFilterModel,
+  GridPaginationInitialState,
+  GridFeatureMode
+} from '@mui/x-data-grid'
+
 import { CustomGridFilterPanel } from './CustomGridFilterPanel'
 import { IFetchModel, ITableMode, ITableOption, ITableTemplatePropBases } from './type'
 import { ITableTemplateContext, ITableTemplateState, TableTemplateContext } from './TableTemplateContext'
@@ -38,7 +50,7 @@ export const CreateTableTemplate = function <TModel extends GridValidRowModel>(
   {
     static defaultState: ITableTemplateState<TModel> = {
       PageInfo: { data: [], rowTotal: 0, paginationModel: { page: 0, pageSize: 0 } },
-      isLoading: true,
+      isLoading: true
     }
     AbortController?: AbortController
 
@@ -78,7 +90,7 @@ export const CreateTableTemplate = function <TModel extends GridValidRowModel>(
           paginationMode: 'server' as GridFeatureMode,
           sortingMode: 'server' as GridFeatureMode,
           filterModel: this.state.FilterModel,
-          sortModel: this.state.GridSortModel,
+          sortModel: this.state.GridSortModel
         }
       } else if (mode === 'Client' && 'data' in this.props) {
         _DataGridProp = {
@@ -86,9 +98,9 @@ export const CreateTableTemplate = function <TModel extends GridValidRowModel>(
           componentsProps: {
             toolbar: {
               showQuickFilter: true,
-              quickFilterProps: { debounceMs: 500 },
-            },
-          },
+              quickFilterProps: { debounceMs: 500 }
+            }
+          }
         }
       } else {
         _DataGridProp = { rows: [] }
@@ -128,7 +140,7 @@ export const CreateTableTemplate = function <TModel extends GridValidRowModel>(
                 PaginationModel: this.state.PaginationModel,
                 FilterModel: this.state.FilterModel,
                 GridSortModel: this.state.GridSortModel,
-                abort: this.AbortController.signal,
+                abort: this.AbortController.signal
               },
               model
             )
@@ -175,20 +187,20 @@ export const CreateTableTemplate = function <TModel extends GridValidRowModel>(
               slots={{
                 toolbar: GridToolbar,
                 filterPanel: CustomGridFilterPanel,
-                noRowsOverlay: NoRowsOverlay,
+                noRowsOverlay: NoRowsOverlay
               }}
               componentsProps={{
                 toolbar: {
                   showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
+                  quickFilterProps: { debounceMs: 500 }
+                }
               }}
               style={{ border: 0 }}
               checkboxSelection={true}
               sx={{
                 border: 0,
                 '& .MuiTablePagination-root .MuiToolbar-root > p': { margin: 0 },
-                '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 700, color: '#3c3c3c' },
+                '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 700, color: '#3c3c3c' }
               }}
               {...(this.props.InnerProps ?? {})}
             />
@@ -206,5 +218,5 @@ const Wrapper = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
   border: '1px solid #e0e0e0',
-  borderRadius: '5px',
+  borderRadius: '5px'
 })

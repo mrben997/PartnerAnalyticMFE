@@ -1,5 +1,5 @@
 import { GridFilterModel, GridFilterItem, GridPaginationInitialState, GridLogicOperator } from '@mui/x-data-grid'
-import { EOperator, IFetchModel } from './type'
+import { IFetchModel } from './type'
 
 type TSorts = { [key: string]: string }[]
 interface IResultFilterGraphql {
@@ -45,7 +45,7 @@ class TableConverterBase {
     return searchOptions.map((s) => `${s}.contains("${text}")`).join(' || ')
   }
 
-  _converSearchFilterModal = (args: { texts?: any[]; searchOptions: string[] }) => {
+  _converSearchFilterModal = (args: { texts?: string[]; searchOptions: string[] }) => {
     const arr = args.texts?.filter((e) => !!e)
     return arr?.map((e) => this._covertSearchOptions(args.searchOptions, e)).join(' || ')
   }
@@ -56,17 +56,17 @@ class TableConverterBase {
 
     const filterSearch = this._converSearchFilterModal({
       texts: model.FilterModel?.quickFilterValues,
-      searchOptions: config.searchOptions.map<string>((e) => e.toString()),
+      searchOptions: config.searchOptions.map<string>((e) => e.toString())
     })
     const filterOperator = this._covertFilterModal(model.FilterModel)
-    let concatenation = filterSearch && filterOperator ? ' || ' : ''
+    const concatenation = filterSearch && filterOperator ? ' || ' : ''
     const filter = `${filterSearch ? filterSearch + concatenation : ''}${filterOperator ?? ''}`
 
     let sort: TSorts = []
     const gsm = model.GridSortModel
     if (gsm && gsm[0] && gsm[0].sort) sort = [{ [gsm[0].field]: gsm[0].sort.toUpperCase() ?? 'ASC' }]
 
-    let filterResult: IResultFilterGraphql = { take, skip: page * take, filter, sort }
+    const filterResult: IResultFilterGraphql = { take, skip: page * take, filter, sort }
     // Remove properties with unknown values.
     if (!filter) delete filterResult.filter
     if (filterResult.sort && filterResult.sort.length < 1) delete filterResult.sort

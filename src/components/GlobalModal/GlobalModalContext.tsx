@@ -1,4 +1,5 @@
-import { JSXElementConstructor, createContext } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { JSXElementConstructor, createContext } from 'react'
 import { OptionModal } from './type'
 
 export interface IGlobalModalContext {

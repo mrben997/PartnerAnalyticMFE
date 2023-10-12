@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChartData } from 'chart.js'
 import { IChartData } from './type'
 
@@ -16,9 +17,9 @@ export const GenerateLineChartData: TGenerateLineChartDataFunc = ({ labels, deta
         pointBorderColor: 'rgba(0, 0, 0, 0)',
         pointBackgroundColor: 'rgba(0, 0, 0, 0)',
         pointHoverBackgroundColor: 'rgb(255, 99, 132)',
-        pointHoverBorderColor: 'white',
-      },
-    ],
+        pointHoverBorderColor: 'white'
+      }
+    ]
   }
 }
 
@@ -60,7 +61,7 @@ export function MergeDeep<TModel = any>(target: any, ...sources: any[]): TModel 
 export const FormatterUSD = () => {
   return Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'USD'
   })
 }
 

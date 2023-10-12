@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext } from 'react'
 import { GridCallbackDetails, GridFilterModel, GridPaginationInitialState, GridRowModel, GridSortModel } from '@mui/x-data-grid'
 import { IFetchPagination } from './type'

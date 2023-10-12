@@ -18,13 +18,13 @@ export default class EnhancedTableToolbar extends Component<IProps> {
   renderContent = () => {
     if (this.props.numSelected > 0) {
       return (
-        <Typography sx={{ flex: '1 1 100%' }} color="inherit" variant="subtitle1" component="div">
+        <Typography sx={{ flex: '1 1 100%' }} color='inherit' variant='subtitle1' component='div'>
           {this.props.numSelected} selected
         </Typography>
       )
     }
     return (
-      <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
+      <Typography sx={{ flex: '1 1 100%' }} variant='h6' id='tableTitle' component='div'>
         Details
       </Typography>
     )

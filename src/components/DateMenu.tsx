@@ -32,11 +32,11 @@ export class DateMenu extends Component<IProps, IState> {
     return (
       <>
         <CustomButton onClick={this.open} endIcon={<ArrowDropDownIcon />} sx={{ ...sxHover, ...this.props.sx }}>
-          <Box component="span" className="content-btn">
-            <Typography variant="subtitle2" component="span">
+          <Box component='span' className='content-btn'>
+            <Typography variant='subtitle2' component='span'>
               Start date - End date
             </Typography>
-            <Typography variant="body1" component="span" sx={{ fontWeight: 600 }}>
+            <Typography variant='body1' component='span' sx={{ fontWeight: 600 }}>
               {selectedData ?? 'Title'}
             </Typography>
           </Box>
@@ -72,13 +72,13 @@ const CustomButton = styled(Button)({
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
+    alignItems: 'flex-start'
+  }
 })
 
 const CustomMenu = styled(Menu)({
   '& .MuiMenuItem-root': { width: buttonWidth },
   '& .MuiMenuItem-root.Mui-selected': { fontWeight: 600, backgroundColor: 'rgba(255, 255, 255, 0)', cursor: 'unset' },
   '& .MuiMenuItem-root:hover': { backgroundColor: 'rgba(25, 118, 210, 0.08)' },
-  '& .MuiMenuItem-root.Mui-selected:hover': { backgroundColor: 'rgba(255, 255, 255, 0)' },
+  '& .MuiMenuItem-root.Mui-selected:hover': { backgroundColor: 'rgba(255, 255, 255, 0)' }
 })

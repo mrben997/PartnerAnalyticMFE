@@ -14,16 +14,16 @@ export default class App extends Component {
               sx={{
                 display: 'flex',
                 alignItems: 'flex-end',
-                marginTop: '24px',
+                marginTop: '24px'
               }}
             >
               <DateMenu data={FAKEDATA.dates} />
               <Box sx={{ flex: 1 }} />
-              <Stack gap="6px">
+              <Stack gap='6px'>
                 <NetworkMenu data={FAKEDATA.networks} />
                 <AvancedModeContext.Consumer>
                   {({ open }) => (
-                    <Button variant="contained" color="primary" onClick={open}>
+                    <Button variant='contained' color='primary' onClick={open}>
                       Advanced Mode
                     </Button>
                   )}
@@ -31,9 +31,9 @@ export default class App extends Component {
               </Stack>
             </Box>
           </AvancedMode>
-          <Box height="24px" />
+          <Box height='24px' />
           <OverviewSection data={FAKEDATA.lineChart} />
-          <Box height="64px" />
+          <Box height='64px' />
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TopData data={FAKEDATA.topData1} />
@@ -42,7 +42,7 @@ export default class App extends Component {
               <TopData data={FAKEDATA.topData2} />
             </Grid>
           </Grid>
-          <Box height="128px" />
+          <Box height='128px' />
         </Box>
       </Container>
     )

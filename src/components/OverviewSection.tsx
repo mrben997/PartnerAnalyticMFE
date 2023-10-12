@@ -24,7 +24,7 @@ export class OverviewSection extends Component<IProps, IState> {
     return (
       <TabContext value={this.state.tabIndex}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList centered onChange={this.handleChange} aria-label="lab API tabs example">
+          <TabList centered onChange={this.handleChange} aria-label='lab API tabs example'>
             {this.renderTabs()}
           </TabList>
         </Box>
@@ -41,8 +41,8 @@ export class OverviewSection extends Component<IProps, IState> {
         value={index + ''}
         label={
           <Box sx={{ minWidth: '300px', textTransform: 'none' }}>
-            <Typography variant="subtitle1">{e.title}</Typography>
-            <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+            <Typography variant='subtitle1'>{e.title}</Typography>
+            <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
               {index === 2 ? FormatterUSD().format(e.total) : HumanNumber(e.total)}
             </Typography>
           </Box>

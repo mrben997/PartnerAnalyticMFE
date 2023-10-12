@@ -15,7 +15,7 @@ export default class TableTopData extends Component {
   }
 
   getData = () => {
-    let arr = FAKEDATA.tableTopData
+    const arr = FAKEDATA.tableTopData
     return { data: arr, page: 0, pageSize: 25, rowTotal: arr.length }
   }
 

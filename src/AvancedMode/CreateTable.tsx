@@ -11,10 +11,10 @@ const CreateTable = () => {
         minWidth: 100,
         type: 'string',
         headerName: 'Title',
-        renderCell: (params) => TableFormatter.tooltip(params.value),
-      },
+        renderCell: (params) => TableFormatter.tooltip(params.value)
+      }
     },
-    filterOperators: MapOperators, //server mode
+    filterOperators: MapOperators //server mode
   })
 }
 export default CreateTable

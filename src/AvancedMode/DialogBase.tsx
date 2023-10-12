@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { Component, PropsWithChildren, ReactElement, Ref, forwardRef } from 'react'
 import { Dialog, Grow, styled } from '@mui/material'
 import { TransitionProps } from '@mui/material/transitions'
-import { Component, PropsWithChildren, ReactElement, Ref, forwardRef } from 'react'
 
 const Transition = forwardRef(function Transition(props: TransitionProps & { children: ReactElement }, ref: Ref<unknown>) {
   return <Grow ref={ref} {...props} timeout={350} />
@@ -29,5 +30,5 @@ export default class DialogBase extends Component<TProps> {
 
 const CustomDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': { padding: theme.spacing(1) },
-  '& .MuiDialogActions-root': { padding: theme.spacing(1) },
+  '& .MuiDialogActions-root': { padding: theme.spacing(1) }
 }))

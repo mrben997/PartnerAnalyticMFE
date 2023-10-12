@@ -6,5 +6,5 @@ export interface OptionModal {
 }
 
 export enum ContentPosition {
-  Center,
+  Center
 }

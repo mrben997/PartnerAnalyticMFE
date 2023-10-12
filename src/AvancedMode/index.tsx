@@ -1,9 +1,14 @@
-import { Component, PropsWithChildren } from 'react'
+import React, { Component, PropsWithChildren } from 'react'
 import { Box, Container, Fade, IconButton, Tooltip, styled } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { IChartData } from '../core/type'
-import { AvancedModeContext, IAvancedModeContext } from './AvancedModeContext'
-import { IAvancedModeState, TAvancedModeOpen, TAvancedModeClose } from './AvancedModeContext'
+import {
+  AvancedModeContext,
+  IAvancedModeContext,
+  IAvancedModeState,
+  TAvancedModeOpen,
+  TAvancedModeClose
+} from './AvancedModeContext'
 import DialogBase from './DialogBase'
 import TabSection from './TabSection'
 import DateMenu from '../components/DateMenu'
@@ -59,6 +64,7 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
           </Box>
           {this.renderTabPanels()}
           <TableTopData />
+          
         </DialogBase>
       </AvancedModeContext.Provider>
     )
@@ -66,7 +72,7 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
 
   renderHeader = () => (
     <Header>
-      <Tooltip title="Close">
+      <Tooltip title='Close'>
         <CustomIconButtonClose onClick={this.close}>
           <CloseIcon />
         </CustomIconButtonClose>
@@ -108,5 +114,5 @@ const Header = styled(Box)({
 
 const CustomIconButtonClose = styled(IconButton)({
   '& svg': { transition: 'all 0.3s' },
-  '&:hover svg': { color: '#ff200c' },
+  '&:hover svg': { color: '#ff200c' }
 })

@@ -1,6 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { GridRowIdGetter, GridValidRowModel, GridFilterModel, GridFilterOperator } from '@mui/x-data-grid'
-import { GridSortModel, DataGridProps, GridColDef, GridCallbackDetails, GridPaginationInitialState } from '@mui/x-data-grid'
+import {
+  GridRowIdGetter,
+  GridValidRowModel,
+  GridFilterModel,
+  GridFilterOperator,
+  GridSortModel,
+  DataGridProps,
+  GridColDef,
+  GridCallbackDetails,
+  GridPaginationInitialState
+} from '@mui/x-data-grid'
 
 export interface ITableTemplatePropBases<T extends GridValidRowModel> {
   InnerProps?: Omit<DataGridProps<T> & React.RefAttributes<HTMLDivElement>, 'rows' | 'columns' | 'getRowId'>
@@ -58,5 +68,5 @@ export enum EOperator {
   LessThanOrEqual,
   NotEqual,
   Equal,
-  Contains,
+  Contains
 }

@@ -1,4 +1,5 @@
-import { Component, SyntheticEvent } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { Component, SyntheticEvent } from 'react'
 import { SxProps, Tab, Tabs, Theme, styled } from '@mui/material'
 import { IChartDetail } from '../core/type'
 
@@ -18,10 +19,10 @@ export default class TabSection extends Component<IProps> {
         sx={this.props.sx}
         value={this.props.selectedIndex}
         onChange={this.props.onChange}
-        variant="scrollable"
+        variant='scrollable'
         scrollButtons
         allowScrollButtonsMobile
-        aria-label="scrollable force tabs"
+        aria-label='scrollable force tabs'
       >
         {this.props.data.map((e, i) => (
           <CustomTab key={i} label={e.title} {...this.a11yProps(i)} />
@@ -34,5 +35,5 @@ export default class TabSection extends Component<IProps> {
 const CustomTab = styled(Tab)({
   textTransform: 'unset',
   fontWeight: '700',
-  paddingBottom: 0,
+  paddingBottom: 0
 })

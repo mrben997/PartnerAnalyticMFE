@@ -7,7 +7,7 @@ const configDefault: ITopDataConfig = {
   title: 'Top data title',
   startDate: 'Start date',
   endDate: 'End date',
-  measure: 'Views',
+  measure: 'Views'
 }
 
 interface IProps {
@@ -32,14 +32,14 @@ export class TopData extends Component<IProps> {
     return (
       <>
         <Box>
-          <Typography component="h3" variant="h6" sx={{ fontWeight: 500 }}>
+          <Typography component='h3' variant='h6' sx={{ fontWeight: 500 }}>
             {config.title}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', mt: '12px' }}>
-            <Typography component="span" variant="subtitle2" sx={{ flex: 1, fontWeight: 500 }}>
+            <Typography component='span' variant='subtitle2' sx={{ flex: 1, fontWeight: 500 }}>
               {config.startDate} - {config.endDate}
             </Typography>
-            <Typography component="span" variant="subtitle2" sx={{ fontWeight: 500, width: widthAmount }}>
+            <Typography component='span' variant='subtitle2' sx={{ fontWeight: 500, width: widthAmount }}>
               {config.measure}
             </Typography>
           </Box>
@@ -53,16 +53,16 @@ export class TopData extends Component<IProps> {
     return (
       <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: '12px', mt: '12px' }}>
         <Box
-          component="img"
+          component='img'
           src={e.imageUrl}
-          alt="thumbnail"
+          alt='thumbnail'
           sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
         />
         <Typography noWrap sx={{ flex: 1 }}>
           {e.title}
         </Typography>
         <Line percent={e.percent} />
-        <Typography component="span" variant="subtitle1" sx={{ width: widthAmount }}>
+        <Typography component='span' variant='subtitle1' sx={{ width: widthAmount }}>
           {HumanNumber(e.value)}
         </Typography>
       </Box>
@@ -89,6 +89,6 @@ const Line = styled(Box)<{ percent?: number }>(({ percent }) => ({
     bottom: 0,
     width: (percent || 0) + '%',
     display: 'block',
-    backgroundColor: '#1a90ff',
-  },
+    backgroundColor: '#1a90ff'
+  }
 }))
