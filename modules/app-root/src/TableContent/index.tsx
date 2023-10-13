@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import { idDefault } from 'csmfe'
 import { Checkbox, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme } from '@mui/material'
 import { IMapSelected, IMapSelecteds, IRowData, TOnChangeCheckbox, TOnChangeCheckboxAll } from './type'
-import TableContentHelper from './helper'
-import { Dictionary } from '@reduxjs/toolkit'
 import SelectAccessor from './SelectAccessor'
 
-export * from './helper'
+export * from './SelectAccessor'
 
 interface IProps {
   data: SelectAccessor

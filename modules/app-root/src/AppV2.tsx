@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { Container } from '@mui/material'
 import { Dictionary } from '@reduxjs/toolkit'
-import TableContent, { TableContentHelper } from './TableContent'
-import { IMapSelected, IMapSelecteds, IRowData, TOnChangeCheckbox, TOnChangeCheckboxAll } from './TableContent/type'
+import TableContent, { SelectAccessor } from './TableContent'
+import { TOnChangeCheckbox } from './TableContent/type'
 import FAKEDATA from './core/FAKEDATA'
-import SelectAccessor from './TableContent/SelectAccessor'
 import { idDefault } from 'csmfe'
 
 interface IProps {}
