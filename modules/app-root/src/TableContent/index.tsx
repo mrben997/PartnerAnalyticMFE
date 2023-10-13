@@ -3,20 +3,23 @@ import { idDefault } from 'csmfe'
 import { Checkbox, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Theme } from '@mui/material'
 import { IMapSelected, IMapSelecteds, IRowData, TOnChangeCheckbox, TOnChangeCheckboxAll } from './type'
 import TableContentHelper from './helper'
+import { Dictionary } from '@reduxjs/toolkit'
+import SelectAccessor from './SelectAccessor'
 
 export * from './helper'
 
 interface IProps {
-  data: IRowData[]
-  mapSelecteds: IMapSelecteds
+  data: SelectAccessor
   onChangeCheckbox?: TOnChangeCheckbox
 }
 
 export default class TableContent extends Component<IProps> {
   getCheckboxControlStatus = () => {
-    const ids = TableContentHelper.convertMapSelectToSelectedIds(this.props.mapSelecteds)
-    const checked = ids.length === this.props.mapSelecteds.max
-    const indeterminate = ids.length > 0 && ids.length < this.props.mapSelecteds.max
+    const { idActives, max } = this.props.data
+    console.log({ idActives, max })
+
+    const checked = idActives.length === max
+    const indeterminate = idActives.length > 0 && idActives.length < max
     return { checked, indeterminate }
   }
 
@@ -36,8 +39,8 @@ export default class TableContent extends Component<IProps> {
         <Table sx={{ minWidth: 650 }}>
           {this.renderHeader()}
           <TableBody>
-            {this.props.data.map((row) => {
-              const status = this.props.mapSelecteds.map[row.id]
+            {this.props.data.rows.map((row) => {
+              const status = this.props.data.maping[row.id]
               return this.renderRow(row, status)
             })}
           </TableBody>
@@ -47,6 +50,8 @@ export default class TableContent extends Component<IProps> {
   }
 
   renderHeader = () => {
+    console.log(this.getCheckboxControlStatus())
+
     return (
       <TableHead>
         <TableRow>

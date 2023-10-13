@@ -4,39 +4,30 @@ import { Dictionary } from '@reduxjs/toolkit'
 import TableContent, { TableContentHelper } from './TableContent'
 import { IMapSelected, IMapSelecteds, IRowData, TOnChangeCheckbox, TOnChangeCheckboxAll } from './TableContent/type'
 import FAKEDATA from './core/FAKEDATA'
+import SelectAccessor from './TableContent/SelectAccessor'
+import { idDefault } from 'csmfe'
 
 interface IProps {}
-interface IState {
-  data: IRowData[]
-  mapSelects: IMapSelecteds
-}
+interface IState {}
 
 export default class AppV2 extends Component<IProps, IState> {
+  selectAccessor: SelectAccessor
   constructor(props: IProps) {
     super(props)
-    this.state = this.initial()
-  }
-
-  initial = (): IState => {
-    const { colors, calculatorTotals, inititalMap } = TableContentHelper
-    const data = calculatorTotals(FAKEDATA.rowDatas, FAKEDATA.initialRowData('Total'))
-    console.log(data)
-
-    const mapSelect = inititalMap(data)
-    console.log(mapSelect)
-    return { data, mapSelects: { colors, max: colors.length, map: mapSelect } }
+    const sa = new SelectAccessor(FAKEDATA.rowDatas, idDefault)
+    this.selectAccessor = sa
   }
 
   handleChangeCheckbox: TOnChangeCheckbox = (params) => {
     switch (params.type) {
       case 'unit': {
-        const mapSelects = TableContentHelper.selectUnitCheckbox(this.state.mapSelects, params.value.id, params.checked)
-        this.setState({ mapSelects })
+        this.selectAccessor.selectUnitCheckbox(params.value.id, params.checked)
+        this.forceUpdate()
         return
       }
       case 'all': {
-        const mapSelects = TableContentHelper.selectAllCheckbox(this.state.mapSelects, params.checked)
-        this.setState({ mapSelects })
+        this.selectAccessor.selectAllCheckbox(params.checked)
+        this.forceUpdate()
         return
       }
       default:
@@ -47,7 +38,7 @@ export default class AppV2 extends Component<IProps, IState> {
   render() {
     return (
       <Container>
-        <TableContent data={this.state.data} onChangeCheckbox={this.handleChangeCheckbox} mapSelecteds={this.state.mapSelects} />
+        <TableContent data={this.selectAccessor} onChangeCheckbox={this.handleChangeCheckbox} />
       </Container>
     )
   }
