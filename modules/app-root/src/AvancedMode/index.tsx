@@ -64,7 +64,6 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
           </Box>
           {this.renderTabPanels()}
           <TableTopData />
-          
         </DialogBase>
       </AvancedModeContext.Provider>
     )
