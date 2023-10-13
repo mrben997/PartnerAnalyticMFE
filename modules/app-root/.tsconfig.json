@@ -20,6 +20,6 @@
         "@pages/*": ["src/pages/*"]
       }
     },
-    "include": ["src"]
+    "include": ["src","../component-shared-mfe"]
   }
   

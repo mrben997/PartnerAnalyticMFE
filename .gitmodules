@@ -1,0 +1,3 @@
+[submodule "modules/component-shared-mfe"]
+	path = modules/component-shared-mfe
+	url = git@github.com:mrben997/component-shared-mfe.git
