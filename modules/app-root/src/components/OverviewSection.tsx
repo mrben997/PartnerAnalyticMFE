@@ -1,9 +1,10 @@
-import { Component, SyntheticEvent } from 'react'
+import React, { Component, SyntheticEvent } from 'react'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
+import { humanNumber, formatterUSD } from 'csmfe/helper'
 import { Box, Fade, Tab, Typography } from '@mui/material'
 import { LineChart } from './LineChart'
 import { IChartData } from '../core/type'
-import { FormatterUSD, GenerateLineChartData, HumanNumber } from '../core/helper'
+import { GenerateLineChartData } from '../core/helper'
 
 interface IProps {
   data?: IChartData
@@ -43,7 +44,7 @@ export class OverviewSection extends Component<IProps, IState> {
           <Box sx={{ minWidth: '300px', textTransform: 'none' }}>
             <Typography variant='subtitle1'>{e.title}</Typography>
             <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
-              {index === 2 ? FormatterUSD().format(e.total) : HumanNumber(e.total)}
+              {index === 2 ? formatterUSD().format(e.total) : humanNumber(e.total)}
             </Typography>
           </Box>
         }

@@ -1,8 +1,11 @@
 {
-  "name": "PartnerAnalyticMFE",
+  "name": "partner-analytic",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
     "modules/*"
-  ]
+  ],
+  "scripts": {
+    "dev": "cd ./modules/app-root && yarn dev"
+  }
 }

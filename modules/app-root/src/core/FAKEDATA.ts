@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { IChartData, ITableData, ITopData } from './type'
 import { ChartData } from 'chart.js'
+import { idDefault } from 'csmfe/helper'
+import { IRowData } from '../TableContent/type'
+import { IChartData, ITableData, ITopData } from './type'
 
 interface IFakeData {
   mounthLabels: string[]
@@ -12,6 +14,8 @@ interface IFakeData {
   topData2: ITopData[]
   avancedMode: ChartData<'line', number[], string>
   tableTopData: ITableData[]
+  initialRowData: (title?: string) => IRowData
+  rowDatas: IRowData[]
 }
 
 const MOUNTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -77,6 +81,20 @@ const genarateTableTopData = (): ITableData[] => {
   return arr
 }
 
+const generateRowData = (max: number = 20) => {
+  const arr: IRowData[] = []
+  for (let index = 0; index < max; index++) {
+    arr.push({
+      id: faker.database.mongodbObjectId(),
+      title: faker.person.fullName(),
+      views: faker.number.int({ min: 0, max: 10000 }),
+      estimatedMinutesWatched: faker.number.int({ min: 0, max: 10000 }),
+      estimatedRevenue: faker.number.int({ min: 0, max: 10000 })
+    })
+  }
+  return arr
+}
+
 const FAKEDATA: IFakeData = {
   mounthLabels: MOUNTH_LABELS,
   lineChart: {
@@ -102,7 +120,15 @@ const FAKEDATA: IFakeData = {
   topData1: generateTopData(),
   topData2: generateTopData(),
   avancedMode: genarateAvancedModeData(),
-  tableTopData: genarateTableTopData()
+  tableTopData: genarateTableTopData(),
+  initialRowData: (title = 'title') => ({
+    id: idDefault,
+    title,
+    views: 0,
+    estimatedMinutesWatched: 0,
+    estimatedRevenue: 0
+  }),
+  rowDatas: generateRowData(30)
 }
 
 export default FAKEDATA

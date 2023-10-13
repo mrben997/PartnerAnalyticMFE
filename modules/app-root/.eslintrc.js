@@ -56,6 +56,7 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': 'off',
-    'import/named': 'off'
+    'import/named': 'off',
+    'import/no-duplicates': 'off'
   }
 }

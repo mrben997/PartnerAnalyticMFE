@@ -23,22 +23,6 @@ export const GenerateLineChartData: TGenerateLineChartDataFunc = ({ labels, deta
   }
 }
 
-export const HumanNumber = (bytes: number, dp = 1) => {
-  const thresh = 1000
-  if (Math.abs(bytes) < thresh) return bytes + ''
-
-  const units = ['k', 'M', 'B']
-  let u = -1
-  const r = 10 ** dp
-
-  do {
-    bytes /= thresh
-    ++u
-  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1)
-
-  return bytes.toFixed(dp) + ' ' + units[u]
-}
-
 const isObject = (item: any) => item && typeof item === 'object' && !Array.isArray(item)
 
 export function MergeDeep<TModel = any>(target: any, ...sources: any[]): TModel {
@@ -57,12 +41,3 @@ export function MergeDeep<TModel = any>(target: any, ...sources: any[]): TModel 
   }
   return MergeDeep(target, ...sources)
 }
-
-export const FormatterUSD = () => {
-  return Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  })
-}
-
-export const FormatNumber = new Intl.NumberFormat('en-US')

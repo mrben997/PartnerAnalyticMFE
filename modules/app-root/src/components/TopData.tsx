@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
+import { humanNumber } from 'csmfe/helper'
 import { Box, Typography, styled } from '@mui/material'
-import { HumanNumber } from '../core/helper'
 import { ITopData, ITopDataConfig, ITopDataDTO } from '../core/type'
 
 const configDefault: ITopDataConfig = {
@@ -63,7 +63,7 @@ export class TopData extends Component<IProps> {
         </Typography>
         <Line percent={e.percent} />
         <Typography component='span' variant='subtitle1' sx={{ width: widthAmount }}>
-          {HumanNumber(e.value)}
+          {humanNumber(e.value)}
         </Typography>
       </Box>
     )
