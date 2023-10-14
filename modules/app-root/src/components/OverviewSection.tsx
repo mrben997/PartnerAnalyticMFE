@@ -3,8 +3,8 @@ import { TabList, TabPanel, TabContext } from '@mui/lab'
 import { humanNumber, formatterUSD } from 'csmfe/helper'
 import { Box, Fade, Tab, Typography } from '@mui/material'
 import { LineChart } from './LineChart'
-import { IChartData } from '../core/type'
-import { GenerateLineChartData } from '../core/helper'
+import { IChartData } from '../utils/type'
+import { GenerateLineChartData } from '../utils/helper'
 
 interface IProps {
   data?: IChartData

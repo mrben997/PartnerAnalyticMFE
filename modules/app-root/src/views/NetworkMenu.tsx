@@ -1,40 +1,42 @@
 import React, { Component } from 'react'
 import { Box, Button, Menu, MenuItem, SxProps, Theme, Typography, styled } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { ENetwork } from '../utils/type'
+import { NetworkReduxProps } from '../redux/type'
 
-interface IProps {
-  data: string[]
+interface IProps extends NetworkReduxProps {
   hoverDisabled?: boolean
   sx?: SxProps<Theme>
 }
 interface IState {
-  selectedIndex: number
   anchorEl?: HTMLElement | null
 }
 export class NetworkMenu extends Component<IProps, IState> {
+  menuData: ENetwork[]
   constructor(props: IProps) {
     super(props)
-    this.state = { selectedIndex: 0 }
+    this.state = { anchorEl: null }
+    this.menuData = Object.keys(ENetwork).map((key) => ENetwork[key]) as ENetwork[]
   }
 
   open = (event: React.MouseEvent<HTMLElement>) => this.setState({ anchorEl: event.currentTarget })
   close = () => this.setState({ anchorEl: null })
 
-  handleMenuItemClick = (_: React.MouseEvent<HTMLElement>, index: number) => {
-    if (index !== this.state.selectedIndex) this.setState({ selectedIndex: index, anchorEl: null })
-    else this.setState({ anchorEl: null })
+  handleMenuItemClick = (network: ENetwork) => {
+    if (network !== this.props.NetworkSelected) {
+      this.props.changeNetworkSelected(network)
+    }
+    this.setState({ anchorEl: null })
   }
 
   render() {
-    const menuData = this.props.data
-    const selectedData = this.props.data[this.state.selectedIndex]
     const sxHover: SxProps<Theme> = this.props.hoverDisabled ? {} : { '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.12)' } }
     return (
       <>
         <CustomButton onClick={this.open} endIcon={<ArrowDropDownIcon />} sx={{ ...sxHover, ...this.props.sx }}>
           <Box component='span' className='content-btn'>
             <Typography variant='body1' component='span' sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
-              {selectedData ?? 'Title'}
+              {this.props.NetworkSelected ?? 'Title'}
             </Typography>
           </Box>
         </CustomButton>
@@ -46,8 +48,8 @@ export class NetworkMenu extends Component<IProps, IState> {
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
         >
-          {menuData.map((e, i) => (
-            <MenuItem key={e} selected={i === this.state.selectedIndex} onClick={(event) => this.handleMenuItemClick(event, i)}>
+          {this.menuData.map((e, i) => (
+            <MenuItem key={e} selected={e === this.props.NetworkSelected} onClick={() => this.handleMenuItemClick(e)}>
               {e}
             </MenuItem>
           ))}

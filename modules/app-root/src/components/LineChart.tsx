@@ -14,7 +14,7 @@ import {
 import { Line } from 'react-chartjs-2'
 
 import { faker } from '@faker-js/faker'
-import { MergeDeep } from '../core/helper'
+import { MergeDeep } from '../utils/helper'
 
 ChartJS.register(
   CategoryScale,

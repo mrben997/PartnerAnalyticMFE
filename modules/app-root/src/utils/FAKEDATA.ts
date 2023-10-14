@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { ChartData } from 'chart.js'
 import { idDefault } from 'csmfe/helper'
-import { IRowData } from '../TableContent/type'
+import { IRowData } from '../views/TableContent/type'
 import { IChartData, ITableData, ITopData } from './type'
 
 interface IFakeData {

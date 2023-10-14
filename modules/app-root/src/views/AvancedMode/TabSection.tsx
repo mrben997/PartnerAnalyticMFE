@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Component, SyntheticEvent } from 'react'
 import { SxProps, Tab, Tabs, Theme, styled } from '@mui/material'
-import { IChartDetail } from '../core/type'
+import { IChartDetail } from '../../utils/type'
 
 interface IProps {
   selectedIndex: number

@@ -12,12 +12,7 @@ export interface ISelectMap {
 type TMaping = Dictionary<ISelectMap>
 
 export class SelectAccessor {
-  colors = [
-    '#e6194b',
-    '#3cb44b',
-    '#ffe119'
-    // , '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe'
-  ]
+  colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe']
   maping: TMaping = {}
   max: number
   totalId: string
@@ -25,7 +20,6 @@ export class SelectAccessor {
     this.max = this.colors.length
     this.totalId = totalId
     this.maping = this.getMaping(rows)
-    console.log(this)
   }
 
   get rows(): IRowData[] {
@@ -55,12 +49,12 @@ export class SelectAccessor {
       obj[cur.id] = data
       return obj
     }, {} as TMaping)
-    m[this.totalId] = { row: this.calculatorTotal(), type: 'total', checked: false }
+    m[this.totalId] = { row: this.calculatorTotal(params), type: 'total', checked: false }
     return m
   }
 
-  calculatorTotal = (): IRowData => {
-    return this.rows.reduce((obj, cur) => {
+  calculatorTotal = (params: IRowData[]): IRowData => {
+    return params.reduce((obj, cur) => {
       obj.views += cur.views
       obj.estimatedMinutesWatched += cur.estimatedMinutesWatched
       obj.estimatedRevenue += cur.estimatedRevenue
@@ -120,8 +114,6 @@ export class SelectAccessor {
   }
 
   selectAllCheckbox = (checked: boolean) => {
-    console.log(checked)
-
     if (!checked) return this.cleanCheckbox()
     let amount = 0
     let ids = Array.from(Object.keys(this.maping) as string[])

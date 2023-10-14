@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Container } from '@mui/material'
-import TableContent, { SelectAccessor } from './views/TableContent'
-import { TOnChangeCheckbox } from './views/TableContent/type'
-import FAKEDATA from './utils/FAKEDATA'
 import { idDefault } from 'csmfe'
+import { TOnChangeCheckbox } from '../TableContent/type'
+import TableContent, { SelectAccessor } from '../TableContent'
+import FAKEDATA from '../../utils/FAKEDATA'
 
 interface IProps {}
 interface IState {}
 
-export default class AppV2 extends Component<IProps, IState> {
+export default class AvancedModeTable extends Component<IProps, IState> {
   selectAccessor: SelectAccessor
   constructor(props: IProps) {
     super(props)
@@ -35,7 +35,7 @@ export default class AppV2 extends Component<IProps, IState> {
 
   render() {
     return (
-      <Container>
+      <Container maxWidth={false}>
         <TableContent data={this.selectAccessor} onChangeCheckbox={this.handleChangeCheckbox} />
       </Container>
     )

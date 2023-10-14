@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import CreateTable from './CreateTable'
 import { Box, Container, Typography } from '@mui/material'
 import AudioFileIcon from '@mui/icons-material/AudioFile'
-import FAKEDATA from '../core/FAKEDATA'
-import { ITableData } from '../core/type'
-import { IFetchModel } from '../components/TableTemplate/type'
+import { IFetchModel } from '../../components/TableTemplate/type'
+import FAKEDATA from '../../utils/FAKEDATA'
 
 interface IProps {}
 export default class TableTopData extends Component {

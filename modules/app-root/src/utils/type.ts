@@ -1,3 +1,8 @@
+export enum ENetwork {
+  DinoCollab = 'DinoCollab',
+  SuperNetwork = 'SuperNetwork'
+}
+
 export interface IChartDetail {
   title: string
   total: number

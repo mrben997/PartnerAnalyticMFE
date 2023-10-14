@@ -1,21 +1,17 @@
 import React, { Component, PropsWithChildren } from 'react'
+import { ChartData } from 'chart.js'
 import { Box, Container, Fade, IconButton, Tooltip, styled } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { IChartData } from '../core/type'
-import {
-  AvancedModeContext,
-  IAvancedModeContext,
-  IAvancedModeState,
-  TAvancedModeOpen,
-  TAvancedModeClose
-} from './AvancedModeContext'
+import { DateMenu } from '../../components'
+import { IChartData } from '../../utils/type'
+import { LineChart } from '../../components/LineChart'
+import { TAvancedModeOpen, TAvancedModeClose } from './AvancedModeContext'
+import { AvancedModeContext, IAvancedModeContext, IAvancedModeState } from './AvancedModeContext'
 import DialogBase from './DialogBase'
 import TabSection from './TabSection'
-import DateMenu from '../components/DateMenu'
-import FAKEDATA from '../core/FAKEDATA'
-import { ChartData } from 'chart.js'
-import { LineChart } from '../components/LineChart'
 import TableTopData from './TableTopData'
+import FAKEDATA from '../../utils/FAKEDATA'
+import AvancedModeTable from '../AvancedModeTable'
 
 export * from './AvancedModeContext'
 
@@ -63,7 +59,9 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
             </Container>
           </Box>
           {this.renderTabPanels()}
-          <TableTopData />
+          {/* Top data Table */}
+          {/* <TableTopData /> */}
+          <AvancedModeTable />
         </DialogBase>
       </AvancedModeContext.Provider>
     )

@@ -1,5 +1,5 @@
-import { CreateTableTemplate, MapOperators, TableFormatter } from '../components/TableTemplate'
-import { ITableData } from '../core/type'
+import { CreateTableTemplate, MapOperators, TableFormatter } from '../../components/TableTemplate'
+import { ITableData } from '../../utils/type'
 
 const CreateTable = () => {
   return CreateTableTemplate<ITableData>('Server', {
