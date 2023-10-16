@@ -10,6 +10,7 @@ const ESLintPlugin = require('eslint-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpack = require('webpack')
+const { ModuleFederationPlugin } = require('webpack').container
 
 // Cái dòng này giúp Editor gợi ý được các giá trị cho dòng code config ngay phía dưới nó
 // (giống như đang dùng Typescript vậy đó 😉)
@@ -29,7 +30,7 @@ module.exports = (env, argv) => {
         // để khi import cho ngắn gọn
         // Ví dụ: import Login from '@pages/Login'
         // Thay vì: import Login from '../pages/Login' chẳng hạn
-        '@pages': path.resolve(__dirname, './src/pages'),
+        '@pages': path.resolve(__dirname, './src/pages')
       }
     },
     // File đầu vào cho webpack, file này thường là file import mọi file khác
@@ -40,7 +41,7 @@ module.exports = (env, argv) => {
         {
           test: /\.tsx?$/, // duyệt các file .ts || .tsx
           exclude: /node_modules/,
-          use: ['babel-loader'] ,// Giúp dịch code TS, React sang JS,
+          use: ['babel-loader'] // Giúp dịch code TS, React sang JS,
         },
         {
           test: /\.(s[ac]ss|css)$/, // duyệt các file sass || scss || css
@@ -80,12 +81,15 @@ module.exports = (env, argv) => {
         }
       ]
     },
-
     output: {
-      filename: 'static/js/main.[contenthash:6].js', // Thêm mã hash tên file dựa vào content để tránh bị cache bởi CDN hay browser.
-      path: path.resolve(__dirname, 'dist'), // Build ra thư mục dist
-      publicPath: '/'
+      publicPath: 'auto',
+      crossOriginLoading: 'anonymous'
     },
+    // output: {
+    //   filename: 'static/js/main.[contenthash:6].js', // Thêm mã hash tên file dựa vào content để tránh bị cache bởi CDN hay browser.
+    //   path: path.resolve(__dirname, 'dist'), // Build ra thư mục dist
+    //   publicPath: '/'
+    // },
     devServer: {
       hot: true, // enable Hot Module Replacement, kiểu như reload nhanh
       port: 3000, // Chạy port 3000 khi dev
@@ -117,7 +121,13 @@ module.exports = (env, argv) => {
           }
         ]
       }),
-
+      new ModuleFederationPlugin({
+        name: 'analytics',
+        exposes: {
+          './Analytic': './src/App'
+        },
+        filename: 'remoteEntry.js'
+      }),
       // Plugin hỗ trợ thêm thẻ style và script vào index.html
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public', 'index.html'),
