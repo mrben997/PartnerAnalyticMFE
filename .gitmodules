@@ -1,3 +1,6 @@
 [submodule "modules/component-shared-mfe"]
 	path = modules/component-shared-mfe
 	url = git@github.com:mrben997/component-shared-mfe.git
+[submodule "modules/graphql-service-mfe"]
+	path = modules/graphql-service-mfe
+	url = git@github.com:mrben997/graphql-service-mfe.git
