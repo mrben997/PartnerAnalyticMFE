@@ -1,63 +1,86 @@
-import { EntityState, PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { fetchAnalyticThunk } from './AnalyticThunk'
-import { IDateOption, INetwork } from '../../../utils/type'
+import { Dictionary, EntityState, PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { fetchAnalyticConfigThunk, fetchAnalyticThunk } from './AnalyticThunk'
+import { IDataInfo, IDateOption, INetwork, ITopData, TQueryParams } from '../../../utils/type'
 import { LazyStatus, TStateRedux } from '../../type'
 import FakeDataLocal from '../../../utils/FakeDataLocal'
-import DateOption from '../../../views/DateMenu/DateOption'
+import DateOption from '../../../utils/DateOption'
 
 export interface IAnalyticState {
-  networks: EntityState<INetwork>
-  networkId: string
-  dates: EntityState<IDateOption>
-  dateId: string
+  networks: INetwork[]
+  networkIndex: number
+  dateIndex: number
+  totals: (string | number)[]
+  data: (string | number)[][]
+  videos: (string | number)[][]
+  channels: (string | number)[][]
+  videoInfos: Dictionary<IDataInfo>
+  channelInfos: Dictionary<IDataInfo>
 }
 
-export interface IAnalyticStateRedux extends TStateRedux, IAnalyticState {}
-
-const NetworkSliceAdapter = createEntityAdapter<INetwork>({ selectId: (x) => x.id })
-const DateSliceAdapter = createEntityAdapter<IDateOption>({ selectId: (x) => x.id })
+export interface IAnalyticStateRedux extends TStateRedux, IAnalyticState {
+  chartStatus: LazyStatus
+}
 
 // Define the initial state using that type
 const initialState: IAnalyticStateRedux = {
   status: LazyStatus.Loading,
-  networks: NetworkSliceAdapter.getInitialState(),
-  networkId: '',
-  dates: DateSliceAdapter.getInitialState(),
-  dateId: ''
+  chartStatus: LazyStatus.Loading,
+  networks: [],
+  totals: ['', '0', '0', '0'],
+  data: [],
+  dateIndex: 0,
+  networkIndex: 0,
+  videoInfos: {},
+  channelInfos: {},
+  videos: [],
+  channels: []
 }
 
 export const AnalyticSlice = createSlice({
   name: 'AnalyticSlice',
   initialState,
   reducers: {
-    setNetworkId: (state, action: PayloadAction<string>) => {
-      state.networkId = action.payload
+    setNetworkId: (state, action: PayloadAction<number>) => {
+      state.networkIndex = action.payload
     },
-    setDateId: (state, action: PayloadAction<string>) => {
-      state.dateId = action.payload
+    setDateId: (state, action: PayloadAction<number>) => {
+      state.dateIndex = action.payload
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAnalyticThunk.fulfilled, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
-        state.status = LazyStatus.Loaded
+        state.chartStatus = LazyStatus.Loaded
 
-        const { networks } = action.payload
-        NetworkSliceAdapter.removeAll(state.networks as EntityState<INetwork>)
-        NetworkSliceAdapter.upsertMany(state.networks as EntityState<INetwork>, networks)
-        if (networks[0] && networks[0].id) state.networkId = networks[0].id
-
-        const dates = DateOption.data
-        DateSliceAdapter.removeAll(state.dates as EntityState<IDateOption>)
-        DateSliceAdapter.upsertMany(state.dates as EntityState<IDateOption>, dates)
-        if (dates[0] && dates[0].id) state.dateId = dates[0].id
+        state.totals = action.payload.totals
+        state.data = action.payload.data
+        state.videos = action.payload.videos
+        state.channels = action.payload.channels
+        state.videoInfos = action.payload.videoInfos
+        state.channelInfos = action.payload.channelInfos
       })
       .addCase(fetchAnalyticThunk.rejected, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
-        state.status = LazyStatus.Error
+        state.chartStatus = LazyStatus.Error
       })
       .addCase(fetchAnalyticThunk.pending, (state, action) => {
+        state.requestId = action.meta.requestId
+        state.chartStatus = LazyStatus.Loading
+      })
+
+    builder
+      .addCase(fetchAnalyticConfigThunk.fulfilled, (state, action) => {
+        if (state.requestId !== action.meta.requestId) return
+        state.status = LazyStatus.Loaded
+
+        state.networks = action.payload.networks
+      })
+      .addCase(fetchAnalyticConfigThunk.rejected, (state, action) => {
+        if (state.requestId !== action.meta.requestId) return
+        state.status = LazyStatus.Error
+      })
+      .addCase(fetchAnalyticConfigThunk.pending, (state, action) => {
         state.requestId = action.meta.requestId
         state.status = LazyStatus.Loading
       })

@@ -45,8 +45,7 @@ export interface ITopDataDTO extends ITopData {
 
 export interface ITopDataConfig {
   title: string
-  startDate: string
-  endDate: string
+  date: string
   measure: string
 }
 
@@ -57,3 +56,18 @@ export interface ITableData {
 }
 
 export type TQueryParams = Graphql.QReport.TQueryParams
+
+export interface IDataInfo {
+  Id: string
+  Snippet: {
+    Title: string
+    Thumbnails: {
+      Default__: {
+        Height?: number
+        Url?: string
+        Width?: string
+        Etag?: string
+      }
+    }
+  }
+}

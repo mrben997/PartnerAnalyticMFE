@@ -1,27 +1,30 @@
 import { connect } from 'react-redux'
 import { EntityState } from '@reduxjs/toolkit'
-import { AnalyticSlice } from '../Analytic/AnalyticSlice'
+import { AnalyticSlice } from '../analytic/AnalyticSlice'
 import { IDateOption } from '../../../utils/type'
 import { AppDispatch, RootState } from '../../type'
 import DateMenu from '../../../views/DateMenu'
+import DateOption from '../../../utils/DateOption'
+import { fetchAnalyticThunk } from '../analytic/AnalyticThunk'
 
 export interface DateMenuReduxState {
-  dates: EntityState<IDateOption>
-  dateId: string
+  dates: IDateOption[]
+  dateIndex: number
 }
 
 export interface DateMenuReduxDispatch {
-  setdateId: (params: string) => void
+  setdateId: (params: number) => void
 }
 
 const mapStateToProps = (state: RootState): DateMenuReduxState => ({
-  dates: state.AnalyticSlice.dates,
-  dateId: state.AnalyticSlice.dateId
+  dates: DateOption.data,
+  dateIndex: state.AnalyticSlice.dateIndex
 })
 
 const appDispatchToProps = (dispatch: AppDispatch): DateMenuReduxDispatch => ({
-  setdateId: (params: string) => {
+  setdateId: (params) => {
     dispatch(AnalyticSlice.actions.setDateId(params))
+    dispatch(fetchAnalyticThunk())
   }
 })
 

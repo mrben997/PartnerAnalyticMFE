@@ -5,8 +5,7 @@ import { ITopData, ITopDataConfig, ITopDataDTO } from '../utils/type'
 
 const configDefault: ITopDataConfig = {
   title: 'Top data title',
-  startDate: 'Start date',
-  endDate: 'End date',
+  date: 'Start date - End date',
   measure: 'Views'
 }
 
@@ -30,14 +29,14 @@ export class TopData extends Component<IProps> {
   render() {
     const { config = configDefault } = this.props
     return (
-      <>
+      <Box sx={{ minHeight: '300px' }}>
         <Box>
           <Typography component='h3' variant='h6' sx={{ fontWeight: 500 }}>
             {config.title}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', mt: '12px' }}>
             <Typography component='span' variant='subtitle2' sx={{ flex: 1, fontWeight: 500 }}>
-              {config.startDate} - {config.endDate}
+              {config.date}
             </Typography>
             <Typography component='span' variant='subtitle2' sx={{ fontWeight: 500, width: widthAmount }}>
               {config.measure}
@@ -45,7 +44,7 @@ export class TopData extends Component<IProps> {
           </Box>
         </Box>
         {this.coverData(this.props.data).map(this.renderItem)}
-      </>
+      </Box>
     )
   }
 
@@ -58,6 +57,11 @@ export class TopData extends Component<IProps> {
           alt='thumbnail'
           sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
         />
+        {/* <img
+          alt='VideoThumb'
+          src={`/api/user/v2/YoutubeReport/VideoThumb?Id=${'iswFOvqpcSc'}`}
+          style={{ width: '50px', marginRight: '10px', borderRadius: '5px' }}
+        /> */}
         <Typography noWrap sx={{ flex: 1 }}>
           {e.title}
         </Typography>

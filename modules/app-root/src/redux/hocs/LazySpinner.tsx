@@ -7,14 +7,11 @@ type TProps = PropsWithChildren<{
 export default class LazySpinner extends Component<TProps> {
   render() {
     return (
-      <>
-        {this.props.children}
-        <Fade in={this.props.in} unmountOnExit timeout={{ enter: 0, exit: 350 }}>
-          <ContainerSpinner>
-            <CircularProgress />
-          </ContainerSpinner>
-        </Fade>
-      </>
+      <Fade in={this.props.in} unmountOnExit timeout={{ enter: 0, exit: 350 }}>
+        <ContainerSpinner>
+          <CircularProgress />
+        </ContainerSpinner>
+      </Fade>
     )
   }
 }

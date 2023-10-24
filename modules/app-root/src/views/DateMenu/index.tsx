@@ -3,7 +3,7 @@ import { Box, Button, Menu, MenuItem, SxProps, Theme, Typography, styled } from 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { DateMenuReduxProps } from '../../redux'
 import { IDateOption } from '../../utils/type'
-import DateOption from './DateOption'
+import DateOption from '../../utils/DateOption'
 
 interface IProps extends DateMenuReduxProps {
   hoverDisabled?: boolean
@@ -21,17 +21,16 @@ class DateMenu extends Component<IProps, IState> {
   open = (event: React.MouseEvent<HTMLElement>) => this.setState({ anchorEl: event.currentTarget })
   close = () => this.setState({ anchorEl: null })
 
-  getData = () => Array.from(Object.values(this.props.dates.entities) as IDateOption[])
-  getTitle = () => this.props.dates.entities[this.props.dateId]?.title || 'Title'
+  getTitle = () => this.props.dates[this.props.dateIndex]?.title || 'Title'
   getPeriod = () => {
-    const temp = this.props.dates.entities[this.props.dateId]?.value
+    const temp = this.props.dates[this.props.dateIndex]?.value
     if (!temp) return ''
     return DateOption.toRangeDate(temp)
   }
 
-  handleMenuItemClick = (_: React.MouseEvent<HTMLElement>, value: IDateOption) => {
+  handleMenuItemClick = (_: React.MouseEvent<HTMLElement>, value: number) => {
     this.setState({ anchorEl: null })
-    if (value.id !== this.props.dateId) this.props.setdateId(value.id)
+    if (value !== this.props.dateIndex) this.props.setdateId(value)
   }
 
   render() {
@@ -57,8 +56,8 @@ class DateMenu extends Component<IProps, IState> {
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
         >
-          {this.getData().map((e, i) => (
-            <MenuItem key={i} selected={e.id !== this.props.dateId} onClick={(event) => this.handleMenuItemClick(event, e)}>
+          {this.props.dates.map((e, i) => (
+            <MenuItem key={i} selected={i !== this.props.dateIndex} onClick={(event) => this.handleMenuItemClick(event, i)}>
               {e.title}
             </MenuItem>
           ))}

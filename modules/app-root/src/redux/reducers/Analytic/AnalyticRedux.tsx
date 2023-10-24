@@ -1,14 +1,16 @@
 import { customConnect } from '../../hocs'
-import { fetchAnalyticThunk } from './AnalyticThunk'
 import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../type'
 import Analytic from '../../../views/Analytic'
 import { IAnalyticStateRedux } from './AnalyticSlice'
+import { fetchAnalyticThunk, fetchAnalyticConfigThunk } from './AnalyticThunk'
 
 export interface AnalyticReduxState extends TStateRedux {
   AnalyticSlice: IAnalyticStateRedux
 }
 
-export interface AnalyticReduxDispatch extends TDispatchRedux {}
+export interface AnalyticReduxDispatch extends TDispatchRedux {
+  fetchChartData: () => void
+}
 
 const mapStateToProps = (state: RootState): AnalyticReduxState => ({
   status: state.AnalyticSlice.status,
@@ -17,7 +19,10 @@ const mapStateToProps = (state: RootState): AnalyticReduxState => ({
 
 const appDispatchToProps = (dispatch: AppDispatch): AnalyticReduxDispatch => ({
   FetchData: () => {
-    return dispatch(fetchAnalyticThunk())
+    return dispatch(fetchAnalyticConfigThunk())
+  },
+  fetchChartData: () => {
+    dispatch(fetchAnalyticThunk())
   }
 })
 

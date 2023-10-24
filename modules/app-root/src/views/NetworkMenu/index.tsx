@@ -20,11 +20,10 @@ export class NetworkMenu extends Component<IProps, IState> {
   open = (event: React.MouseEvent<HTMLElement>) => this.setState({ anchorEl: event.currentTarget })
   close = () => this.setState({ anchorEl: null })
 
-  getData = () => Array.from(Object.values(this.props.networks.entities) as INetwork[])
-  getTitle = () => this.props.networks.entities[this.props.networkId]?.title || 'Title'
+  getTitle = () => this.props.networks[this.props.networkIndex]?.title || 'Title'
 
-  handleMenuItemClick = (id: string) => {
-    if (id !== this.props.networkId) this.props.setNetworkId(id)
+  handleMenuItemClick = (value: number) => {
+    if (value !== this.props.networkIndex) this.props.setNetworkId(value)
     this.setState({ anchorEl: null })
   }
 
@@ -47,8 +46,8 @@ export class NetworkMenu extends Component<IProps, IState> {
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
         >
-          {this.getData().map((e, i) => (
-            <MenuItem key={i} selected={e.id === this.props.networkId} onClick={() => this.handleMenuItemClick(e.id)}>
+          {this.props.networks.map((e, i) => (
+            <MenuItem key={i} selected={i === this.props.networkIndex} onClick={() => this.handleMenuItemClick(i)}>
               {e.title}
             </MenuItem>
           ))}

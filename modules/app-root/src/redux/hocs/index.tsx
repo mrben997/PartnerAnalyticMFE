@@ -5,6 +5,7 @@ import axios, { CancelTokenSource } from 'axios'
 import { AppDispatch, LazyStatus } from '../type'
 import { ActionMapDispatchToProps, ActionMapStateToProps, IReturnDispatch, TDispatchRedux, TStateRedux } from '../type'
 import LazySpinner from './LazySpinner'
+import { Box, Fade } from '@mui/material'
 
 interface hocComponentProp<TActionParam> {
   params?: TActionParam
@@ -58,11 +59,14 @@ export const customConnect = function <
       }
       switch (this.props.status) {
         case LazyStatus.Loading:
+          return <LazySpinner in />
         case LazyStatus.Loaded:
           return (
-            <LazySpinner in={this.props.status === LazyStatus.Loading}>
-              <WrappedComponent {...this.props} />
-            </LazySpinner>
+            <Fade in>
+              <Box width='100%'>
+                <WrappedComponent {...this.props} />
+              </Box>
+            </Fade>
           )
         case LazyStatus.Error:
           return <div>Error...</div>

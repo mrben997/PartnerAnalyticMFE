@@ -1,12 +1,12 @@
-import { AnalyticReduxDispatch, AnalyticReduxState } from './Analytic/AnalyticRedux'
-import { DateMenuReduxDispatch, DateMenuReduxState } from './DateMenu/DateMenuRedux'
-import { NetworkReduxDispatch, NetworkReduxState } from './NetworkMenu/NetworkMenuRedux'
+import { AnalyticReduxDispatch, AnalyticReduxState } from './analytic/AnalyticRedux'
+import { NetworkReduxDispatch, NetworkReduxState } from './other/NetworkMenuRedux'
+import { DateMenuReduxDispatch, DateMenuReduxState } from './other/DateMenuRedux'
 
-export { AnalyticRedux } from './Analytic/AnalyticRedux'
+export { AnalyticRedux } from './analytic/AnalyticRedux'
 export interface AnalyticReduxProps extends AnalyticReduxState, AnalyticReduxDispatch {}
 
-export { NetworkMenuRedux } from './NetworkMenu/NetworkMenuRedux'
+export { NetworkMenuRedux } from './other/NetworkMenuRedux'
 export interface NetworkMenuReduxProps extends NetworkReduxState, NetworkReduxDispatch {}
 
-export { DateMenuRedux } from './DateMenu/DateMenuRedux'
+export { DateMenuRedux } from './other/DateMenuRedux'
 export interface DateMenuReduxProps extends DateMenuReduxState, DateMenuReduxDispatch {}

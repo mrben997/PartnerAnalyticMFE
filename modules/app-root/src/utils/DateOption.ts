@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IDateOption } from '../../utils/type'
+import { IDateOption } from './type'
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const FULL_MONTH_LABELS = [
@@ -31,16 +31,18 @@ class DateOptionBase {
     this.monthLabels = MONTH_LABELS
     this.fullMonthLabels = FULL_MONTH_LABELS
     this.data = [
-      { id: faker.database.mongodbObjectId(), title: 'Last 7 days', value: this.getLast7Days() },
-      { id: faker.database.mongodbObjectId(), title: 'Last 28 days', value: this.getLast28Days() },
-      { id: faker.database.mongodbObjectId(), title: 'Last 90 days', value: this.getLast90Days() },
-      { id: faker.database.mongodbObjectId(), title: new Date().getFullYear() + '', value: this.getThisYear() },
-      { id: faker.database.mongodbObjectId(), title: new Date().getFullYear() - 1 + '', value: this.getThisYear(1) },
-      { id: faker.database.mongodbObjectId(), title: this.generateName(), value: this.getThisMonth() },
-      { id: faker.database.mongodbObjectId(), title: this.generateName(1), value: this.getThisMonth(1) },
-      { id: faker.database.mongodbObjectId(), title: this.generateName(2), value: this.getThisMonth(2) }
+      this.generateData('Last 7 days', this.toString(this.getLast7Days())),
+      this.generateData('Last 28 days', this.toString(this.getLast28Days())),
+      this.generateData('Last 90 days', this.toString(this.getLast90Days())),
+      this.generateData(new Date().getFullYear() + '', this.toString(this.getThisYear())),
+      this.generateData(new Date().getFullYear() - 1 + '', this.toString(this.getThisYear(1))),
+      this.generateData(this.generateName(), this.toString(this.getThisMonth())),
+      this.generateData(this.generateName(1), this.toString(this.getThisMonth(1))),
+      this.generateData(this.generateName(2), this.toString(this.getThisMonth(2)))
     ]
   }
+
+  private generateData = (title: string, value: string[]) => ({ id: faker.database.mongodbObjectId(), title, value })
 
   private delayDate = (date1: Date, date2: Date, amount: number) => {
     date1 = new Date(date1.setDate(date1.getDate() + amount))
@@ -48,9 +50,14 @@ class DateOptionBase {
     return [date1, date2]
   }
 
-  private toString = (date1: Date, date2: Date) => {
+  private toString = ([date1, date2, ..._]: Date[]) => {
     return [date1.toLocaleString(), date2.toLocaleString()]
   }
+
+  toStringRequest = ([date1, date2, ..._]: Date[]) => [
+    `${date1.getFullYear()}-${date1.getMonth() + 1}-${date1.getDate()}`,
+    `${date2.getFullYear()}-${date2.getMonth() + 1}-${date2.getDate()}`
+  ]
 
   private generateName = (subtraction: number = 0) => {
     let date = new Date()
@@ -84,36 +91,32 @@ class DateOptionBase {
   getLast7Days = () => {
     const date = new Date()
     const tmps = [new Date(date.setDate(date.getDate() - 6)), new Date()]
-    const [d1, d2] = this.delayDate(tmps[0], tmps[1], -this.maxDate)
-    return this.toString(d1, d2)
+    return this.delayDate(tmps[0], tmps[1], -this.maxDate)
   }
 
   getLast28Days = () => {
     const date = new Date()
-    const tmps = [new Date(date.getFullYear(), date.getMonth(), date.getDate() - 27), date]
-    const [d1, d2] = this.delayDate(tmps[0], tmps[1], -this.maxDate)
-    return this.toString(d1, d2)
+    const tmps = [new Date(date.setDate(date.getDate() - 27)), new Date()]
+    return this.delayDate(tmps[0], tmps[1], -this.maxDate)
   }
 
   getLast90Days = () => {
     const date = new Date()
     const tmps = [new Date(date.getFullYear(), date.getMonth(), date.getDate() - 89), date]
-    const [d1, d2] = this.delayDate(tmps[0], tmps[1], -this.maxDate)
-    return this.toString(d1, d2)
+    return this.delayDate(tmps[0], tmps[1], -this.maxDate)
   }
 
   getLast365Days = () => {
     const date = new Date()
     const tmps = [new Date(date.getFullYear(), date.getMonth(), date.getDate() - 364), date]
-    const [d1, d2] = this.delayDate(tmps[0], tmps[1], -this.maxDate)
-    return this.toString(d1, d2)
+    return this.delayDate(tmps[0], tmps[1], -this.maxDate)
   }
 
   getThisYear = (subtraction: number = 0) => {
     const date = new Date()
     let year = date.getFullYear()
     if (subtraction > 0) year -= subtraction
-    return this.toString(new Date(year, 0, 1), new Date(year, 11, 30))
+    return [new Date(year, 0, 1), new Date(year, 11, 30)]
   }
 
   getThisMonth = (subtraction: number = 0) => {
@@ -121,7 +124,7 @@ class DateOptionBase {
     if (subtraction > 0) date = new Date(date.setMonth(date.getMonth() - subtraction))
     const month = date.getMonth()
     const year = date.getFullYear()
-    return this.toString(new Date(year, month, 1), new Date(year, month, this.getDaysInMonth(month + 1, year)))
+    return [new Date(year, month, 1), new Date(year, month, this.getDaysInMonth(month + 1, year))]
   }
 }
 const DateOption = new DateOptionBase()
