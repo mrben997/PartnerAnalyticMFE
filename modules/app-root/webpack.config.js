@@ -134,8 +134,7 @@ module.exports = (env, argv) => {
           'react-dom': {
             requiredVersion: '17.0.2',
             singleton: true
-          },
-          'OIDC-auth': { singleton: true }
+          }
         }
       }),
       // Plugin hỗ trợ thêm thẻ style và script vào index.html
