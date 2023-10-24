@@ -3,7 +3,7 @@ import { Container } from '@mui/material'
 import { idDefault } from 'csmfe'
 import { TOnChangeCheckbox } from '../TableContent/type'
 import TableContent, { SelectAccessor } from '../TableContent'
-import FAKEDATA from '../../utils/FAKEDATA'
+import FakeDataLocal from '../../utils/FakeDataLocal'
 
 interface IProps {}
 interface IState {}
@@ -12,7 +12,7 @@ export default class AvancedModeTable extends Component<IProps, IState> {
   selectAccessor: SelectAccessor
   constructor(props: IProps) {
     super(props)
-    const sa = new SelectAccessor(FAKEDATA.rowDatas, idDefault)
+    const sa = new SelectAccessor(FakeDataLocal.rowDatas, idDefault)
     this.selectAccessor = sa
   }
 

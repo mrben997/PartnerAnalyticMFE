@@ -1,34 +1,30 @@
 import React, { Component } from 'react'
 import { Box, Button, Container, Grid, Stack } from '@mui/material'
-import { AnalyticReduxProps } from '../../redux/type'
-import { OverviewSection, TopData, DateMenu } from '../../components'
+import { OverviewSection, TopData } from '../../components'
 import AvancedMode, { AvancedModeContext } from '../AvancedMode'
-import FAKEDATA from '../../utils/FAKEDATA'
-import NetworkMenu from '../NetworkMenu'
-import NetworkMenuRedux from '../../redux/maps/NetworkMenuRedux'
+import FakeDataLocal from '../../utils/FakeDataLocal'
+import { AnalyticReduxProps, DateMenuRedux, NetworkMenuRedux } from '../../redux'
 
 interface IProps extends AnalyticReduxProps {}
 export default class Analytic extends Component<IProps> {
   render() {
     return (
-      <Container maxWidth='xl'>
-        <Box sx={{ px: '24px' }}>
-          {this.renderTopBar()}
-          <Box height='24px' />
-          <OverviewSection data={FAKEDATA.lineChart} />
-          <Box height='64px' />
-          {this.renderTopData()}
-          <Box height='128px' />
-        </Box>
+      <Container maxWidth={false}>
+        {this.renderTopBar()}
+        <Box height='24px' />
+        <OverviewSection data={FakeDataLocal.lineChart} />
+        <Box height='64px' />
+        {this.renderTopData()}
+        <Box height='128px' />
       </Container>
     )
   }
 
   renderTopBar = () => {
     return (
-      <AvancedMode data={FAKEDATA.avancedMode}>
+      <AvancedMode data={FakeDataLocal.avancedMode}>
         <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '24px' }}>
-          <DateMenu data={FAKEDATA.dates} />
+          <DateMenuRedux />
           <Box sx={{ flex: 1 }} />
           <Stack gap='6px'>
             <NetworkMenuRedux />
@@ -48,11 +44,11 @@ export default class Analytic extends Component<IProps> {
   renderTopData = () => {
     return (
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <TopData data={FAKEDATA.topData1} />
+        <Grid item xs={12} sm={6}>
+          <TopData data={FakeDataLocal.topData1} />
         </Grid>
-        <Grid item xs={6}>
-          <TopData data={FAKEDATA.topData2} />
+        <Grid item xs={12} sm={6}>
+          <TopData data={FakeDataLocal.topData2} />
         </Grid>
       </Grid>
     )

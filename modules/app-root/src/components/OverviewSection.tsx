@@ -1,7 +1,7 @@
 import React, { Component, SyntheticEvent } from 'react'
 import { TabList, TabPanel, TabContext } from '@mui/lab'
 import { humanNumber, formatterUSD } from 'csmfe/helper'
-import { Box, Fade, Tab, Typography } from '@mui/material'
+import { Box, Fade, Tab, Typography, styled } from '@mui/material'
 import { LineChart } from './LineChart'
 import { IChartData } from '../utils/type'
 import { GenerateLineChartData } from '../utils/helper'
@@ -24,11 +24,13 @@ export class OverviewSection extends Component<IProps, IState> {
   render() {
     return (
       <TabContext value={this.state.tabIndex}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList centered onChange={this.handleChange} aria-label='lab API tabs example'>
-            {this.renderTabs()}
-          </TabList>
-        </Box>
+        <TabList
+          centered
+          onChange={this.handleChange}
+          sx={{ borderBottom: 1, borderColor: 'divider', px: '24px', minWidth: '600px' }}
+        >
+          {this.renderTabs()}
+        </TabList>
         <Box sx={{ height: '400px' }}>{this.renderTabPanels()}</Box>
       </TabContext>
     )
@@ -38,15 +40,16 @@ export class OverviewSection extends Component<IProps, IState> {
     if (!this.props.data) return <></>
     return this.props.data.details.map((e, index) => (
       <Tab
-        key={'key' + index}
+        key={index}
         value={index + ''}
+        sx={{ textTransform: 'none', flex: 1, maxWidth: 'unset' }}
         label={
-          <Box sx={{ minWidth: '300px', textTransform: 'none' }}>
+          <>
             <Typography variant='subtitle1'>{e.title}</Typography>
             <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
               {index === 2 ? formatterUSD().format(e.total) : humanNumber(e.total)}
             </Typography>
-          </Box>
+          </>
         }
       />
     ))

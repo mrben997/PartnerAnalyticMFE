@@ -17,15 +17,15 @@ export const customConnect = function <
   TActionParam,
   TMapState extends TStateRedux,
   TMapDispatch extends TDispatchRedux<TActionParam> = TDispatchRedux<TActionParam>,
-  TComponentProp = any
+  TComponentProps = any
 >(
-  WrappedComponent: ComponentType<TComponentProp>,
+  WrappedComponent: ComponentType<TComponentProps>,
   actionState: ActionMapStateToProps<TMapState> | null = null,
   actionProp: ActionMapDispatchToProps<TMapDispatch> | null = null,
   options: OptionsHocLazy<TActionParam> | null = null
 ) {
-  type Props = hocComponentProp<TActionParam> & TMapState & TMapDispatch & TComponentProp
-  class HocComponent extends Component<Props> {
+  type TProps = hocComponentProp<TActionParam> & TMapState & TMapDispatch & TComponentProps
+  class HocComponent extends Component<TProps> {
     constructor(props: any) {
       super(props)
       this.state = {
@@ -56,11 +56,11 @@ export const customConnect = function <
         this.isFirst = false
         return <LazySpinner in />
       }
-      switch (this.props.Status) {
+      switch (this.props.status) {
         case LazyStatus.Loading:
         case LazyStatus.Loaded:
           return (
-            <LazySpinner in={this.props.Status === LazyStatus.Loading}>
+            <LazySpinner in={this.props.status === LazyStatus.Loading}>
               <WrappedComponent {...this.props} />
             </LazySpinner>
           )
@@ -77,7 +77,7 @@ export const customConnect = function <
   }
 
   return connect(actionState, customActionProps)(HocComponent as any) as ConnectedComponent<
-    ComponentType<TComponentProp>,
-    TComponentProp
+    ComponentType<TComponentProps>,
+    TComponentProps
   >
 }

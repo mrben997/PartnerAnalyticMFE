@@ -1,43 +1,41 @@
 import React, { Component } from 'react'
 import { Box, Button, Menu, MenuItem, SxProps, Theme, Typography, styled } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { INetwork } from '../../utils/type'
+import { NetworkMenuReduxProps } from '../../redux'
 
-interface IProps {
-  data: string[]
+interface IProps extends NetworkMenuReduxProps {
   hoverDisabled?: boolean
   sx?: SxProps<Theme>
 }
 interface IState {
-  selectedIndex: number
   anchorEl?: HTMLElement | null
 }
-export class DateMenu extends Component<IProps, IState> {
+export class NetworkMenu extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
-    this.state = { selectedIndex: 0 }
+    this.state = { anchorEl: null }
   }
 
   open = (event: React.MouseEvent<HTMLElement>) => this.setState({ anchorEl: event.currentTarget })
   close = () => this.setState({ anchorEl: null })
 
-  handleMenuItemClick = (_: React.MouseEvent<HTMLElement>, index: number) => {
-    if (index !== this.state.selectedIndex) this.setState({ selectedIndex: index, anchorEl: null })
-    else this.setState({ anchorEl: null })
+  getData = () => Array.from(Object.values(this.props.networks.entities) as INetwork[])
+  getTitle = () => this.props.networks.entities[this.props.networkId]?.title || 'Title'
+
+  handleMenuItemClick = (id: string) => {
+    if (id !== this.props.networkId) this.props.setNetworkId(id)
+    this.setState({ anchorEl: null })
   }
 
   render() {
-    const menuData = this.props.data
-    const selectedData = this.props.data[this.state.selectedIndex]
     const sxHover: SxProps<Theme> = this.props.hoverDisabled ? {} : { '&:hover': { backgroundColor: 'rgba(25, 118, 210, 0.12)' } }
     return (
       <>
         <CustomButton onClick={this.open} endIcon={<ArrowDropDownIcon />} sx={{ ...sxHover, ...this.props.sx }}>
           <Box component='span' className='content-btn'>
-            <Typography variant='subtitle2' component='span'>
-              Start date - End date
-            </Typography>
-            <Typography variant='body1' component='span' sx={{ fontWeight: 600 }}>
-              {selectedData ?? 'Title'}
+            <Typography variant='body1' component='span' sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+              {this.getTitle()}
             </Typography>
           </Box>
         </CustomButton>
@@ -49,9 +47,9 @@ export class DateMenu extends Component<IProps, IState> {
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
         >
-          {menuData.map((e, i) => (
-            <MenuItem key={e} selected={i === this.state.selectedIndex} onClick={(event) => this.handleMenuItemClick(event, i)}>
-              {e}
+          {this.getData().map((e, i) => (
+            <MenuItem key={i} selected={e.id === this.props.networkId} onClick={() => this.handleMenuItemClick(e.id)}>
+              {e.title}
             </MenuItem>
           ))}
         </CustomMenu>
@@ -59,18 +57,18 @@ export class DateMenu extends Component<IProps, IState> {
     )
   }
 }
-export default DateMenu
 
-const buttonWidth = '220px'
+export default NetworkMenu
+
+const buttonWidth = '200px'
 
 const CustomButton = styled(Button)({
   color: '#3c3c3c',
   width: buttonWidth,
-  height: '56px',
   textTransform: 'unset',
   '& .content-btn': {
-    display: 'flex',
     flex: 1,
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start'
   }

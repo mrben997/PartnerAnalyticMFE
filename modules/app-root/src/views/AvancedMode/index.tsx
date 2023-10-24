@@ -2,15 +2,13 @@ import React, { Component, PropsWithChildren } from 'react'
 import { ChartData } from 'chart.js'
 import { Box, Container, Fade, IconButton, Tooltip, styled } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { DateMenu } from '../../components'
 import { IChartData } from '../../utils/type'
 import { LineChart } from '../../components/LineChart'
 import { TAvancedModeOpen, TAvancedModeClose } from './AvancedModeContext'
 import { AvancedModeContext, IAvancedModeContext, IAvancedModeState } from './AvancedModeContext'
 import DialogBase from './DialogBase'
 import TabSection from './TabSection'
-import TableTopData from './TableTopData'
-import FAKEDATA from '../../utils/FAKEDATA'
+import FakeDataLocal from '../../utils/FakeDataLocal'
 import AvancedModeTable from '../AvancedModeTable'
 
 export * from './AvancedModeContext'
@@ -25,11 +23,11 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
   }
 
   get data(): IChartData {
-    return FAKEDATA.lineChartAvancedMode
+    return FakeDataLocal.lineChartAvancedMode
   }
 
   get dates(): string[] {
-    return FAKEDATA.dates
+    return FakeDataLocal.dates
   }
 
   open: TAvancedModeOpen = () => this.setState({ isOpen: true })
@@ -49,7 +47,7 @@ export default class AvancedMode extends Component<TProps, IAvancedModeState> im
               <Box sx={{ display: 'flex', alignItems: 'center', height: sectionHeight }}>
                 <Box sx={{ flex: 1 }} />
                 <Box sx={{ height: '100%', borderRight: borderValue }} />
-                <DateMenu data={this.dates} hoverDisabled sx={{ borderRadius: 0 }} />
+                {/* <DateMenu data={this.dates} hoverDisabled sx={{ borderRadius: 0 }} /> */}
               </Box>
             </Container>
           </Box>

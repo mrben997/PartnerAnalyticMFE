@@ -1,8 +1,13 @@
 import React from 'react'
-import { AnalyticRedux } from './redux/analytic/AnalyticRedux'
+import { Provider } from 'react-redux'
+import store, { AnalyticRedux } from './redux'
 
 export default class App extends React.Component {
   render() {
-    return <AnalyticRedux />
+    return (
+      <Provider store={store}>
+        <AnalyticRedux />
+      </Provider>
+    )
   }
 }

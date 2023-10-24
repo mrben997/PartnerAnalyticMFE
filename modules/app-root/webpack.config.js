@@ -82,8 +82,7 @@ module.exports = (env, argv) => {
       ]
     },
     output: {
-      publicPath: 'auto',
-      crossOriginLoading: 'anonymous'
+      publicPath: 'auto'
     },
     // output: {
     //   filename: 'static/js/main.[contenthash:6].js', // Thêm mã hash tên file dựa vào content để tránh bị cache bởi CDN hay browser.
@@ -126,7 +125,18 @@ module.exports = (env, argv) => {
         exposes: {
           './Analytic': './src/App'
         },
-        filename: 'remoteEntry.js'
+        filename: 'remoteEntry.js',
+        shared: {
+          react: {
+            requiredVersion: '17.0.2',
+            singleton: true
+          },
+          'react-dom': {
+            requiredVersion: '17.0.2',
+            singleton: true
+          },
+          'OIDC-auth': { singleton: true }
+        }
       }),
       // Plugin hỗ trợ thêm thẻ style và script vào index.html
       new HtmlWebpackPlugin({

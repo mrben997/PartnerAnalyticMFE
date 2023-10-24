@@ -1,6 +1,20 @@
+import { Graphql } from 'graphql-service-mfe'
+
 export enum ENetwork {
   DinoCollab = 'DinoCollab',
   SuperNetwork = 'SuperNetwork'
+}
+
+export interface INetwork {
+  id: string
+  title: string
+  value: ENetwork
+}
+
+export interface IDateOption {
+  id: string
+  title: string
+  value: string[]
 }
 
 export interface IChartDetail {
@@ -41,3 +55,5 @@ export interface ITableData {
   title: string
   description?: string
 }
+
+export type TQueryParams = Graphql.QReport.TQueryParams
