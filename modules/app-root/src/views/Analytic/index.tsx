@@ -1,52 +1,18 @@
 import React, { Component } from 'react'
-import { Box, Button, Container, Grid, Stack } from '@mui/material'
+import { Box, Button, Container, Grid, Stack, Typography, styled } from '@mui/material'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { ITopData } from '../../utils/type'
+import { AnalyticReduxProps } from '../../redux'
 import { OverviewSection, TopData } from '../../components'
 import AvancedMode, { AvancedModeContext } from '../AvancedMode'
-import FakeDataLocal from '../../utils/FakeDataLocal'
-import { AnalyticReduxProps, DateMenuRedux, LazyStatus, NetworkMenuRedux } from '../../redux'
-import { IChartData, ITopData } from '../../utils/type'
-import { ChartData } from 'chart.js'
+import SelectMenu from '../SelectMenu'
 import DateOption from '../../utils/DateOption'
+import FakeDataLocal from '../../utils/FakeDataLocal'
 import SkeletonLazyWrap from '../../components/SkeletonLazyView'
 
 interface IProps extends AnalyticReduxProps {}
 export default class Analytic extends Component<IProps> {
-  componentDidMount(): void {
-    this.props.fetchChartData()
-  }
-  render() {
-    return (
-      <Container maxWidth={false}>
-        {this.renderTopBar()}
-        <Box height='24px' />
-        <OverviewSection AnalyticSlice={this.props.AnalyticSlice} />
-        <Box height='64px' />
-        {this.renderTopData()}
-        <Box height='128px' />
-      </Container>
-    )
-  }
-
-  renderTopBar = () => {
-    return (
-      <AvancedMode data={FakeDataLocal.avancedMode}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '24px' }}>
-          <DateMenuRedux />
-          <Box sx={{ flex: 1 }} />
-          <Stack gap='6px'>
-            <NetworkMenuRedux />
-            <AvancedModeContext.Consumer>
-              {({ open }) => (
-                <Button variant='contained' color='primary' onClick={open}>
-                  Advanced Mode
-                </Button>
-              )}
-            </AvancedModeContext.Consumer>
-          </Stack>
-        </Box>
-      </AvancedMode>
-    )
-  }
+  getPeriod = () => {}
 
   getVideoDatas = () => {
     return this.props.AnalyticSlice.videos.map((e) => {
@@ -60,55 +26,126 @@ export default class Analytic extends Component<IProps> {
     })
   }
 
-  getChannelDatas = () => {
+  getChannelDatas = (): ITopData[] => {
     return this.props.AnalyticSlice.channels.map((e) => {
       const info = this.props.AnalyticSlice.channelInfos[e[0]]
-      const t: ITopData = {
+      return {
         title: info?.Snippet.Title ?? e[0].toString(),
         value: e[1] as number,
         imageUrl: info?.Snippet.Thumbnails?.Default__?.Url ?? 'example'
       }
-      return t
     })
   }
 
-  getTitle = () => DateOption.data[this.props.AnalyticSlice.dateIndex]?.title || 'Title'
-  getPeriod = () => {
-    const temp = DateOption.data[this.props.AnalyticSlice.dateIndex]?.value
-    if (!temp) return ''
-    return DateOption.toRangeDate(temp)
+  componentDidMount(): void {
+    this.props.fetchChartData()
   }
 
-  getIsLoading = () => this.props.AnalyticSlice.chartStatus !== LazyStatus.Loaded
+  render() {
+    return (
+      <AvancedMode>
+        <Container maxWidth={false}>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '24px' }}>
+            {this.renderSelectDate()}
+            <Box sx={{ flex: 1 }} />
+            <Stack gap='6px'>
+              {this.renderSelectNetwork()}
+              <AvancedModeContext.Consumer>
+                {({ open }) => (
+                  <Button variant='contained' color='primary' onClick={open}>
+                    Advanced Mode
+                  </Button>
+                )}
+              </AvancedModeContext.Consumer>
+            </Stack>
+          </Box>
+          <Box height='24px' />
+          <OverviewSection AnalyticSlice={this.props.AnalyticSlice} />
+          <Box height='64px' />
+          {this.renderTopData()}
+          <Box height='128px' />
+        </Container>
+      </AvancedMode>
+    )
+  }
+
+  renderSelectNetwork = () => {
+    const data = this.props.AnalyticSlice.networks[this.props.AnalyticSlice.networkIndex]
+    return (
+      <SelectMenu
+        data={this.props.AnalyticSlice.networks}
+        selectedIndex={this.props.AnalyticSlice.networkIndex}
+        onSelected={this.props.setNetworkIndex}
+        width={buttonWidth}
+      >
+        {(open) => (
+          <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
+            <Box component='span' className='content-btn'>
+              <Typography variant='body1' component='span' sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
+                {data?.title || 'Title'}
+              </Typography>
+            </Box>
+          </CustomButton>
+        )}
+      </SelectMenu>
+    )
+  }
+
+  renderSelectDate = () => {
+    const data = DateOption.data[this.props.AnalyticSlice.dateIndex]
+    const period = data?.value ? DateOption.toRangeDate(data?.value) : ''
+    return (
+      <SelectMenu
+        data={DateOption.data}
+        selectedIndex={this.props.AnalyticSlice.dateIndex}
+        onSelected={this.props.setDateIndex}
+        width={buttonWidth}
+      >
+        {(open) => (
+          <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
+            <Box component='span' className='content-btn'>
+              <Typography variant='subtitle2' component='span'>
+                {period}
+              </Typography>
+              <Typography variant='body1' component='span' sx={{ fontWeight: 600 }}>
+                {data?.title || 'Title'}
+              </Typography>
+            </Box>
+          </CustomButton>
+        )}
+      </SelectMenu>
+    )
+  }
 
   renderTopData = () => {
+    const data = DateOption.data[this.props.AnalyticSlice.dateIndex]
+    const period = data?.value ? DateOption.toRangeDate(data?.value) : ''
     return (
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <SkeletonLazyWrap isLoading={this.getIsLoading()}>
-            <TopData
-              data={this.getVideoDatas()}
-              config={{
-                title: 'Top Videos',
-                date: this.getPeriod(),
-                measure: 'Views'
-              }}
-            />
+          <SkeletonLazyWrap status={this.props.AnalyticSlice.chartStatus}>
+            <TopData data={this.getVideoDatas()} config={{ title: 'Top Videos', date: period, measure: 'Views' }} />
           </SkeletonLazyWrap>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <SkeletonLazyWrap isLoading={this.getIsLoading()}>
-            <TopData
-              data={this.getChannelDatas()}
-              config={{
-                title: 'Top Channels',
-                date: this.getPeriod(),
-                measure: 'Views'
-              }}
-            />
+          <SkeletonLazyWrap status={this.props.AnalyticSlice.chartStatus}>
+            <TopData data={this.getChannelDatas()} config={{ title: 'Top Channels', date: period, measure: 'Views' }} />
           </SkeletonLazyWrap>
         </Grid>
       </Grid>
     )
   }
 }
+
+const buttonWidth = '200px'
+const CustomButton = styled(Button)({
+  color: '#3c3c3c',
+  width: buttonWidth,
+  textTransform: 'unset',
+  '& .content-btn': {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start'
+  }
+})

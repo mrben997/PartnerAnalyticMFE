@@ -14,8 +14,6 @@ interface IProps {
 export default class TableContent extends Component<IProps> {
   getCheckboxControlStatus = () => {
     const { idActives, max } = this.props.data
-    console.log({ idActives, max })
-
     const checked = idActives.length === max
     const indeterminate = idActives.length > 0 && idActives.length < max
     return { checked, indeterminate }
@@ -48,8 +46,6 @@ export default class TableContent extends Component<IProps> {
   }
 
   renderHeader = () => {
-    console.log(this.getCheckboxControlStatus())
-
     return (
       <TableHead>
         <TableRow>

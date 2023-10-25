@@ -1,7 +1,7 @@
 import { customConnect } from '../../hocs'
 import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../type'
 import Analytic from '../../../views/Analytic'
-import { IAnalyticStateRedux } from './AnalyticSlice'
+import { AnalyticSlice, IAnalyticStateRedux } from './AnalyticSlice'
 import { fetchAnalyticThunk, fetchAnalyticConfigThunk } from './AnalyticThunk'
 
 export interface AnalyticReduxState extends TStateRedux {
@@ -9,7 +9,9 @@ export interface AnalyticReduxState extends TStateRedux {
 }
 
 export interface AnalyticReduxDispatch extends TDispatchRedux {
-  fetchChartData: () => void
+  fetchChartData: () => { abort: () => void }
+  setNetworkIndex: (params: number) => void
+  setDateIndex: (params: number) => void
 }
 
 const mapStateToProps = (state: RootState): AnalyticReduxState => ({
@@ -22,6 +24,14 @@ const appDispatchToProps = (dispatch: AppDispatch): AnalyticReduxDispatch => ({
     return dispatch(fetchAnalyticConfigThunk())
   },
   fetchChartData: () => {
+    return dispatch(fetchAnalyticThunk())
+  },
+  setNetworkIndex: (params) => {
+    dispatch(AnalyticSlice.actions.setNetworkIndex(params))
+    dispatch(fetchAnalyticThunk())
+  },
+  setDateIndex: (params) => {
+    dispatch(AnalyticSlice.actions.setDateIndex(params))
     dispatch(fetchAnalyticThunk())
   }
 })

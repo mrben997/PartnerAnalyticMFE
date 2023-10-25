@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Component, SyntheticEvent } from 'react'
 import { SxProps, Tab, Tabs, Theme, styled } from '@mui/material'
-import { IChartDetail } from '../../utils/type'
 
 interface IProps {
   selectedIndex: number
   onChange?: (event: SyntheticEvent<Element, Event>, value: any) => void
-  data: IChartDetail[]
+  data: string[]
   sx?: SxProps<Theme>
 }
 
@@ -25,7 +24,7 @@ export default class TabSection extends Component<IProps> {
         aria-label='scrollable force tabs'
       >
         {this.props.data.map((e, i) => (
-          <CustomTab key={i} label={e.title} {...this.a11yProps(i)} />
+          <CustomTab key={i} label={e} {...this.a11yProps(i)} />
         ))}
       </Tabs>
     )

@@ -40,10 +40,10 @@ export const AnalyticSlice = createSlice({
   name: 'AnalyticSlice',
   initialState,
   reducers: {
-    setNetworkId: (state, action: PayloadAction<number>) => {
+    setNetworkIndex: (state, action: PayloadAction<number>) => {
       state.networkIndex = action.payload
     },
-    setDateId: (state, action: PayloadAction<number>) => {
+    setDateIndex: (state, action: PayloadAction<number>) => {
       state.dateIndex = action.payload
     }
   },
@@ -52,7 +52,6 @@ export const AnalyticSlice = createSlice({
       .addCase(fetchAnalyticThunk.fulfilled, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
         state.chartStatus = LazyStatus.Loaded
-
         state.totals = action.payload.totals
         state.data = action.payload.data
         state.videos = action.payload.videos

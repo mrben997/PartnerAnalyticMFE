@@ -26,7 +26,6 @@ export class OverviewSection extends Component<IProps, IState> {
   }
 
   get data() {
-    // return this.props.AnalyticSlice.data
     return this.sortByDate(this.props.AnalyticSlice.data)
   }
 
@@ -35,8 +34,6 @@ export class OverviewSection extends Component<IProps, IState> {
   sortByDate = (params: (string | number)[][]) => {
     const temp = params.slice()
     temp.sort((a, b) => {
-      // const dateA = new Date(`${a[0].substring(0, 4)}-${a[0].substring(4, 6)}-${a[0].substring(6, 8)}`)
-      // const dateB = new Date(`${b[0].substring(0, 4)}-${b[0].substring(4, 6)}-${b[0].substring(6, 8)}`)
       const aa = a[0].toString()
       const bb = b[0].toString()
       return aa > bb ? 1 : aa < bb ? -1 : 0
@@ -46,11 +43,9 @@ export class OverviewSection extends Component<IProps, IState> {
 
   hummanDate = (value: string) => `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`
 
-  getLabels = () => this.data.map((e) => e[0].toString())
+  getLabels = () => this.data.map((e) => this.hummanDate(e[0].toString()))
 
   getData = () => this.data.map((e) => e[parseInt(this.state.tabIndex) + 1] as number)
-
-  getIsLoading = () => this.props.AnalyticSlice.chartStatus !== LazyStatus.Loaded
 
   generateLineChart = (): ChartData<'line', number[], string> => {
     return {
@@ -100,7 +95,7 @@ export class OverviewSection extends Component<IProps, IState> {
             <Typography variant='subtitle1' component='span' sx={{ display: 'block' }}>
               {e.title}
             </Typography>
-            <SkeletonLazyWrap component='span' isLoading={this.getIsLoading()} sx={{ width: '100%' }}>
+            <SkeletonLazyWrap component='span' status={this.props.AnalyticSlice.chartStatus} sx={{ width: '100%' }}>
               <Typography variant='h6' component='span' sx={{ display: 'block', fontWeight: 'bold' }}>
                 {index === 2 ? formatterUSD().format(e.total) : humanNumber(e.total)}
               </Typography>
@@ -114,7 +109,7 @@ export class OverviewSection extends Component<IProps, IState> {
   renderTabPanels = () => {
     const data = this.generateLineChart()
     return (
-      <SkeletonLazyWrap isLoading={this.getIsLoading()}>
+      <SkeletonLazyWrap status={this.props.AnalyticSlice.chartStatus}>
         <Box sx={{ minHeight: '300px', marginTop: '12px' }}>
           <LineChart key={this.state.tabIndex} options={{ plugins: { legend: { display: false } } }} data={data} />
         </Box>

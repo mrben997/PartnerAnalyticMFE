@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { ChartData } from 'chart.js'
 import { idDefault } from 'csmfe/helper'
 import { IRowData } from '../views/TableContent/type'
-import { ENetwork, IChartData, INetwork, ITableData, ITopData } from './type'
+import { IChartData, INetwork, ITableData, ITopData } from './type'
 
 const MOUNTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -45,7 +45,8 @@ class FakeDataLocalBase implements IFakeData {
       ]
     }
     this.dates = ['Last 7 day', 'Last 14 day', 'Last 28 day', 'Last 90 day']
-    this.networks = this.generateNetworks()
+    // this.networks = this.generateNetworks()
+    this.networks = []
     this.topData1 = this.generateTopData()
     this.topData2 = this.generateTopData()
     this.avancedMode = this.generateAvancedModeData()
@@ -135,18 +136,18 @@ class FakeDataLocalBase implements IFakeData {
     return arr
   }
 
-  private generateNetworks = () => {
-    const arr: INetwork[] = []
-    const types = [ENetwork.DinoCollab, ENetwork.SuperNetwork]
-    for (let index = 0; index < 2; index++) {
-      arr.push({
-        id: faker.database.mongodbObjectId(),
-        title: types[index],
-        value: types[index]
-      })
-    }
-    return arr
-  }
+  // private generateNetworks = () => {
+  //   const arr: INetwork[] = []
+  //   const types = [ENetwork.DinoCollab, ENetwork.SuperNetwork]
+  //   for (let index = 0; index < 2; index++) {
+  //     arr.push({
+  //       id: faker.database.mongodbObjectId(),
+  //       title: types[index],
+  //       value: types[index]
+  //     })
+  //   }
+  //   return arr
+  // }
 }
 const FakeDataLocal = new FakeDataLocalBase()
 export default FakeDataLocal

@@ -1,14 +1,8 @@
 import { Graphql } from 'graphql-service-mfe'
 
-export enum ENetwork {
-  DinoCollab = 'DinoCollab',
-  SuperNetwork = 'SuperNetwork'
-}
-
 export interface INetwork {
   id: string
   title: string
-  value: ENetwork
 }
 
 export interface IDateOption {
@@ -70,4 +64,28 @@ export interface IDataInfo {
       }
     }
   }
+}
+
+export interface EntityTimeBase {
+  DateCreated: string
+  DateUpdated: string
+}
+export enum EnumChannelType {
+  Content = 'Content',
+  Claimed = 'Claimed'
+}
+export type EChannelType = 'Content' | 'Claimed' | EnumChannelType
+
+export enum MediaNetworkStatus {
+  Active = 'Active',
+  Inactive = 'Inactive'
+}
+export interface IMediaNetwork extends EntityTimeBase {
+  Id: string
+  Name: string
+  Status: MediaNetworkStatus
+  OwnerId: string
+  AccountJson: string
+  Description: string
+  Types: EChannelType[]
 }
