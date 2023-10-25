@@ -11,9 +11,7 @@ class AnalyticServiceBase extends ServiceBase {
   GetVideoInfo = async (data: string[], signal?: AbortSignal) => {
     const InfoData = await this.Post<IDataInfo[]>(this._UrlVideoInfo, data, {
       signal,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
 
     return InfoData.reduce<Dictionary<IDataInfo>>((a, b) => {
@@ -23,13 +21,10 @@ class AnalyticServiceBase extends ServiceBase {
   }
 
   _UrlChannelInfo = 'GetChannelInfos'
-
   GetChannelInfo = async (data: string[], signal?: AbortSignal) => {
     const InfoData = await this.Post<IDataInfo[]>(this._UrlChannelInfo, data, {
       signal,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' }
     })
 
     return InfoData.reduce<Dictionary<IDataInfo>>((a, b) => {

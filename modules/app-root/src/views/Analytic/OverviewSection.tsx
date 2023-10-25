@@ -1,14 +1,11 @@
 import React, { Component, SyntheticEvent } from 'react'
-import { TabList, TabPanel, TabContext } from '@mui/lab'
-import { humanNumber, formatterUSD } from 'csmfe/helper'
-import { Box, Fade, Tab, Typography, styled } from '@mui/material'
-import { LineChart } from './LineChart'
-import { IChartData } from '../utils/type'
-import { GenerateLineChartData } from '../utils/helper'
-import { IAnalyticStateRedux } from '../redux/reducers/analytic/AnalyticSlice'
 import { ChartData } from 'chart.js'
-import { LazyStatus } from '../redux'
-import SkeletonLazyWrap from './SkeletonLazyView'
+import { TabList, TabContext } from '@mui/lab'
+import { Box, Tab, Typography } from '@mui/material'
+import { humanNumber, formatterUSD } from 'csmfe/helper'
+import { LineChart } from '../../components/LineChart'
+import { IAnalyticStateRedux } from '../../redux/reducers/analytic/AnalyticSlice'
+import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 
 const tabs = ['Views', 'Watch time (hours)', 'Estimated partner revenue']
 

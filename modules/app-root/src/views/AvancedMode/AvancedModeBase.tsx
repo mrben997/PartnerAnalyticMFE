@@ -9,20 +9,25 @@ import TabSection from './TabSection'
 import AvancedModeTable from '../AvancedModeTable'
 import FakeDataLocal from '../../utils/FakeDataLocal'
 import { AvancedModeReduxProps } from '../../redux'
-import SelectMenu from '../SelectMenu'
+import SelectMenu from '../../components/SelectMenu'
 import DateOption from '../../utils/DateOption'
 import MetricOption from '../../utils/MetricOption'
+import KindOption from '../../utils/KindOption'
+import SelectedProcessor from '../../utils/SelectedProcessor'
+import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 
 interface IProps extends AvancedModeReduxProps {}
-interface IState {
-  selectedIndex: number
-}
-export default class AvancedModeBase extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = { selectedIndex: 0 }
+
+export default class AvancedModeBase extends Component<IProps> {
+  componentDidMount(): void {
+    this.props.fetchChartData()
   }
-  handleChange = (_: React.SyntheticEvent, value: number) => this.setState({ selectedIndex: value })
+
+  getSelectAccessor = (): SelectedProcessor => {
+    const metricType = MetricOption.data[this.props.AvancedModeSlice.metricIndex].id
+    return new SelectedProcessor(this.props.AvancedModeSlice.tableData, metricType)
+  }
+
   render() {
     return (
       <>
@@ -46,19 +51,22 @@ export default class AvancedModeBase extends Component<IProps, IState> {
         </Box>
         <Box sx={{ borderBottom: borderValue }}>
           <Container maxWidth={false}>
-            <TabSection data={['Channels', 'Videos']} selectedIndex={this.state.selectedIndex} onChange={this.handleChange} />
+            <TabSection
+              data={KindOption.data.map((e) => e.title)}
+              selectedIndex={this.props.AvancedModeSlice.tabIndex}
+              onChange={(_, value: number) => this.props.setTabIndex(value)}
+            />
           </Container>
         </Box>
-        {/* Top data Table */}
-        {/* <TableTopData /> */}
         <Container maxWidth={false} sx={{ pt: '12px' }}>
           {this.renderSelectMetric()}
-          {/* <SelectMenu data={this.getMetricData()} selectedIndex={0} sx={{  }} /> */}
           <Box sx={{ flex: 1, display: 'flex', padding: '0 5px', height: '400px' }}>
             <LineChart options={{ plugins: { legend: { display: false } } }} data={FakeDataLocal.avancedMode} />
           </Box>
         </Container>
-        <AvancedModeTable />
+        <SkeletonLazyWrap status={this.props.AvancedModeSlice.fetchStatus}>
+          <AvancedModeTable selectedProcessor={this.getSelectAccessor()} metricIndex={this.props.AvancedModeSlice.metricIndex} />
+        </SkeletonLazyWrap>
       </>
     )
   }

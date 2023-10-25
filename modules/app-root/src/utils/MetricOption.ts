@@ -1,5 +1,7 @@
+export type TMetricOptionType = 'View' | 'WatchTime' | 'Money'
+
 interface ISelectMenu {
-  id: string
+  id: TMetricOptionType
   title: string
 }
 
@@ -12,10 +14,12 @@ class MetricOptionBase {
   private initial = () => {
     this.data = [
       { id: 'View', title: 'View' },
-      { id: 'Money', title: 'Estimated partner revenue' },
-      { id: 'WatchTime', title: 'Watch time (hours)' }
+      { id: 'WatchTime', title: 'Watch time (hours)' },
+      { id: 'Money', title: 'Estimated partner revenue' }
     ]
   }
+
+  getSortString = (params: TMetricOptionType) => `${params} desc`
 }
 
 const MetricOption = new MetricOptionBase()

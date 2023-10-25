@@ -3,11 +3,11 @@ import { Box, BoxProps, Fade, Skeleton, SkeletonPropsVariantOverrides, Typograph
 import { OverridableStringUnion } from '@mui/types'
 import { LazyStatus } from '../../redux'
 
-interface ItemWrapProps extends BoxProps {
+interface IProps extends BoxProps {
   status: LazyStatus
   variant?: OverridableStringUnion<'text' | 'rectangular' | 'circular', SkeletonPropsVariantOverrides>
 }
-const SkeletonLazyWrap: FC<ItemWrapProps> = (props) => {
+const SkeletonLazyWrap: FC<IProps> = (props) => {
   const { status, ...other } = props
   return (
     <Box {...other} sx={{ position: 'relative', ...(props.sx || {}) }}>

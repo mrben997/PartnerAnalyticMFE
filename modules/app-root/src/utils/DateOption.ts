@@ -35,14 +35,14 @@ class DateOptionBase {
       this.generateData('Last 28 days', this.toString(this.getLast28Days())),
       this.generateData('Last 90 days', this.toString(this.getLast90Days())),
       this.generateData(new Date().getFullYear() + '', this.toString(this.getThisYear())),
-      this.generateData(new Date().getFullYear() - 1 + '', this.toString(this.getThisYear(1))),
+      // this.generateData(new Date().getFullYear() - 1 + '', this.toString(this.getThisYear(1))),
       this.generateData(this.generateName(), this.toString(this.getThisMonth())),
       this.generateData(this.generateName(1), this.toString(this.getThisMonth(1))),
       this.generateData(this.generateName(2), this.toString(this.getThisMonth(2)))
     ]
   }
 
-  private generateData = (title: string, value: string[]) => ({ id: faker.database.mongodbObjectId(), title, value })
+  private generateData = (title: string, value: number[]) => ({ id: faker.database.mongodbObjectId(), title, value })
 
   private delayDate = (date1: Date, date2: Date, amount: number) => {
     date1 = new Date(date1.setDate(date1.getDate() + amount))
@@ -51,7 +51,7 @@ class DateOptionBase {
   }
 
   private toString = ([date1, date2, ..._]: Date[]) => {
-    return [date1.toLocaleString(), date2.toLocaleString()]
+    return [date1.getTime(), date2.getTime()]
   }
 
   toStringRequest = ([date1, date2, ..._]: Date[]) => [
@@ -70,7 +70,7 @@ class DateOptionBase {
     return m === 2 ? (y & 3 || (!(y % 25) && y & 15) ? 28 : 29) : 30 + ((m + (m >> 3)) & 1)
   }
 
-  toRangeDate = (range: string[]) => {
+  toRangeDate = (range: number[]) => {
     if (range.length < 1 || range.some((x) => !x)) return ''
 
     const date1 = new Date(range[0])

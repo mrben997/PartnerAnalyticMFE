@@ -13,6 +13,7 @@ export interface AvancedModeReduxDispatch extends TDispatchRedux {
   setNetworkIndex: (params: number) => void
   setDateIndex: (params: number) => void
   setMetricIndex: (params: number) => void
+  setTabIndex: (params: number) => void
 }
 
 const mapStateToProps = (state: RootState): AvancedModeReduxState => ({
@@ -37,6 +38,10 @@ const appDispatchToProps = (dispatch: AppDispatch): AvancedModeReduxDispatch => 
   },
   setMetricIndex: (params) => {
     dispatch(AvancedModeSlice.actions.setMetricIndex(params))
+    dispatch(fetchAvancedModeThunk())
+  },
+  setTabIndex: (params) => {
+    dispatch(AvancedModeSlice.actions.setTabIndex(params))
     dispatch(fetchAvancedModeThunk())
   }
 })

@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { ChartData } from 'chart.js'
 import { idDefault } from 'csmfe/helper'
-import { IRowData } from '../views/TableContent/type'
+import { IRowData } from './SelectedProcessorType'
 import { IChartData, INetwork, ITableData, ITopData } from './type'
 
 const MOUNTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

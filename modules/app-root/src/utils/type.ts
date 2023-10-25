@@ -1,14 +1,11 @@
 import { Graphql } from 'graphql-service-mfe'
 
-export interface INetwork {
-  id: string
-  title: string
-}
+export * from './SelectedProcessorType'
 
 export interface IDateOption {
   id: string
   title: string
-  value: string[]
+  value: number[]
 }
 
 export interface IChartDetail {

@@ -7,3 +7,12 @@ export const SetupCancel = (key: string, abort: () => void) => {
   action && action()
   MapAction[key] = abort
 }
+
+export const calculateWatchTime = (params: (string | number)[][], index): (string | number)[][] => {
+  const data = params.slice()
+  if (data.length < 1) return []
+  data.forEach((elm) => {
+    elm[index] = (elm[index] as number) / 60
+  })
+  return data
+}

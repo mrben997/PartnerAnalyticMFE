@@ -3,12 +3,12 @@ import { Box, Button, Container, Grid, Stack, Typography, styled } from '@mui/ma
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { ITopData } from '../../utils/type'
 import { AnalyticReduxProps } from '../../redux'
-import { OverviewSection, TopData } from '../../components'
 import AvancedMode, { AvancedModeContext } from '../AvancedMode'
-import SelectMenu from '../SelectMenu'
 import DateOption from '../../utils/DateOption'
-import FakeDataLocal from '../../utils/FakeDataLocal'
-import SkeletonLazyWrap from '../../components/SkeletonLazyView'
+import SelectMenu from '../../components/SelectMenu'
+import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
+import OverviewSection from './OverviewSection'
+import TopData from './TopData'
 
 interface IProps extends AnalyticReduxProps {}
 export default class Analytic extends Component<IProps> {

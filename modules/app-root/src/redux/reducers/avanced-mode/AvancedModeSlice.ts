@@ -1,24 +1,29 @@
-import { Dictionary, EntityState, PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { LazyStatus, TStateRedux } from '../../type'
 import { fetchAvancedModeConfigThunk, fetchAvancedModeThunk } from './AvancedModeThunk'
-import { INetwork } from '../../../utils/type'
+import { IRowData } from '../../../utils/type'
+import { ISelectMenu } from '../../../components/type'
 
 export interface IAvancedModeStateRedux extends TStateRedux {
-  chartStatus: LazyStatus
-  networks: INetwork[]
+  fetchStatus: LazyStatus
+  networks: ISelectMenu[]
   networkIndex: number
   dateIndex: number
   metricIndex: number
+  tabIndex: number
+  tableData: IRowData[]
 }
 
 // Define the initial state using that type
 const initialState: IAvancedModeStateRedux = {
   status: LazyStatus.Loading,
-  chartStatus: LazyStatus.Loading,
+  fetchStatus: LazyStatus.Loading,
   dateIndex: 0,
   networks: [],
   networkIndex: 0,
-  metricIndex: 0
+  metricIndex: 0,
+  tabIndex: 0,
+  tableData: []
 }
 
 export const AvancedModeSlice = createSlice({
@@ -33,21 +38,25 @@ export const AvancedModeSlice = createSlice({
     },
     setMetricIndex: (state, action: PayloadAction<number>) => {
       state.metricIndex = action.payload
+    },
+    setTabIndex: (state, action: PayloadAction<number>) => {
+      state.tabIndex = action.payload
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAvancedModeThunk.fulfilled, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
-        state.chartStatus = LazyStatus.Loaded
+        state.fetchStatus = LazyStatus.Loaded
+        state.tableData = action.payload.tableData
       })
       .addCase(fetchAvancedModeThunk.rejected, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
-        state.chartStatus = LazyStatus.Error
+        state.fetchStatus = LazyStatus.Error
       })
       .addCase(fetchAvancedModeThunk.pending, (state, action) => {
         state.requestId = action.meta.requestId
-        state.chartStatus = LazyStatus.Loading
+        state.fetchStatus = LazyStatus.Loading
       })
 
     builder

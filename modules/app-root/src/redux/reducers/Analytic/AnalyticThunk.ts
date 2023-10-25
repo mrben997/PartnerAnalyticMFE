@@ -1,7 +1,7 @@
 import { Graphql } from 'graphql-service-mfe'
 import { Dictionary, createAsyncThunk } from '@reduxjs/toolkit'
 import { authService } from 'OIDC-auth/Components/ApiAuthorization/AuthorizeService'
-import { SetupCancel } from '../../helper'
+import { SetupCancel, calculateWatchTime } from '../../helper'
 import { IDataInfo, INetwork, TQueryParams } from '../../../utils/type'
 import store from '../..'
 import DateOption from '../../../utils/DateOption'
@@ -34,15 +34,6 @@ const getTopData = (dates: string[], networkId: string, kind: 'Video' | 'Channel
   return Graphql.Report.Query(Graphql.QReport.Query(params), { signal })
 }
 
-const calculateWatchTime = (params: (string | number)[][]): (string | number)[][] => {
-  const data = params.slice()
-  if (data.length < 1) return []
-  data.forEach((elm) => {
-    elm[2] = (elm[2] as number) / 60
-  })
-  return data
-}
-
 interface IReturn {
   totals: (string | number)[]
   data: (string | number)[][]
@@ -64,7 +55,7 @@ export const fetchAnalyticThunk = createAsyncThunk<IReturn>('fetchAnalyticThunk'
     getTopData(dateCurrent, networkId, 'Channel', context.signal)
   ])
 
-  const [first, ...data] = calculateWatchTime((lineChart.query?.data ?? []) as (string | number)[][])
+  const [first, ...data] = calculateWatchTime((lineChart.query?.data ?? []) as (string | number)[][], 2)
 
   const videoIds = (resTopVideos.query?.data ?? []).map((e) => e[0]) as string[]
   const channelIds = (resTopChannels.query?.data ?? []).map((e) => e[0]) as string[]
