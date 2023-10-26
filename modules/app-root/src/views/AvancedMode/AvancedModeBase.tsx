@@ -87,7 +87,7 @@ export default class AvancedModeBase extends Component<IProps> {
     // return FakeDataLocal.avancedMode
   }
 
-  timer
+  timer: any
   handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {

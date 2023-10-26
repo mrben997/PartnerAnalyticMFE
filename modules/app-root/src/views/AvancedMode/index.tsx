@@ -14,7 +14,7 @@ interface IState {
 export default class AvancedMode extends Component<TProps, IState> implements IAvancedModeContext {
   constructor(props: TProps) {
     super(props)
-    this.state = { isOpen: true }
+    this.state = { isOpen: false }
   }
 
   open: TAvancedModeOpen = () => this.setState({ isOpen: true })
