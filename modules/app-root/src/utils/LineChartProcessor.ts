@@ -17,20 +17,19 @@ class LineChartProcessorBase {
     return temp
   }
 
-  mapSingle = (params: TRowDataProperty[], info: Dictionary<IDataInfo>): IRowData => ({
+  mapSingle = (params: TRowDataProperty[]): IRowData => ({
     id: params[0],
     date: params[1],
     views: params[2],
     estimatedMinutesWatched: parseFloat(params[3] + '') / 60,
-    estimatedRevenue: params[4],
-    title: info[params[0]]?.Snippet.Title ?? params[0].toString()
+    estimatedRevenue: params[4]
   })
 
-  mapLineChart = (params: TRowDataProperty[][], info: Dictionary<IDataInfo>): TLineChart => {
+  mapLineChart = (params: TRowDataProperty[][]): TLineChart => {
     return params.reduce((prev, cur) => {
       if (!prev[cur[0]]) prev[cur[0]] = {}
       const item = prev[cur[0]]
-      if (item) item[cur[1]] = this.mapSingle(cur, info)
+      if (item) item[cur[1]] = this.mapSingle(cur)
       return prev
     }, {} as TLineChart)
   }

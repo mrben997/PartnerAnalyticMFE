@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import { Dictionary } from '@reduxjs/toolkit'
+import { formatterUSD, humanNumber } from 'csmfe/helper'
 import { Container, TableContainer, TableSortLabel, Typography, styled } from '@mui/material'
 import { Checkbox, SxProps, Table, TableBody, TableCell, TableHead, TableRow, Theme } from '@mui/material'
 import SelectedProcessor, { TSelectedProcessorMaping } from '../../utils/SelectedProcessor'
+import { IDataInfo } from '../../models'
 import { IRowData, TOnChangeCheckbox } from '../../utils/SelectedProcessor/type'
-import { formatterUSD, humanNumber } from 'csmfe/helper'
 
 interface IProps {
+  info: Dictionary<IDataInfo>
   tableData: IRowData[]
   tableDataMaping: TSelectedProcessorMaping
   tableDataMapingDefault: TSelectedProcessorMaping
@@ -97,7 +100,9 @@ export default class AvancedModeTable extends Component<IProps, IState> {
           />
         </TableCell>
         <TableCell scope='row'>
-          <Typography noWrap>{row.title}</Typography>
+          <Typography component='span' noWrap>
+            {this.props.info[row.id]?.Snippet.Title ?? row.id}
+          </Typography>
         </TableCell>
         <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.views + ''))}</TableCell>
         <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.estimatedMinutesWatched + ''))}</TableCell>

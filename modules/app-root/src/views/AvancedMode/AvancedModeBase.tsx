@@ -64,7 +64,7 @@ export default class AvancedModeBase extends Component<IProps> {
       })
       return {
         color: item?.color,
-        label: (item?.row.title ?? item?.row.id ?? '') as string,
+        label: (this.props.AvancedModeSlice.info[item?.row.id ?? '']?.Snippet.Title ?? item?.row.id) as string,
         data
       }
     })
@@ -99,6 +99,13 @@ export default class AvancedModeBase extends Component<IProps> {
     return this.props.AvancedModeSlice.tabIndex === 0 ? 'Search channelId' : 'Search videoId'
   }
 
+  getLoadingStatus = () => {
+    return (
+      this.props.AvancedModeSlice.tableStatus === LazyStatus.Loading ||
+      this.props.AvancedModeSlice.lineChartStatus === LazyStatus.Loading
+    )
+  }
+
   render() {
     return (
       <>
@@ -126,7 +133,7 @@ export default class AvancedModeBase extends Component<IProps> {
               </Box>
             </Container>
           </Box>
-          <Fade in={this.props.AvancedModeSlice.tableStatus === LazyStatus.Loading}>
+          <Fade in={this.getLoadingStatus()}>
             <LinearProgress />
           </Fade>
           <Box sx={{ borderBottom: borderValue }}>
@@ -140,14 +147,17 @@ export default class AvancedModeBase extends Component<IProps> {
           </Box>
         </StickyBox>
 
-        <SkeletonLazyWrap status={this.props.AvancedModeSlice.tableStatus} sxSkeleton={{ opacity: '0.35' }}>
+        <SkeletonLazyWrap status={this.props.AvancedModeSlice.lineChartStatus} sxSkeleton={{ opacity: '0.35' }}>
           <Container maxWidth={false} sx={{ pt: '12px' }}>
             {this.renderSelectMetric()}
             <Box sx={{ flex: 1, display: 'flex', padding: '0 5px', height: '400px' }}>
               <LineChart options={{ plugins: { legend: { display: false } } }} data={this.generateLineChartData()} />
             </Box>
           </Container>
+        </SkeletonLazyWrap>
+        <SkeletonLazyWrap status={this.props.AvancedModeSlice.tableStatus} sxSkeleton={{ opacity: '0.35' }}>
           <AvancedModeTable
+            info={this.props.AvancedModeSlice.info}
             tableData={this.props.AvancedModeSlice.tableData}
             tableDataMaping={this.props.AvancedModeSlice.tableDataMaping}
             tableDataMapingDefault={this.props.AvancedModeSlice.tableDataMapingDefault}

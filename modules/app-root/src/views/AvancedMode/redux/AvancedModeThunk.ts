@@ -60,12 +60,10 @@ const getInfo = async (ids: string[], kindType: TKindOptionType, signal?: AbortS
   }
 }
 
-interface IReturn {
+interface IReturnTable {
   tableData: IRowData[]
-  lineChart: TLineChart
-  dates: TRowDataProperty[]
 }
-export const fetchAvancedModeThunk = createAsyncThunk<IReturn>('fetchAvancedModeThunk', async (_, context) => {
+export const fetchAvancedModeThunk = createAsyncThunk<IReturnTable>('fetchAvancedModeThunk', async (_, context) => {
   SetupCancel('fetchAvancedModeThunk', context.abort)
 
   const state = store.getState().AvancedModeSlice
@@ -78,20 +76,39 @@ export const fetchAvancedModeThunk = createAsyncThunk<IReturn>('fetchAvancedMode
   const tableDataRes = await getTableData({ dates, networkId, kind, sortBy, ids: searchId ? [searchId] : [] }, context.signal)
   const table = calculateWatchTime((tableDataRes.query?.data ?? []) as (string | number)[][], 2)
 
-  const ids = (tableDataRes.query?.data ?? []).slice(1).map((e) => e[0]) as string[]
-  const info = await getInfo(ids, kind, context.signal)
-
-  const lineChart = await getLineChartData({ dates, networkId, kind, sortBy, ids }, context.signal)
   return {
     tableData: table.map<IRowData>((e) => ({
       id: e[0].toString(),
-      title: info[e[0]]?.Snippet.Title ?? e[0].toString(),
+      title: e[0].toString(),
       views: e[1] as number,
       estimatedMinutesWatched: parseFloat(e[2] + '') / 60,
       estimatedRevenue: e[3] as number
-    })),
-    lineChart: LineChartProcessor.mapLineChart((lineChart.query?.data ?? []) as TRowDataProperty[][], info),
-    dates: LineChartProcessor.getDates((lineChart.query?.data ?? []) as TRowDataProperty[][])
+    }))
+  }
+})
+interface ILineChartReturn {
+  lineChart: TLineChart
+  dates: TRowDataProperty[]
+  info: Dictionary<IDataInfo>
+}
+export const fetchLineChartThunk = createAsyncThunk<ILineChartReturn>('fetchLineChartThunk', async (_, context) => {
+  SetupCancel('fetchLineChartThunk', context.abort)
+
+  const state = store.getState().AvancedModeSlice
+  const dates = DateOption.toStringRequest(DateOption.data[state.dateIndex].value.map((e) => new Date(e)))
+  const networkId = state.networks[state.networkIndex].id
+  const kind = KindOption.data[state.tabIndex].id
+  const sortBy = MetricOption.getSortString(MetricOption.data[state.metricIndex].id)
+  const ids = state.tableData.map((e) => e.id as string).slice(1)
+
+  const [info, lineChart] = await Promise.all([
+    getInfo(ids, kind, context.signal).catch(() => ({})),
+    getLineChartData({ dates, networkId, kind, sortBy, ids }, context.signal)
+  ])
+  return {
+    lineChart: LineChartProcessor.mapLineChart((lineChart.query?.data ?? []) as TRowDataProperty[][]),
+    dates: LineChartProcessor.getDates((lineChart.query?.data ?? []) as TRowDataProperty[][]),
+    info
   }
 })
 

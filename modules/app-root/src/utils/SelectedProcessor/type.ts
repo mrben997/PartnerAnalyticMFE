@@ -7,7 +7,6 @@ export interface IRowData {
   views: TRowDataProperty
   estimatedMinutesWatched: TRowDataProperty
   estimatedRevenue: TRowDataProperty
-  title?: TRowDataProperty
   date?: TRowDataProperty
 }
 export interface IMapSelected {

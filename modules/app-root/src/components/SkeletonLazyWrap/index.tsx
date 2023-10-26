@@ -9,7 +9,7 @@ interface IProps extends BoxProps {
   sxSkeleton?: SxProps<Theme>
 }
 const SkeletonLazyWrap: FC<IProps> = (props) => {
-  const { status, ...other } = props
+  const { status, sxSkeleton, ...other } = props
   return (
     <Box {...other} sx={{ position: 'relative', ...(props.sx || {}) }}>
       {props.children}
@@ -18,7 +18,7 @@ const SkeletonLazyWrap: FC<IProps> = (props) => {
           <Skeleton
             variant={props.variant ?? 'rectangular'}
             animation='wave'
-            sx={{ height: '100%', width: '100%', ...props.sxSkeleton }}
+            sx={{ height: '100%', width: '100%', ...sxSkeleton }}
           />
         </Wrapper>
       </Fade>

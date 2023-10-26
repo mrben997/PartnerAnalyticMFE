@@ -1,14 +1,16 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { Dictionary, PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { ISelectMenu } from '../../../components/type'
 import { LazyStatus, TStateRedux } from '../../../redux/type'
 import { TLineChart } from '../../../utils/LineChartProcessor'
-import { fetchAvancedModeConfigThunk, fetchAvancedModeThunk } from './AvancedModeThunk'
+import { fetchAvancedModeConfigThunk, fetchAvancedModeThunk, fetchLineChartThunk } from './AvancedModeThunk'
 import { IRowData, TOnChangeCheckboxParams, TRowDataProperty } from '../../../utils/SelectedProcessor/type'
 import SelectedProcessor, { TSelectedProcessorMaping } from '../../../utils/SelectedProcessor'
+import { IDataInfo } from '../../../models'
+import store from '../../../redux'
 
 export interface IAvancedModeStateRedux extends TStateRedux {
   tableStatus: LazyStatus
-  // lineChartStatus: LazyStatus
+  lineChartStatus: LazyStatus
   networks: ISelectMenu[]
   networkIndex: number
   dateIndex: number
@@ -20,13 +22,14 @@ export interface IAvancedModeStateRedux extends TStateRedux {
   tableDataMaping: TSelectedProcessorMaping
   tableDataMapingDefault: TSelectedProcessorMaping
   searchId: string
+  info: Dictionary<IDataInfo>
 }
 
 // Define the initial state using that type
 const initialState: IAvancedModeStateRedux = {
   status: LazyStatus.Loading,
   tableStatus: LazyStatus.Loading,
-  // lineChartStatus: LazyStatus.Loading,
+  lineChartStatus: LazyStatus.Loading,
   dateIndex: 0,
   networks: [],
   networkIndex: 0,
@@ -37,7 +40,8 @@ const initialState: IAvancedModeStateRedux = {
   tableDataMaping: {},
   tableDataMapingDefault: {},
   dates: [],
-  searchId: ''
+  searchId: '',
+  info: {}
 }
 
 export const AvancedModeSlice = createSlice({
@@ -88,12 +92,10 @@ export const AvancedModeSlice = createSlice({
         state.tableData = action.payload.tableData
         state.tableDataMaping = SelectedProcessor.convertMaping(action.payload.tableData)
         const rowDefaults = action.payload.tableData.slice(1, 6)
-
         state.tableDataMapingDefault = SelectedProcessor.convertMapingUnusedColor(rowDefaults)
-        // console.log(state.tableData, state.tableDataMaping)
-
-        state.lineChart = action.payload.lineChart
-        state.dates = action.payload.dates
+        setTimeout(() => {
+          store.dispatch(fetchLineChartThunk())
+        }, 300)
       })
       .addCase(fetchAvancedModeThunk.rejected, (state, action) => {
         if (state.requestId !== action.meta.requestId) return
@@ -102,6 +104,25 @@ export const AvancedModeSlice = createSlice({
       .addCase(fetchAvancedModeThunk.pending, (state, action) => {
         state.requestId = action.meta.requestId
         state.tableStatus = LazyStatus.Loading
+        state.lineChartStatus = LazyStatus.Loading
+      })
+
+    builder
+      .addCase(fetchLineChartThunk.fulfilled, (state, action) => {
+        if (state.requestId !== action.meta.requestId) return
+        state.lineChartStatus = LazyStatus.Loaded
+
+        state.lineChart = action.payload.lineChart
+        state.dates = action.payload.dates
+        state.info = action.payload.info
+      })
+      .addCase(fetchLineChartThunk.rejected, (state, action) => {
+        if (state.requestId !== action.meta.requestId) return
+        state.lineChartStatus = LazyStatus.Error
+      })
+      .addCase(fetchLineChartThunk.pending, (state, action) => {
+        state.requestId = action.meta.requestId
+        state.lineChartStatus = LazyStatus.Loading
       })
 
     builder
