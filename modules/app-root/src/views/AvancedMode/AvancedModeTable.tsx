@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Dictionary } from '@reduxjs/toolkit'
 import { formatterUSD, humanNumber } from 'csmfe/helper'
-import { Container, TableContainer, TableSortLabel, Typography, styled } from '@mui/material'
+import { Container, Link, TableContainer, TableSortLabel, Typography, styled } from '@mui/material'
 import { Checkbox, SxProps, Table, TableBody, TableCell, TableHead, TableRow, Theme } from '@mui/material'
 import SelectedProcessor, { TSelectedProcessorMaping } from '../../utils/SelectedProcessor'
 import { IDataInfo } from '../../models'
@@ -13,6 +13,7 @@ interface IProps {
   tableDataMaping: TSelectedProcessorMaping
   tableDataMapingDefault: TSelectedProcessorMaping
   metricIndex: number
+  baseUrl: string
   onChangeCheckbox: TOnChangeCheckbox
 }
 interface IState {}
@@ -25,10 +26,10 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     return { checked, indeterminate }
   }
 
-  getSxDefault = (row: IRowData): SxProps<Theme> => {
+  getSxDefault = (row: IRowData): { borderLeftColor?: string; color?: string } => {
     const ids = SelectedProcessor.getIdActives(this.props.tableDataMaping)
     const rowDefault = this.props.tableDataMapingDefault[row.id]
-    return rowDefault && ids.length < 1 ? { borderLeftColor: rowDefault.color } : {}
+    return rowDefault && ids.length < 1 ? { borderLeftColor: rowDefault.color, color: rowDefault.color } : {}
   }
 
   handleChangeCheckbox: TOnChangeCheckbox = (params) => {
@@ -82,12 +83,17 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     )
   }
 
+  getHref = (id: string | number): string => {
+    return this.props.baseUrl + id
+  }
+
   renderRow = (row: IRowData) => {
+    // TODO chuyển về component
     const check = SelectedProcessor.isTotalRow(row.id as string)
     const status = this.props.tableDataMaping[row.id]
-    const color = status?.color ?? '#606060'
-    const sx: SxProps<Theme> = check ? { '& .MuiTableCell-root': { fontWeight: 700 } } : {}
     const sxDefault = this.getSxDefault(row)
+    const color = status?.color ?? sxDefault.color ?? '#606060'
+    const sx: SxProps<Theme> = check ? { '& .MuiTableCell-root': { fontWeight: 700 } } : {}
 
     return (
       <CustomTableRow key={row.id} sx={{ ...sx, ...sxDefault }}>
@@ -99,10 +105,10 @@ export default class AvancedModeTable extends Component<IProps, IState> {
             onChange={(_, checked) => this.handleChangeCheckbox({ type: 'unit', checked, value: row })}
           />
         </TableCell>
-        <TableCell scope='row'>
-          <Typography component='span' noWrap>
+        <TableCell scope='row' sx={{ maxWidth: '767px' }}>
+          <CustomTypography {...{ component: Link, target: '_blank', href: this.getHref(row.id) }} noWrap>
             {this.props.info[row.id]?.Snippet.Title ?? row.id}
-          </Typography>
+          </CustomTypography>
         </TableCell>
         <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.views + ''))}</TableCell>
         <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.estimatedMinutesWatched + ''))}</TableCell>
@@ -115,4 +121,16 @@ export default class AvancedModeTable extends Component<IProps, IState> {
 const CustomTableRow = styled(TableRow)({
   '&:last-child td, &:last-child th': { border: 0 },
   borderLeft: `3px solid transparent`
+})
+
+const CustomTypography = styled(Typography)({
+  width: '100%',
+  display: 'block',
+  color: '#606060',
+  transition: 'all 0.3s',
+  textDecoration: 'none',
+  '&:hover': {
+    color: '#1976d2',
+    textDecoration: 'underline'
+  }
 })

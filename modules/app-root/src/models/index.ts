@@ -23,6 +23,7 @@ export interface IAvancedModeTableDTO {
 }
 
 export interface ITopData {
+  id: string
   title: string
   value: number
   imageUrl: string

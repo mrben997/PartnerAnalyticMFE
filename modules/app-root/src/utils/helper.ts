@@ -43,3 +43,27 @@ export function MergeDeep<TModel = any>(target: any, ...sources: any[]): TModel 
 }
 
 export const hummanDate = (value: string) => `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`
+
+export const cutStringToWidth = (str: string, width: number) => {
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')
+  if (!context) return str
+  context.font = '14px Arial'
+
+  let newStr = str
+  let isCheck = false
+  while (context.measureText(newStr).width > width) {
+    newStr = newStr.slice(0, -1)
+    isCheck = true
+  }
+
+  if (isCheck) {
+    newStr += '...'
+  }
+
+  while (context.measureText(newStr).width < width) {
+    newStr += ' '
+  }
+
+  return newStr
+}

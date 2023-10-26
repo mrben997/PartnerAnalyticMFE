@@ -15,7 +15,7 @@ import KindOption from '../../utils/KindOption'
 import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 import { ChartData } from 'chart.js'
 import { AvancedModeReduxProps } from './redux/type'
-import { hummanDate } from '../../utils/helper'
+import { cutStringToWidth, hummanDate } from '../../utils/helper'
 import SelectedProcessor from '../../utils/SelectedProcessor'
 import { LazyStatus } from '../../redux'
 
@@ -72,7 +72,7 @@ export default class AvancedModeBase extends Component<IProps> {
 
   generateLineChartData = (): ChartData<'line', number[], string> => {
     const datasets = this.getDatas().map((item) => ({
-      label: item.label,
+      label: cutStringToWidth(item.label ?? 'None', 200),
       data: item.data,
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
       borderColor: item.color,
@@ -87,7 +87,9 @@ export default class AvancedModeBase extends Component<IProps> {
     // return FakeDataLocal.avancedMode
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   timer: any
+  /* eslint-enable */
   handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {
@@ -104,6 +106,10 @@ export default class AvancedModeBase extends Component<IProps> {
       this.props.AvancedModeSlice.tableStatus === LazyStatus.Loading ||
       this.props.AvancedModeSlice.lineChartStatus === LazyStatus.Loading
     )
+  }
+
+  getBaseUrl = (): string => {
+    return this.props.AvancedModeSlice.tabIndex === 0 ? 'https://www.youtube.com/channel/' : 'https://youtu.be/'
   }
 
   render() {
@@ -162,6 +168,7 @@ export default class AvancedModeBase extends Component<IProps> {
             tableDataMaping={this.props.AvancedModeSlice.tableDataMaping}
             tableDataMapingDefault={this.props.AvancedModeSlice.tableDataMapingDefault}
             metricIndex={this.props.AvancedModeSlice.metricIndex}
+            baseUrl={this.getBaseUrl()}
             onChangeCheckbox={this.props.onSelectedTableCheckbox}
           />
         </SkeletonLazyWrap>

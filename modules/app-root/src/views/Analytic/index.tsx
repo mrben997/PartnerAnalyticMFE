@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Box, Button, Container, Grid, Stack, Typography, styled } from '@mui/material'
+import { Box, Button, Container, Fade, Grid, LinearProgress, Stack, Typography, styled } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { ITopData } from '../../models'
 import { AnalyticReduxProps } from './redux/type'
@@ -9,6 +9,7 @@ import SelectMenu from '../../components/SelectMenu'
 import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 import OverviewSection from './OverviewSection'
 import TopData from './TopData'
+import { LazyStatus } from '../../redux'
 
 interface IProps extends AnalyticReduxProps {}
 export default class Analytic extends Component<IProps> {
@@ -18,6 +19,7 @@ export default class Analytic extends Component<IProps> {
     return this.props.AnalyticSlice.videos.map((e) => {
       const info = this.props.AnalyticSlice.videoInfos[e[0]]
       const t: ITopData = {
+        id: e[0].toString(),
         title: info?.Snippet.Title ?? e[0].toString(),
         value: e[1] as number,
         imageUrl: info?.Snippet.Thumbnails?.Default__?.Url ?? 'example'
@@ -30,6 +32,7 @@ export default class Analytic extends Component<IProps> {
     return this.props.AnalyticSlice.channels.map((e) => {
       const info = this.props.AnalyticSlice.channelInfos[e[0]]
       return {
+        id: e[0].toString(),
         title: info?.Snippet.Title ?? e[0].toString(),
         value: e[1] as number,
         imageUrl: info?.Snippet.Thumbnails?.Default__?.Url ?? 'example'
@@ -124,12 +127,20 @@ export default class Analytic extends Component<IProps> {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <SkeletonLazyWrap status={this.props.AnalyticSlice.chartStatus}>
-            <TopData data={this.getVideoDatas()} config={{ title: 'Top Videos', date: period, measure: 'Views' }} />
+            <TopData
+              baseUrl='https://youtu.be/'
+              data={this.getVideoDatas()}
+              config={{ title: 'Top Videos', date: period, measure: 'Views' }}
+            />
           </SkeletonLazyWrap>
         </Grid>
         <Grid item xs={12} sm={6}>
           <SkeletonLazyWrap status={this.props.AnalyticSlice.chartStatus}>
-            <TopData data={this.getChannelDatas()} config={{ title: 'Top Channels', date: period, measure: 'Views' }} />
+            <TopData
+              baseUrl='https://www.youtube.com/channel/'
+              data={this.getChannelDatas()}
+              config={{ title: 'Top Channels', date: period, measure: 'Views' }}
+            />
           </SkeletonLazyWrap>
         </Grid>
       </Grid>

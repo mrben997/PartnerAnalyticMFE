@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { humanNumber } from 'csmfe/helper'
-import { Box, Typography, styled } from '@mui/material'
+import { Box, Link, Typography, styled } from '@mui/material'
 import { ITopData, ITopDataConfig, ITopDataDTO } from '../../models'
 
 const configDefault: ITopDataConfig = {
@@ -12,6 +12,7 @@ const configDefault: ITopDataConfig = {
 interface IProps {
   config?: ITopDataConfig
   data: ITopData[]
+  baseUrl: string
 }
 
 export class TopData extends Component<IProps> {
@@ -24,6 +25,10 @@ export class TopData extends Component<IProps> {
     const max = this.findMax(data)?.value || 0
     const arr = data.map<ITopDataDTO>((e) => ({ ...e, percent: (e.value * 100) / max }))
     return arr.sort((a, b) => b.value - a.value)
+  }
+
+  getHref = (id: string | number): string => {
+    return this.props.baseUrl + id
   }
 
   render() {
@@ -57,14 +62,9 @@ export class TopData extends Component<IProps> {
           alt='thumbnail'
           sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
         />
-        {/* <img
-          alt='VideoThumb'
-          src={`/api/user/v2/YoutubeReport/VideoThumb?Id=${'iswFOvqpcSc'}`}
-          style={{ width: '50px', marginRight: '10px', borderRadius: '5px' }}
-        /> */}
-        <Typography noWrap sx={{ flex: 1 }}>
+        <CustomTypography {...{ component: Link, target: '_blank', href: this.getHref(e.id) }} noWrap>
           {e.title}
-        </Typography>
+        </CustomTypography>
         <Line percent={e.percent} />
         <Typography component='span' variant='subtitle1' sx={{ width: widthAmount }}>
           {humanNumber(e.value)}
@@ -96,3 +96,15 @@ const Line = styled(Box)<{ percent?: number }>(({ percent }) => ({
     backgroundColor: '#1a90ff'
   }
 }))
+
+const CustomTypography = styled(Typography)({
+  width: '100%',
+  display: 'block',
+  color: '#606060',
+  transition: 'all 0.3s',
+  textDecoration: 'none',
+  '&:hover': {
+    color: '#1976d2',
+    textDecoration: 'underline'
+  }
+})
