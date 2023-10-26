@@ -1,7 +1,5 @@
 import { Graphql } from 'graphql-service-mfe'
 
-export * from './SelectedProcessorType'
-
 export interface IDateOption {
   id: string
   title: string

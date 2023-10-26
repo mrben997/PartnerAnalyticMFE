@@ -1,8 +1,8 @@
 import React, { Component, PropsWithChildren } from 'react'
-import { AvancedModeRedux } from '../../redux'
 import { TAvancedModeOpen, TAvancedModeClose } from './AvancedModeContext'
 import { AvancedModeContext, IAvancedModeContext } from './AvancedModeContext'
 import DialogBase from './DialogBase'
+import AvancedModeRedux from './redux/AvancedModeRedux'
 
 export * from './AvancedModeContext'
 

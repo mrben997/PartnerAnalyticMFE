@@ -1,8 +1,9 @@
-import { customConnect } from '../../hocs'
-import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../type'
+import { customConnect } from '../../../redux/hocs'
+import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../../redux/type'
 import { AvancedModeSlice, IAvancedModeStateRedux } from './AvancedModeSlice'
 import { fetchAvancedModeThunk, fetchAvancedModeConfigThunk } from './AvancedModeThunk'
-import AvancedModeBase from '../../../views/AvancedMode/AvancedModeBase'
+import AvancedModeBase from '../AvancedModeBase'
+import { TOnChangeCheckboxParams } from '../../../utils/SelectedProcessor/type'
 
 export interface AvancedModeReduxState extends TStateRedux {
   AvancedModeSlice: IAvancedModeStateRedux
@@ -14,6 +15,8 @@ export interface AvancedModeReduxDispatch extends TDispatchRedux {
   setDateIndex: (params: number) => void
   setMetricIndex: (params: number) => void
   setTabIndex: (params: number) => void
+  setSearchId: (params: string) => void
+  onSelectedTableCheckbox: (params: TOnChangeCheckboxParams) => void
 }
 
 const mapStateToProps = (state: RootState): AvancedModeReduxState => ({
@@ -43,6 +46,13 @@ const appDispatchToProps = (dispatch: AppDispatch): AvancedModeReduxDispatch => 
   setTabIndex: (params) => {
     dispatch(AvancedModeSlice.actions.setTabIndex(params))
     dispatch(fetchAvancedModeThunk())
+  },
+  setSearchId: (params) => {
+    dispatch(AvancedModeSlice.actions.setSearchId(params))
+    dispatch(fetchAvancedModeThunk())
+  },
+  onSelectedTableCheckbox: (params) => {
+    dispatch(AvancedModeSlice.actions.onSelectedTableCheckbox(params))
   }
 })
 

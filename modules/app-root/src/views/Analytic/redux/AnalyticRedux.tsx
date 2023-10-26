@@ -1,6 +1,6 @@
-import { customConnect } from '../../hocs'
-import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../type'
-import Analytic from '../../../views/Analytic'
+import { customConnect } from '../../../redux/hocs'
+import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../../redux/type'
+import Analytic from '..'
 import { AnalyticSlice, IAnalyticStateRedux } from './AnalyticSlice'
 import { fetchAnalyticThunk, fetchAnalyticConfigThunk } from './AnalyticThunk'
 

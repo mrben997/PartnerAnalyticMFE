@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChartData } from 'chart.js'
-import { IChartData } from './type'
+import { IChartData } from '../models'
 
 type TGenerateLineChartDataFunc = (parmas: IChartData, index: number) => ChartData<'line', number[], string>
 export const GenerateLineChartData: TGenerateLineChartDataFunc = ({ labels, details }, index) => {
@@ -41,3 +41,5 @@ export function MergeDeep<TModel = any>(target: any, ...sources: any[]): TModel 
   }
   return MergeDeep(target, ...sources)
 }
+
+export const hummanDate = (value: string) => `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`

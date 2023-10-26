@@ -1,20 +1,29 @@
-import React, { Component } from 'react'
-import { Box, Button, Container, IconButton, TextField, Tooltip, Typography, styled } from '@mui/material'
+import React, { ChangeEventHandler, Component } from 'react'
+import { Box, Button, Container, Fade, IconButton, LinearProgress, TextField, Tooltip, Typography, styled } from '@mui/material'
 import PollIcon from '@mui/icons-material/Poll'
 import CloseIcon from '@mui/icons-material/Close'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { LineChart } from '../../components/LineChart'
 import { AvancedModeContext } from './AvancedModeContext'
 import TabSection from './TabSection'
-import AvancedModeTable from '../AvancedModeTable'
+import AvancedModeTable from './AvancedModeTable'
 import FakeDataLocal from '../../utils/FakeDataLocal'
-import { AvancedModeReduxProps } from '../../redux'
 import SelectMenu from '../../components/SelectMenu'
 import DateOption from '../../utils/DateOption'
 import MetricOption from '../../utils/MetricOption'
 import KindOption from '../../utils/KindOption'
-import SelectedProcessor from '../../utils/SelectedProcessor'
 import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
+import { ChartData } from 'chart.js'
+import { AvancedModeReduxProps } from './redux/type'
+import { hummanDate } from '../../utils/helper'
+import SelectedProcessor from '../../utils/SelectedProcessor'
+import { LazyStatus } from '../../redux'
+
+interface IDataResult {
+  label?: string
+  data: number[]
+  color?: string
+}
 
 interface IProps extends AvancedModeReduxProps {}
 
@@ -23,49 +32,128 @@ export default class AvancedModeBase extends Component<IProps> {
     this.props.fetchChartData()
   }
 
-  getSelectAccessor = (): SelectedProcessor => {
-    const metricType = MetricOption.data[this.props.AvancedModeSlice.metricIndex].id
-    return new SelectedProcessor(this.props.AvancedModeSlice.tableData, metricType)
+  sortByDates = (params: (string | number)[][], index: number) => {
+    const temp = params.slice()
+    temp.sort((a, b) => {
+      const aa = a[index].toString()
+      const bb = b[index].toString()
+      return aa > bb ? 1 : aa < bb ? -1 : 0
+    })
+    return temp
+  }
+
+  getLabels = () => this.props.AvancedModeSlice.dates.map((e) => hummanDate(e.toString()))
+
+  getDatas = (): IDataResult[] => {
+    const dates = this.props.AvancedModeSlice.dates
+    const lineChart = this.props.AvancedModeSlice.lineChart
+    const metric = MetricOption.getMetricString(this.props.AvancedModeSlice.metricIndex)
+
+    let maping = this.props.AvancedModeSlice.tableDataMaping
+    let ids = SelectedProcessor.getIdActives(maping, true)
+    if (ids.length < 1) {
+      maping = this.props.AvancedModeSlice.tableDataMapingDefault
+      ids = Object.keys(maping) as string[]
+    }
+
+    return ids.map<IDataResult>((id) => {
+      const item = maping[id]
+      const data = dates.map<number>((date) => {
+        const lc = lineChart[id]
+        return ((lc && lc[date]?.[metric]) as number) ?? 0
+      })
+      return {
+        color: item?.color,
+        label: (item?.row.title ?? item?.row.id ?? '') as string,
+        data
+      }
+    })
+  }
+
+  generateLineChartData = (): ChartData<'line', number[], string> => {
+    const datasets = this.getDatas().map((item) => ({
+      label: item.label,
+      data: item.data,
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      borderColor: item.color,
+      borderWidth: 2,
+      pointBorderColor: item.color,
+      pointBackgroundColor: item.color,
+      pointHoverBackgroundColor: 'rgb(255, 99, 132)',
+      pointHoverBorderColor: 'white',
+      pointRadius: () => 0
+    }))
+    return { labels: this.getLabels(), datasets }
+    // return FakeDataLocal.avancedMode
+  }
+
+  timer
+  handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.props.setSearchId(e.target.value)
+    }, 300)
+  }
+
+  getPlaceholderSearchId = (): string => {
+    return this.props.AvancedModeSlice.tabIndex === 0 ? 'Search channelId' : 'Search videoId'
   }
 
   render() {
     return (
       <>
-        {this.renderHeader()}
-        <Box sx={{ borderBottom: borderValue }}>
-          <Container maxWidth={false}>
-            <Box sx={{ display: 'flex', alignItems: 'center', height: sectionHeight }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                <CirBox>
-                  <PollIcon fontSize='large' sx={{ color: '#fff' }} />
-                </CirBox>
-                <TextField placeholder='Search channelId' size='small' name='search' />
+        <StickyBox>
+          {this.renderHeader()}
+          <Box sx={{ borderBottom: borderValue }}>
+            <Container maxWidth={false}>
+              <Box sx={{ display: 'flex', alignItems: 'center', height: sectionHeight }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                  <CirBox>
+                    <PollIcon fontSize='large' sx={{ color: '#fff' }} />
+                  </CirBox>
+                  <TextField
+                    placeholder={this.getPlaceholderSearchId()}
+                    size='small'
+                    name='search'
+                    onChange={this.handleChange}
+                  />
+                </Box>
+                <Box sx={{ flex: 1 }} />
+                <Box sx={{ height: '100%', borderRight: borderValue }} />
+                {this.renderSelectDate()}
+                <Box sx={{ height: '100%', borderRight: borderValue }} />
+                {this.renderSelectNetwork()}
               </Box>
-              <Box sx={{ flex: 1 }} />
-              <Box sx={{ height: '100%', borderRight: borderValue }} />
-              {this.renderSelectDate()}
-              <Box sx={{ height: '100%', borderRight: borderValue }} />
-              {this.renderSelectNetwork()}
+            </Container>
+          </Box>
+          <Fade in={this.props.AvancedModeSlice.tableStatus === LazyStatus.Loading}>
+            <LinearProgress />
+          </Fade>
+          <Box sx={{ borderBottom: borderValue }}>
+            <Container maxWidth={false}>
+              <TabSection
+                data={KindOption.data.map((e) => e.title)}
+                selectedIndex={this.props.AvancedModeSlice.tabIndex}
+                onChange={(_, value: number) => this.props.setTabIndex(value)}
+              />
+            </Container>
+          </Box>
+        </StickyBox>
+
+        <SkeletonLazyWrap status={this.props.AvancedModeSlice.tableStatus} sxSkeleton={{ opacity: '0.35' }}>
+          <Container maxWidth={false} sx={{ pt: '12px' }}>
+            {this.renderSelectMetric()}
+            <Box sx={{ flex: 1, display: 'flex', padding: '0 5px', height: '400px' }}>
+              <LineChart options={{ plugins: { legend: { display: false } } }} data={this.generateLineChartData()} />
             </Box>
           </Container>
-        </Box>
-        <Box sx={{ borderBottom: borderValue }}>
-          <Container maxWidth={false}>
-            <TabSection
-              data={KindOption.data.map((e) => e.title)}
-              selectedIndex={this.props.AvancedModeSlice.tabIndex}
-              onChange={(_, value: number) => this.props.setTabIndex(value)}
-            />
-          </Container>
-        </Box>
-        <Container maxWidth={false} sx={{ pt: '12px' }}>
-          {this.renderSelectMetric()}
-          <Box sx={{ flex: 1, display: 'flex', padding: '0 5px', height: '400px' }}>
-            <LineChart options={{ plugins: { legend: { display: false } } }} data={FakeDataLocal.avancedMode} />
-          </Box>
-        </Container>
-        <SkeletonLazyWrap status={this.props.AvancedModeSlice.fetchStatus}>
-          <AvancedModeTable selectedProcessor={this.getSelectAccessor()} metricIndex={this.props.AvancedModeSlice.metricIndex} />
+          <AvancedModeTable
+            tableData={this.props.AvancedModeSlice.tableData}
+            tableDataMaping={this.props.AvancedModeSlice.tableDataMaping}
+            tableDataMapingDefault={this.props.AvancedModeSlice.tableDataMapingDefault}
+            metricIndex={this.props.AvancedModeSlice.metricIndex}
+            onChangeCheckbox={this.props.onSelectedTableCheckbox}
+          />
         </SkeletonLazyWrap>
       </>
     )
@@ -177,17 +265,20 @@ const CustomButton = styled(Button)({
   }
 })
 
+const StickyBox = styled(Box)({
+  position: 'sticky',
+  top: 0,
+  zIndex: 100,
+  background: '#fff'
+})
+
 const Header = styled(Box)({
   height: sectionHeight,
   borderBottom: borderValue,
   display: 'flex',
   justifyContent: 'flex-end',
   alignItems: 'center',
-  padding: '8px 24px',
-  background: '#fff',
-  position: 'sticky',
-  top: 0,
-  zIndex: 100
+  padding: '8px 24px'
 })
 
 const CustomIconButtonClose = styled(IconButton)({

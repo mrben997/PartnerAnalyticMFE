@@ -1,5 +1,5 @@
 import { CreateHttpService, ServiceBase } from 'graphql-service-mfe'
-import { IMediaNetwork } from '../utils/type'
+import { IMediaNetwork } from '../models'
 
 class ComponentServiceBase extends ServiceBase {
   constructor() {

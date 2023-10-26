@@ -1,11 +1,14 @@
 import { Dictionary } from '@reduxjs/toolkit'
 
+export type TRowDataProperty = string | number
+export type TMetric = 'views' | 'estimatedMinutesWatched' | 'estimatedRevenue'
 export interface IRowData {
-  id: string
-  title: string
-  views: number
-  estimatedMinutesWatched: number
-  estimatedRevenue: number
+  id: TRowDataProperty
+  views: TRowDataProperty
+  estimatedMinutesWatched: TRowDataProperty
+  estimatedRevenue: TRowDataProperty
+  title?: TRowDataProperty
+  date?: TRowDataProperty
 }
 export interface IMapSelected {
   checked: boolean

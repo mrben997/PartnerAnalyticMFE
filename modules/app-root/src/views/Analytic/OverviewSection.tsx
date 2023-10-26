@@ -4,8 +4,9 @@ import { TabList, TabContext } from '@mui/lab'
 import { Box, Tab, Typography } from '@mui/material'
 import { humanNumber, formatterUSD } from 'csmfe/helper'
 import { LineChart } from '../../components/LineChart'
-import { IAnalyticStateRedux } from '../../redux/reducers/analytic/AnalyticSlice'
+import { IAnalyticStateRedux } from './redux/AnalyticSlice'
 import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
+import { hummanDate } from '../../utils/helper'
 
 const tabs = ['Views', 'Watch time (hours)', 'Estimated partner revenue']
 
@@ -38,9 +39,7 @@ export class OverviewSection extends Component<IProps, IState> {
     return temp
   }
 
-  hummanDate = (value: string) => `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`
-
-  getLabels = () => this.data.map((e) => this.hummanDate(e[0].toString()))
+  getLabels = () => this.data.map((e) => hummanDate(e[0].toString()))
 
   getData = () => this.data.map((e) => e[parseInt(this.state.tabIndex) + 1] as number)
 

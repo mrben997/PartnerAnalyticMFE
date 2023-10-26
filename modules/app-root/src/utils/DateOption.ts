@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IDateOption } from './type'
+import { IDateOption } from '../models'
 
 const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const FULL_MONTH_LABELS = [

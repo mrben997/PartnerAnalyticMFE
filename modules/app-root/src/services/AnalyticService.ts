@@ -1,5 +1,5 @@
 import { CreateHttpService, ServiceBase } from 'graphql-service-mfe'
-import { IDataInfo } from '../utils/type'
+import { IDataInfo } from '../models'
 import { Dictionary } from '@reduxjs/toolkit'
 
 class AnalyticServiceBase extends ServiceBase {

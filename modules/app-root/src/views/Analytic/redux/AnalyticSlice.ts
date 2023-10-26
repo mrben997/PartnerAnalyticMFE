@@ -1,7 +1,7 @@
 import { Dictionary, EntityState, PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { fetchAnalyticConfigThunk, fetchAnalyticThunk } from './AnalyticThunk'
-import { IDataInfo, IDateOption, INetwork, ITopData, TQueryParams } from '../../../utils/type'
-import { LazyStatus, TStateRedux } from '../../type'
+import { IDataInfo, IDateOption, INetwork, ITopData, TQueryParams } from '../../../models'
+import { LazyStatus, TStateRedux } from '../../../redux/type'
 import FakeDataLocal from '../../../utils/FakeDataLocal'
 import DateOption from '../../../utils/DateOption'
 

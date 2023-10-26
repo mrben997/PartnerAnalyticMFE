@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { humanNumber } from 'csmfe/helper'
 import { Box, Typography, styled } from '@mui/material'
-import { ITopData, ITopDataConfig, ITopDataDTO } from '../../utils/type'
+import { ITopData, ITopDataConfig, ITopDataDTO } from '../../models'
 
 const configDefault: ITopDataConfig = {
   title: 'Top data title',

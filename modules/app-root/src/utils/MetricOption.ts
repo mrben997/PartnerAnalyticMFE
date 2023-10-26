@@ -1,3 +1,5 @@
+import { TMetric } from './SelectedProcessor/type'
+
 export type TMetricOptionType = 'View' | 'WatchTime' | 'Money'
 
 interface ISelectMenu {
@@ -20,6 +22,18 @@ class MetricOptionBase {
   }
 
   getSortString = (params: TMetricOptionType) => `${params} desc`
+
+  getMetricString = (index: number): TMetric => {
+    switch (index) {
+      case 1:
+        return 'estimatedMinutesWatched'
+      case 2:
+        return 'estimatedRevenue'
+      case 0:
+      default:
+        return 'views'
+    }
+  }
 }
 
 const MetricOption = new MetricOptionBase()

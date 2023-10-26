@@ -1,17 +1,18 @@
 import { Graphql } from 'graphql-service-mfe'
 import { Dictionary, createAsyncThunk } from '@reduxjs/toolkit'
 import { authService } from 'OIDC-auth/Components/ApiAuthorization/AuthorizeService'
-import { SetupCancel, calculateWatchTime } from '../../helper'
-import { IDataInfo, INetwork, TQueryParams } from '../../../utils/type'
-import store from '../..'
+import { IDataInfo, TQueryParams } from '../../../models'
+import { SetupCancel, calculateWatchTime } from '../../../redux/helper'
+import store from '../../../redux'
 import DateOption from '../../../utils/DateOption'
 import AnalyticService from '../../../services/AnalyticService'
 import MediaNetworkService from '../../../services/ComponentService'
+import { ISelectMenu } from '../../../components/type'
 
 const getLineChartData = (dates: string[], networkId: string, signal?: AbortSignal) => {
   let params: TQueryParams = {
     fields: 'View, WatchTime, Money',
-    includeTotal: true,
+    includeTotal: 'None',
     sortBy: 'View desc',
     time: 'Day',
     affterDate: dates[0],
@@ -76,11 +77,11 @@ export const fetchAnalyticThunk = createAsyncThunk<IReturn>('fetchAnalyticThunk'
 })
 
 interface IConfigReturn {
-  networks: INetwork[]
+  networks: ISelectMenu[]
 }
 export const fetchAnalyticConfigThunk = createAsyncThunk<IConfigReturn>('fetchAnalyticConfigThunk', async (_, context) => {
   const networkRes = await MediaNetworkService.AllMediaNetwork(context.signal)
-  const networks = networkRes.map<INetwork>((e) => ({ id: e.Id, title: e.Name }))
+  const networks = networkRes.map<ISelectMenu>((e) => ({ id: e.Id, title: e.Name }))
   const roles = await authService.getRoles()
   if (roles?.some((e) => e === 'Admin')) networks.splice(0, 0, { id: '', title: 'All' })
   return { networks }
