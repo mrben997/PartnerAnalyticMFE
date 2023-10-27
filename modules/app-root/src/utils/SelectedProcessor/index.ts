@@ -20,7 +20,7 @@ class SelectedProcessorBase {
     this.max = this.colors.length
   }
 
-  isTotalRow = (params: string) => totalIdDefault === params
+  isTotalRow = (rowId: string) => totalIdDefault === rowId
 
   convertMaping = (params: IRowData[]) => {
     const m = params.reduce((obj, cur) => {
@@ -107,13 +107,10 @@ class SelectedProcessorBase {
     ids.forEach((id) => {
       const elm = maping[id] as ISelectMap
       if (!elm.checked && amount < this.max) {
-        console.log(this.getUnusedColor(id, maping))
-
         maping[id] = { ...elm, checked: true, color: this.getUnusedColor(id, maping) }
       }
       amount++
     })
-
     this.disableCheckbox(maping)
     return maping
   }

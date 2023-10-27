@@ -40,5 +40,6 @@ const Wrapper = styled(Box)({
   top: 0,
   left: 0,
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
+  zIndex: 100
 })

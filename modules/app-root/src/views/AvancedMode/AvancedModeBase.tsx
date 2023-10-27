@@ -202,6 +202,9 @@ export default class AvancedModeBase extends Component<IProps> {
         {(open) => (
           <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />} sx={{ height: '100%' }}>
             <Box component='span' className='content-btn'>
+              <Typography variant='subtitle2' component='span'>
+                Network
+              </Typography>
               <Typography variant='body1' component='span' sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
                 {data?.title || 'Title'}
               </Typography>
@@ -285,7 +288,7 @@ const CustomButton = styled(Button)({
 const StickyBox = styled(Box)({
   position: 'sticky',
   top: 0,
-  zIndex: 100,
+  zIndex: 200,
   background: '#fff'
 })
 

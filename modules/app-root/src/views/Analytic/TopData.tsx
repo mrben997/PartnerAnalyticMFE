@@ -43,7 +43,7 @@ export class TopData extends Component<IProps> {
             <Typography component='span' variant='subtitle2' sx={{ flex: 1, fontWeight: 500 }}>
               {config.date}
             </Typography>
-            <Typography component='span' variant='subtitle2' sx={{ fontWeight: 500, width: widthAmount }}>
+            <Typography component='span' variant='subtitle2' sx={{ fontWeight: 600, width: widthAmount }}>
               {config.measure}
             </Typography>
           </Box>
@@ -66,16 +66,22 @@ export class TopData extends Component<IProps> {
           {e.title}
         </CustomTypography>
         <Line percent={e.percent} />
-        <Typography component='span' variant='subtitle1' sx={{ width: widthAmount }}>
+        <AmountBox {...{ component: 'span' }} variant='subtitle1'>
           {humanNumber(e.value)}
-        </Typography>
+        </AmountBox>
       </Box>
     )
   }
 }
 export default TopData
 
-const widthAmount = '64px'
+const widthAmount = '76px'
+
+const AmountBox = styled(Typography)({
+  width: widthAmount,
+  display: 'inline-block',
+  flex: '0 0 auto'
+})
 
 const Line = styled(Box)<{ percent?: number }>(({ percent }) => ({
   width: '100%',

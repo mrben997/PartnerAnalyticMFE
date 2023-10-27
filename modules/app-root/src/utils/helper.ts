@@ -67,3 +67,8 @@ export const cutStringToWidth = (str: string, width: number) => {
 
   return newStr
 }
+
+export const getThumbnailYoutube = (id: string, imageUrl?: string) => {
+  if (imageUrl) return imageUrl
+  return `https://i.ytimg.com/vi/${id}/default.jpg`
+}

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Dictionary } from '@reduxjs/toolkit'
-import { formatterUSD, humanNumber } from 'csmfe/helper'
-import { Container, Link, TableContainer, TableSortLabel, Typography, styled } from '@mui/material'
-import { Checkbox, SxProps, Table, TableBody, TableCell, TableHead, TableRow, Theme } from '@mui/material'
+import { Container, TableContainer, TableSortLabel } from '@mui/material'
+import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import SelectedProcessor, { TSelectedProcessorMaping } from '../../utils/SelectedProcessor'
 import { IDataInfo } from '../../models'
 import { IRowData, TOnChangeCheckbox } from '../../utils/SelectedProcessor/type'
+import RowRender from './RowRender'
+import { getThumbnailYoutube } from '../../utils/helper'
 
 interface IProps {
   info: Dictionary<IDataInfo>
@@ -24,12 +25,6 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     const checked = ids.length === SelectedProcessor.max
     const indeterminate = ids.length > 0 && ids.length < SelectedProcessor.max
     return { checked, indeterminate }
-  }
-
-  getSxDefault = (row: IRowData): { borderLeftColor?: string; color?: string } => {
-    const ids = SelectedProcessor.getIdActives(this.props.tableDataMaping)
-    const rowDefault = this.props.tableDataMapingDefault[row.id]
-    return rowDefault && ids.length < 1 ? { borderLeftColor: rowDefault.color, color: rowDefault.color } : {}
   }
 
   handleChangeCheckbox: TOnChangeCheckbox = (params) => {
@@ -83,54 +78,25 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     )
   }
 
-  getHref = (id: string | number): string => {
-    return this.props.baseUrl + id
-  }
-
   renderRow = (row: IRowData) => {
-    // TODO chuyển về component
-    const check = SelectedProcessor.isTotalRow(row.id as string)
+    const ids = SelectedProcessor.getIdActives(this.props.tableDataMaping)
     const status = this.props.tableDataMaping[row.id]
-    const sxDefault = this.getSxDefault(row)
-    const color = status?.color ?? sxDefault.color ?? '#606060'
-    const sx: SxProps<Theme> = check ? { '& .MuiTableCell-root': { fontWeight: 700 } } : {}
+    const imageUrl = this.props.info[row.id]?.Snippet.Thumbnails.Default__.Url
 
     return (
-      <CustomTableRow key={row.id} sx={{ ...sx, ...sxDefault }}>
-        <TableCell padding='none'>
-          <Checkbox
-            checked={status?.checked}
-            disabled={status?.disabled}
-            sx={{ color, '&.Mui-checked': { color } }}
-            onChange={(_, checked) => this.handleChangeCheckbox({ type: 'unit', checked, value: row })}
-          />
-        </TableCell>
-        <TableCell scope='row' sx={{ maxWidth: '767px' }}>
-          <CustomTypography {...{ component: Link, target: '_blank', href: this.getHref(row.id) }} noWrap>
-            {this.props.info[row.id]?.Snippet.Title ?? row.id}
-          </CustomTypography>
-        </TableCell>
-        <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.views + ''))}</TableCell>
-        <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(row.estimatedMinutesWatched + ''))}</TableCell>
-        <TableCell sx={{ width: '18rem' }}>{formatterUSD().format(parseFloat(row.estimatedRevenue + ''))}</TableCell>
-      </CustomTableRow>
+      <RowRender
+        key={row.id}
+        data={row}
+        baseUrl={this.props.baseUrl}
+        onChangeCheckbox={this.props.onChangeCheckbox}
+        title={(this.props.info[row.id]?.Snippet.Title ?? row.id) + ''}
+        checked={status?.checked}
+        disabled={status?.disabled}
+        color={status?.color}
+        colorDefault={this.props.tableDataMapingDefault[row.id]?.color}
+        idColorDefaulted={ids.length < 1}
+        imageUrl={getThumbnailYoutube(row.id + '', imageUrl)}
+      />
     )
   }
 }
-
-const CustomTableRow = styled(TableRow)({
-  '&:last-child td, &:last-child th': { border: 0 },
-  borderLeft: `3px solid transparent`
-})
-
-const CustomTypography = styled(Typography)({
-  width: '100%',
-  display: 'block',
-  color: '#606060',
-  transition: 'all 0.3s',
-  textDecoration: 'none',
-  '&:hover': {
-    color: '#1976d2',
-    textDecoration: 'underline'
-  }
-})

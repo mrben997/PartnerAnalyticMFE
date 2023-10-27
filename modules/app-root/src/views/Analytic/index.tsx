@@ -9,12 +9,11 @@ import SelectMenu from '../../components/SelectMenu'
 import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 import OverviewSection from './OverviewSection'
 import TopData from './TopData'
+import { getThumbnailYoutube } from '../../utils/helper'
 import { LazyStatus } from '../../redux'
 
 interface IProps extends AnalyticReduxProps {}
 export default class Analytic extends Component<IProps> {
-  getPeriod = () => {}
-
   getVideoDatas = () => {
     return this.props.AnalyticSlice.videos.map((e) => {
       const info = this.props.AnalyticSlice.videoInfos[e[0]]
@@ -22,7 +21,7 @@ export default class Analytic extends Component<IProps> {
         id: e[0].toString(),
         title: info?.Snippet.Title ?? e[0].toString(),
         value: e[1] as number,
-        imageUrl: info?.Snippet.Thumbnails?.Default__?.Url ?? 'example'
+        imageUrl: getThumbnailYoutube(e[0] + '', info?.Snippet.Thumbnails?.Default__?.Url)
       }
       return t
     })
@@ -48,11 +47,14 @@ export default class Analytic extends Component<IProps> {
     return (
       <AvancedMode>
         <Container maxWidth={false}>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end', marginTop: '24px' }}>
-            {this.renderSelectDate()}
-            <Box sx={{ flex: 1 }} />
-            <Stack gap='6px'>
+          <StickyBox sx={{}}>
+            <Fade in={this.props.AnalyticSlice.chartStatus === LazyStatus.Loading}>
+              <LinearProgress sx={{ mx: '-24px' }} />
+            </Fade>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px', mt: '24px' }}>
+              {this.renderSelectDate()}
               {this.renderSelectNetwork()}
+              <Box sx={{ flex: 1 }} />
               <AvancedModeContext.Consumer>
                 {({ open }) => (
                   <Button variant='contained' color='primary' onClick={open}>
@@ -60,9 +62,8 @@ export default class Analytic extends Component<IProps> {
                   </Button>
                 )}
               </AvancedModeContext.Consumer>
-            </Stack>
-          </Box>
-          <Box height='24px' />
+            </Box>
+          </StickyBox>
           <OverviewSection AnalyticSlice={this.props.AnalyticSlice} />
           <Box height='64px' />
           {this.renderTopData()}
@@ -84,6 +85,9 @@ export default class Analytic extends Component<IProps> {
         {(open) => (
           <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
             <Box component='span' className='content-btn'>
+              <Typography variant='subtitle2' component='span'>
+                Network
+              </Typography>
               <Typography variant='body1' component='span' sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>
                 {data?.title || 'Title'}
               </Typography>
@@ -149,14 +153,25 @@ export default class Analytic extends Component<IProps> {
 }
 
 const buttonWidth = '200px'
+
 const CustomButton = styled(Button)({
   color: '#3c3c3c',
   width: buttonWidth,
   textTransform: 'unset',
+  backgroundColor: 'rgba(0,0,0,0.02)',
   '& .content-btn': {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start'
   }
+})
+
+const StickyBox = styled(Box)({
+  position: 'sticky',
+  backgroundColor: '#fff',
+  zIndex: 200,
+  top: 0,
+  paddingBottom: '8px',
+  marginBottom: '16px'
 })
