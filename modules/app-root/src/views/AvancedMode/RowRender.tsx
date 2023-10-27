@@ -66,7 +66,7 @@ export default class RowRender extends Component<IProps> {
                 component='img'
                 src={this.props.imageUrl}
                 alt='thumbnail'
-                sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px', flex: '0 0 auto' }}
               />
             )}
             {this.renderTitleCell()}

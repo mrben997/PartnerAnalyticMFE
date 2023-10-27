@@ -60,7 +60,7 @@ export class TopData extends Component<IProps> {
           component='img'
           src={e.imageUrl}
           alt='thumbnail'
-          sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+          sx={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px', flex: '0 0 auto' }}
         />
         <CustomTypography {...{ component: Link, target: '_blank', href: this.getHref(e.id) }} noWrap>
           {e.title}

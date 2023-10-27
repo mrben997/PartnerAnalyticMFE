@@ -62,11 +62,8 @@ export default class AvancedModeBase extends Component<IProps> {
         const lc = lineChart[id]
         return ((lc && lc[date]?.[metric]) as number) ?? 0
       })
-      return {
-        color: item?.color,
-        label: (this.props.AvancedModeSlice.info[item?.row.id ?? '']?.Snippet.Title ?? item?.row.id) as string,
-        data
-      }
+      const label = (this.props.AvancedModeSlice.info[item?.row.id ?? '']?.Snippet.Title ?? item?.row.id) as string
+      return { color: item?.color, label, data }
     })
   }
 
@@ -84,7 +81,6 @@ export default class AvancedModeBase extends Component<IProps> {
       pointRadius: () => 0
     }))
     return { labels: this.getLabels(), datasets }
-    // return FakeDataLocal.avancedMode
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
