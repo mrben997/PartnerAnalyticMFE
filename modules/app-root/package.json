@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --mode development",
-    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --mode development --node-env=development",
+    "build": "webpack --mode production --node-env=production",
     "build:analyze": "webpack --mode production --env analyze",
     "preview": "serve dist/ -s",
     "lint": "eslint --ext js,jsx,ts,tsx src/",
