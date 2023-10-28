@@ -46,7 +46,7 @@ export default class Analytic extends Component<IProps> {
   render() {
     return (
       <AvancedMode>
-        <Container maxWidth={false}>
+        <CustomContainer maxWidth={false}>
           <StickyBox sx={{}}>
             <Fade in={this.props.AnalyticSlice.chartStatus === LazyStatus.Loading}>
               <LinearProgress sx={{ mx: '-24px' }} />
@@ -57,8 +57,10 @@ export default class Analytic extends Component<IProps> {
               <Box sx={{ flex: 1 }} />
               <AvancedModeContext.Consumer>
                 {({ open }) => (
-                  <Button variant='contained' color='primary' onClick={open}>
-                    Advanced Mode
+                  <Button variant='contained' color='primary' size='small' onClick={open}>
+                    <Typography component='span' noWrap>
+                      Advanced Mode
+                    </Typography>
                   </Button>
                 )}
               </AvancedModeContext.Consumer>
@@ -68,7 +70,7 @@ export default class Analytic extends Component<IProps> {
           <Box height='64px' />
           {this.renderTopData()}
           <Box height='128px' />
-        </Container>
+        </CustomContainer>
       </AvancedMode>
     )
   }
@@ -80,7 +82,8 @@ export default class Analytic extends Component<IProps> {
         data={this.props.AnalyticSlice.networks}
         selectedIndex={this.props.AnalyticSlice.networkIndex}
         onSelected={this.props.setNetworkIndex}
-        width={buttonWidth}
+        widthPC={buttonWidth}
+        widthMobile={buttonWidthMobile}
       >
         {(open) => (
           <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
@@ -106,12 +109,13 @@ export default class Analytic extends Component<IProps> {
         data={DateOption.data}
         selectedIndex={this.props.AnalyticSlice.dateIndex}
         onSelected={this.props.setDateIndex}
-        width={buttonWidth}
+        widthPC={buttonWidth}
+        widthMobile={buttonWidthMobile}
       >
         {(open) => (
           <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
             <Box component='span' className='content-btn'>
-              <Typography variant='subtitle2' component='span'>
+              <Typography variant='subtitle2' component='span' noWrap sx={{ width: '100%', display: 'block' }}>
                 {period}
               </Typography>
               <Typography variant='body1' component='span' sx={{ fontWeight: 600 }}>
@@ -153,19 +157,27 @@ export default class Analytic extends Component<IProps> {
 }
 
 const buttonWidth = '200px'
+const buttonWidthMobile = '175px'
 
-const CustomButton = styled(Button)({
+const CustomContainer = styled(Container)({
+  flex: 1,
+  width: 'auto',
+  minWidth: '650px'
+})
+
+const CustomButton = styled(Button)(({ theme }) => ({
   color: '#3c3c3c',
   width: buttonWidth,
   textTransform: 'unset',
-  backgroundColor: 'rgba(0,0,0,0.02)',
+  textAlign: 'left',
   '& .content-btn': {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start'
-  }
-})
+  },
+  [theme.breakpoints.down('md')]: { width: buttonWidthMobile }
+}))
 
 const StickyBox = styled(Box)({
   position: 'sticky',

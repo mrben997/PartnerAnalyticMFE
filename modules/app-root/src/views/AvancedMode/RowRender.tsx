@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Box, Link, Typography, styled } from '@mui/material'
-import { formatterUSD, humanNumber } from 'csmfe/helper'
+import { formatNumber, formatterUSD, humanNumber } from 'csmfe/helper'
 import { Checkbox, SxProps, TableCell, TableRow, Theme } from '@mui/material'
 import { IRowData, TOnChangeCheckbox } from '../../utils/SelectedProcessor/type'
 import SelectedProcessor from '../../utils/SelectedProcessor'
@@ -59,7 +59,7 @@ export default class RowRender extends Component<IProps> {
             onChange={(_, checked) => this.props.onChangeCheckbox({ type: 'unit', checked, value: this.props.data })}
           />
         </TableCell>
-        <TableCell scope='row' sx={{ maxWidth: '767px' }}>
+        <CustomTableCell>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {!this.isTotal && (
               <Box
@@ -71,10 +71,12 @@ export default class RowRender extends Component<IProps> {
             )}
             {this.renderTitleCell()}
           </Box>
-        </TableCell>
-        <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(this.props.data.views + ''))}</TableCell>
-        <TableCell sx={{ width: '18rem' }}>{humanNumber(parseInt(this.props.data.estimatedMinutesWatched + ''))}</TableCell>
-        <TableCell sx={{ width: '18rem' }}>{formatterUSD().format(parseFloat(this.props.data.estimatedRevenue + ''))}</TableCell>
+        </CustomTableCell>
+        <CustomTableCellNumber>{formatNumber.format(parseInt(this.props.data.views + ''))}</CustomTableCellNumber>
+        <CustomTableCellNumber>
+          {formatNumber.format(parseInt(this.props.data.estimatedMinutesWatched + ''))}
+        </CustomTableCellNumber>
+        <CustomTableCellNumber>{formatterUSD().format(parseFloat(this.props.data.estimatedRevenue + ''))}</CustomTableCellNumber>
       </CustomTableRow>
     )
   }
@@ -97,3 +99,12 @@ const CustomTypography = styled(Typography)({
     textDecoration: 'underline'
   }
 })
+
+const CustomTableCell = styled(TableCell)(({ theme }) => ({
+  maxWidth: '768.5px',
+  [theme.breakpoints.down('md')]: { maxWidth: '200px' }
+}))
+
+const CustomTableCellNumber = styled(TableCell)(({ theme }) => ({
+  [theme.breakpoints.down('md')]: { maxWidth: '100px' }
+}))

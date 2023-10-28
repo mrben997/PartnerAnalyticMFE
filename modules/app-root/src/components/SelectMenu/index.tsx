@@ -3,7 +3,8 @@ import { Menu, MenuItem, styled } from '@mui/material'
 import { ISelectMenu } from './type'
 
 interface IProps {
-  width: string
+  widthPC: string
+  widthMobile: string
   data: ISelectMenu[]
   selectedIndex: number
   onSelected?: (params: number) => void
@@ -44,7 +45,8 @@ export default class SelectMenu extends Component<IProps, IState> {
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           MenuListProps={{ 'aria-labelledby': 'lock-button', role: 'listbox' }}
-          sx={{ '& .MuiMenuItem-root': { width: this.props.width } }}
+          widthpc={this.props.widthPC}
+          widthmobile={this.props.widthMobile}
         >
           {this.props.data.map((e, i) => (
             <MenuItem key={i} selected={i === this.props.selectedIndex} onClick={() => this.handleMenuItemClick(i)}>
@@ -57,8 +59,15 @@ export default class SelectMenu extends Component<IProps, IState> {
   }
 }
 
-const CustomMenu = styled(Menu)({
+interface ICustomMenu {
+  widthpc: string
+  widthmobile: string
+}
+
+const CustomMenu = styled(Menu)<ICustomMenu>(({ theme, widthpc, widthmobile }) => ({
+  '& .MuiMenuItem-root': { width: widthpc },
   '& .MuiMenuItem-root.Mui-selected': { fontWeight: 600, backgroundColor: 'rgba(255, 255, 255, 0)', cursor: 'unset' },
   '& .MuiMenuItem-root:hover': { backgroundColor: 'rgba(25, 118, 210, 0.08)' },
-  '& .MuiMenuItem-root.Mui-selected:hover': { backgroundColor: 'rgba(255, 255, 255, 0)' }
-})
+  '& .MuiMenuItem-root.Mui-selected:hover': { backgroundColor: 'rgba(255, 255, 255, 0)' },
+  [theme.breakpoints.down('md')]: { '& .MuiMenuItem-root': { width: widthmobile } }
+}))

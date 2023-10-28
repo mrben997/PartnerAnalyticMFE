@@ -1,7 +1,7 @@
 import { Graphql } from 'graphql-service-mfe'
 import { Dictionary, createAsyncThunk } from '@reduxjs/toolkit'
 import { authService } from 'OIDC-auth/Components/ApiAuthorization/AuthorizeService'
-import { SetupCancel, calculateWatchTime } from '../../../redux/helper'
+import { AbortCancel, SetupCancel, calculateWatchTime } from '../../../redux/helper'
 import { IDataInfo, TQueryParams } from '../../../models'
 import store from '../../../redux'
 import DateOption from '../../../utils/DateOption'
@@ -64,6 +64,7 @@ interface IReturnTable {
   tableData: IRowData[]
 }
 export const fetchAvancedModeThunk = createAsyncThunk<IReturnTable>('fetchAvancedModeThunk', async (_, context) => {
+  AbortCancel('fetchLineChartThunk')
   SetupCancel('fetchAvancedModeThunk', context.abort)
 
   const state = store.getState().AvancedModeSlice
@@ -81,7 +82,7 @@ export const fetchAvancedModeThunk = createAsyncThunk<IReturnTable>('fetchAvance
       id: e[0].toString(),
       title: e[0].toString(),
       views: e[1] as number,
-      estimatedMinutesWatched: parseFloat(e[2] + '') / 60,
+      estimatedMinutesWatched: e[2],
       estimatedRevenue: e[3] as number
     }))
   }

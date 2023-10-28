@@ -1,12 +1,11 @@
-import { Dictionary, EntityState, PayloadAction, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { Dictionary, PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { fetchAnalyticConfigThunk, fetchAnalyticThunk } from './AnalyticThunk'
-import { IDataInfo, IDateOption, INetwork, ITopData, TQueryParams } from '../../../models'
+import { IDataInfo } from '../../../models'
 import { LazyStatus, TStateRedux } from '../../../redux/type'
-import FakeDataLocal from '../../../utils/FakeDataLocal'
-import DateOption from '../../../utils/DateOption'
+import { ISelectMenu } from '../../../components/SelectMenu/type'
 
 export interface IAnalyticState {
-  networks: INetwork[]
+  networks: ISelectMenu[]
   networkIndex: number
   dateIndex: number
   totals: (string | number)[]
@@ -28,7 +27,7 @@ const initialState: IAnalyticStateRedux = {
   networks: [],
   totals: ['', '0', '0', '0'],
   data: [],
-  dateIndex: 0,
+  dateIndex: 1,
   networkIndex: 0,
   videoInfos: {},
   channelInfos: {},

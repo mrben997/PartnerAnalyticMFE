@@ -24,6 +24,14 @@ const mapStateToProps = (state: RootState): AvancedModeReduxState => ({
   AvancedModeSlice: state.AvancedModeSlice
 })
 
+// const fetchData = (dispatch: AppDispatch) => {
+//   const res = dispatch(fetchAvancedModeThunk())
+//   res.then(() => {
+//     return dispatch(fetchLineChartThunk())
+//   })
+//   return res
+// }
+
 const appDispatchToProps = (dispatch: AppDispatch): AvancedModeReduxDispatch => ({
   FetchData: () => {
     return dispatch(fetchAvancedModeConfigThunk())

@@ -1,7 +1,7 @@
 import React, { Component, SyntheticEvent } from 'react'
 import { ChartData } from 'chart.js'
 import { TabList, TabContext } from '@mui/lab'
-import { Box, Tab, Typography } from '@mui/material'
+import { Box, Tab, Typography, styled } from '@mui/material'
 import { humanNumber, formatterUSD } from 'csmfe/helper'
 import { LineChart } from '../../components/LineChart'
 import { IAnalyticStateRedux } from './redux/AnalyticSlice'
@@ -68,14 +68,10 @@ export class OverviewSection extends Component<IProps, IState> {
   render() {
     return (
       <TabContext value={this.state.tabIndex}>
-        <TabList
-          centered
-          onChange={this.handleChange}
-          sx={{ borderBottom: 1, borderColor: 'divider', px: '24px', minWidth: '600px' }}
-        >
+        <CustomTabList centered onChange={this.handleChange}>
           {this.renderTabs()}
-        </TabList>
-        <Box sx={{ minHeight: '200px' }}>{this.renderTabPanels()}</Box>
+        </CustomTabList>
+        {this.renderTabPanels()}
       </TabContext>
     )
   }
@@ -88,7 +84,7 @@ export class OverviewSection extends Component<IProps, IState> {
         sx={{ textTransform: 'none', flex: 1, maxWidth: 'unset' }}
         label={
           <>
-            <Typography variant='subtitle1' component='span' sx={{ display: 'block' }}>
+            <Typography variant='subtitle1' component='span' sx={{ display: 'block', width: '100%' }} noWrap>
               {e.title}
             </Typography>
             <SkeletonLazyWrap component='span' status={this.props.AnalyticSlice.chartStatus} sx={{ width: '100%' }}>
@@ -115,3 +111,9 @@ export class OverviewSection extends Component<IProps, IState> {
 }
 
 export default OverviewSection
+
+const CustomTabList = styled(TabList)(({ theme }) => ({
+  borderBottom: 1,
+  borderColor: 'divider',
+  px: '24px'
+}))

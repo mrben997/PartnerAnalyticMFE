@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Dictionary } from '@reduxjs/toolkit'
-import { Container, TableContainer, TableSortLabel } from '@mui/material'
+import { Container, TableContainer, TableSortLabel, TableSortLabelProps, Typography, styled } from '@mui/material'
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import SelectedProcessor, { TSelectedProcessorMaping } from '../../utils/SelectedProcessor'
 import { IDataInfo } from '../../models'
@@ -41,7 +41,7 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     return (
       <Container maxWidth={false} sx={{ minHeight: '20rem', mt: '24px' }}>
         <TableContainer>
-          <Table sx={{ minWidth: 650 }}>
+          <Table>
             {this.renderHeader()}
             <TableBody>{this.props.tableData.map((row) => this.renderRow(row))}</TableBody>
           </Table>
@@ -58,23 +58,22 @@ export default class AvancedModeTable extends Component<IProps, IState> {
             <Checkbox {...this.getCheckboxControlStatus()} onChange={this.handleChangeCheckBoxAll} />
           </TableCell>
           <TableCell></TableCell>
-          <TableCell sortDirection={'desc'} sx={{ fontWeight: 700, color: '#6c6c6c' }}>
-            <TableSortLabel active={this.props.metricIndex === 0} direction='desc'>
-              Views
-            </TableSortLabel>
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: '#6c6c6c' }}>
-            <TableSortLabel active={this.props.metricIndex === 1} direction='desc'>
-              Watch time (hours)
-            </TableSortLabel>
-          </TableCell>
-          <TableCell sx={{ fontWeight: 700, color: '#6c6c6c' }}>
-            <TableSortLabel active={this.props.metricIndex === 2} direction='desc'>
-              Estimated partner revenue
-            </TableSortLabel>
-          </TableCell>
+          <CustomTableCellNumber>{this.renderCellHeader('Views', 0)}</CustomTableCellNumber>
+          <CustomTableCellNumber>{this.renderCellHeader('Watch time (hours)', 1)}</CustomTableCellNumber>
+          <CustomTableCellNumber>{this.renderCellHeader('Estimated partner revenue', 2)}</CustomTableCellNumber>
         </TableRow>
       </TableHead>
+    )
+  }
+
+  renderCellHeader = (title: string, index: number) => {
+    const isActive = this.props.metricIndex === index
+    if (!isActive) return <Typography noWrap>{title}</Typography>
+    const p: TableSortLabelProps = isActive ? { active: true, direction: 'desc' } : {}
+    return (
+      <TableSortLabel {...p} sx={{ cursor: 'default' }}>
+        {title}
+      </TableSortLabel>
     )
   }
 
@@ -100,3 +99,9 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     )
   }
 }
+
+const CustomTableCellNumber = styled(TableCell)(({ theme }) => ({
+  fontWeight: 700,
+  color: '#6c6c6c',
+  [theme.breakpoints.down('md')]: { maxWidth: '100px' }
+}))

@@ -8,6 +8,11 @@ export const SetupCancel = (key: string, abort: () => void) => {
   MapAction[key] = abort
 }
 
+export const AbortCancel = (key: string) => {
+  const action = MapAction[key]
+  action && action()
+}
+
 export const calculateWatchTime = (params: (string | number)[][], index): (string | number)[][] => {
   const data = params.slice()
   if (data.length < 1) return []

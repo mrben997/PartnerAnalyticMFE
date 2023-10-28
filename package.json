@@ -6,6 +6,8 @@
     "modules/*"
   ],
   "scripts": {
-    "dev": "cd ./modules/app-root && yarn dev"
+    "dev": "cd ./modules/app-root && yarn dev",
+    "build": "cd ./modules/app-root && yarn build",
+    "lint": "cd ./modules/app-root && yarn lint"
   }
 }

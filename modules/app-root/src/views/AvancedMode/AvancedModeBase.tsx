@@ -16,7 +16,7 @@ import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 import { ChartData } from 'chart.js'
 import { AvancedModeReduxProps } from './redux/type'
 import { cutStringToWidth, hummanDate } from '../../utils/helper'
-import SelectedProcessor from '../../utils/SelectedProcessor'
+import SelectedProcessor, { totalColorDefault, totalIdDefault } from '../../utils/SelectedProcessor'
 import { LazyStatus } from '../../redux'
 
 interface IDataResult {
@@ -44,19 +44,34 @@ export default class AvancedModeBase extends Component<IProps> {
 
   getLabels = () => this.props.AvancedModeSlice.dates.map((e) => hummanDate(e.toString()))
 
+  getTotalData = (): IDataResult | undefined => {
+    const { dates, tableDataMaping, lineChart } = this.props.AvancedModeSlice
+    const metric = MetricOption.getMetricString(this.props.AvancedModeSlice.metricIndex)
+    const row = tableDataMaping[totalIdDefault]
+    if (!row || !row.checked) return
+    const data = dates.map<number>((date) => {
+      const lc = lineChart[totalIdDefault]
+      return ((lc && lc[date]?.[metric]) as number) ?? 0
+    })
+    return { color: row.color ?? totalColorDefault, label: totalIdDefault, data }
+  }
+
   getDatas = (): IDataResult[] => {
     const dates = this.props.AvancedModeSlice.dates
     const lineChart = this.props.AvancedModeSlice.lineChart
     const metric = MetricOption.getMetricString(this.props.AvancedModeSlice.metricIndex)
 
+    const totalData = this.getTotalData()
+    let isDefault = false
+
     let maping = this.props.AvancedModeSlice.tableDataMaping
     let ids = SelectedProcessor.getIdActives(maping, true)
-    if (ids.length < 1) {
+    if (ids.length < 1 || (ids.length < 2 && totalData)) {
       maping = this.props.AvancedModeSlice.tableDataMapingDefault
       ids = Object.keys(maping) as string[]
+      isDefault = true
     }
-
-    return ids.map<IDataResult>((id) => {
+    let dataResult = ids.map<IDataResult>((id) => {
       const item = maping[id]
       const data = dates.map<number>((date) => {
         const lc = lineChart[id]
@@ -65,6 +80,8 @@ export default class AvancedModeBase extends Component<IProps> {
       const label = (this.props.AvancedModeSlice.info[item?.row.id ?? '']?.Snippet.Title ?? item?.row.id) as string
       return { color: item?.color, label, data }
     })
+    if (isDefault && totalData) dataResult = [totalData, ...dataResult]
+    return dataResult
   }
 
   generateLineChartData = (): ChartData<'line', number[], string> => {
@@ -110,43 +127,34 @@ export default class AvancedModeBase extends Component<IProps> {
 
   render() {
     return (
-      <>
+      <Wrapper>
         <StickyBox>
           {this.renderHeader()}
-          <Box sx={{ borderBottom: borderValue }}>
-            <Container maxWidth={false}>
-              <Box sx={{ display: 'flex', alignItems: 'center', height: sectionHeight }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                  <CirBox>
-                    <PollIcon fontSize='large' sx={{ color: '#fff' }} />
-                  </CirBox>
-                  <TextField
-                    placeholder={this.getPlaceholderSearchId()}
-                    size='small'
-                    name='search'
-                    onChange={this.handleChange}
-                  />
-                </Box>
-                <Box sx={{ flex: 1 }} />
-                <Box sx={{ height: '100%', borderRight: borderValue }} />
-                {this.renderSelectDate()}
-                <Box sx={{ height: '100%', borderRight: borderValue }} />
-                {this.renderSelectNetwork()}
+          <Container maxWidth={false} sx={{ borderBottom: borderValue }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', height: sectionHeight }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                <CirBox>
+                  <PollIcon fontSize='large' sx={{ color: '#fff' }} />
+                </CirBox>
+                <TextField placeholder={this.getPlaceholderSearchId()} size='small' name='search' onChange={this.handleChange} />
               </Box>
-            </Container>
-          </Box>
+              <Box sx={{ flex: 1 }} />
+              <Box sx={{ height: '100%', borderRight: borderValue }} />
+              {this.renderSelectDate()}
+              <Box sx={{ height: '100%', borderRight: borderValue }} />
+              {this.renderSelectNetwork()}
+            </Box>
+          </Container>
           <Fade in={this.getLoadingStatus()}>
             <LinearProgress />
           </Fade>
-          <Box sx={{ borderBottom: borderValue }}>
-            <Container maxWidth={false}>
-              <TabSection
-                data={KindOption.data.map((e) => e.title)}
-                selectedIndex={this.props.AvancedModeSlice.tabIndex}
-                onChange={(_, value: number) => this.props.setTabIndex(value)}
-              />
-            </Container>
-          </Box>
+          <Container maxWidth={false} sx={{ borderBottom: borderValue }}>
+            <TabSection
+              data={KindOption.data.map((e) => e.title)}
+              selectedIndex={this.props.AvancedModeSlice.tabIndex}
+              onChange={(_, value: number) => this.props.setTabIndex(value)}
+            />
+          </Container>
         </StickyBox>
 
         <SkeletonLazyWrap status={this.props.AvancedModeSlice.lineChartStatus} sxSkeleton={{ opacity: '0.35' }}>
@@ -168,7 +176,7 @@ export default class AvancedModeBase extends Component<IProps> {
             onChangeCheckbox={this.props.onSelectedTableCheckbox}
           />
         </SkeletonLazyWrap>
-      </>
+      </Wrapper>
     )
   }
 
@@ -190,7 +198,8 @@ export default class AvancedModeBase extends Component<IProps> {
     const data = this.props.AvancedModeSlice.networks[this.props.AvancedModeSlice.networkIndex]
     return (
       <SelectMenu
-        width={buttonWidth}
+        widthPC={buttonWidth}
+        widthMobile={buttonWidthMobile}
         onSelected={this.props.setNetworkIndex}
         data={this.props.AvancedModeSlice.networks}
         selectedIndex={this.props.AvancedModeSlice.networkIndex}
@@ -216,7 +225,8 @@ export default class AvancedModeBase extends Component<IProps> {
     const period = data?.value ? DateOption.toRangeDate(data?.value) : ''
     return (
       <SelectMenu
-        width={buttonWidth}
+        widthPC={buttonWidth}
+        widthMobile={buttonWidthMobile}
         data={DateOption.data}
         onSelected={this.props.setDateIndex}
         selectedIndex={this.props.AvancedModeSlice.dateIndex}
@@ -224,7 +234,7 @@ export default class AvancedModeBase extends Component<IProps> {
         {(open) => (
           <CustomButton onClick={open} endIcon={<ArrowDropDownIcon />}>
             <Box component='span' className='content-btn'>
-              <Typography variant='subtitle2' component='span'>
+              <Typography variant='subtitle2' component='span' noWrap sx={{ width: '100%', display: 'block' }}>
                 {period}
               </Typography>
               <Typography variant='body1' component='span' sx={{ fontWeight: 600 }}>
@@ -242,7 +252,8 @@ export default class AvancedModeBase extends Component<IProps> {
     const width = '250px'
     return (
       <SelectMenu
-        width={width}
+        widthPC={width}
+        widthMobile={buttonWidthMobile}
         data={MetricOption.data}
         onSelected={this.props.setMetricIndex}
         selectedIndex={this.props.AvancedModeSlice.metricIndex}
@@ -267,19 +278,26 @@ export default class AvancedModeBase extends Component<IProps> {
 
 const sectionHeight = '56px'
 const borderValue = '1px solid rgba(0,0,0,0.09)'
-
 const buttonWidth = '200px'
-const CustomButton = styled(Button)({
+const buttonWidthMobile = '175px'
+
+const Wrapper = styled(Box)(({ theme }) => ({
+  minWidth: '650px'
+}))
+
+const CustomButton = styled(Button)(({ theme }) => ({
   color: '#3c3c3c',
   width: buttonWidth,
   textTransform: 'unset',
+  textAlign: 'left',
   '& .content-btn': {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start'
-  }
-})
+  },
+  [theme.breakpoints.down('md')]: { width: buttonWidthMobile }
+}))
 
 const StickyBox = styled(Box)({
   position: 'sticky',

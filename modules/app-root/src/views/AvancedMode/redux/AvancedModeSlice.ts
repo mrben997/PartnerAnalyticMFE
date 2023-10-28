@@ -23,6 +23,8 @@ export interface IAvancedModeStateRedux extends TStateRedux {
   tableDataMapingDefault: TSelectedProcessorMaping
   searchId: string
   info: Dictionary<IDataInfo>
+  requestIds: Dictionary<string>
+  prevAdvenModeRequestId?: string
 }
 
 // Define the initial state using that type
@@ -30,7 +32,7 @@ const initialState: IAvancedModeStateRedux = {
   status: LazyStatus.Loading,
   tableStatus: LazyStatus.Loading,
   lineChartStatus: LazyStatus.Loading,
-  dateIndex: 0,
+  dateIndex: 1,
   networks: [],
   networkIndex: 0,
   metricIndex: 0,
@@ -41,7 +43,8 @@ const initialState: IAvancedModeStateRedux = {
   tableDataMapingDefault: {},
   dates: [],
   searchId: '',
-  info: {}
+  info: {},
+  requestIds: {}
 }
 
 export const AvancedModeSlice = createSlice({
@@ -86,7 +89,7 @@ export const AvancedModeSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAvancedModeThunk.fulfilled, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (state.requestIds['fetchAvancedModeThunk'] !== action.meta.requestId) return
         state.tableStatus = LazyStatus.Loaded
 
         state.tableData = action.payload.tableData
@@ -95,49 +98,57 @@ export const AvancedModeSlice = createSlice({
         state.tableDataMapingDefault = SelectedProcessor.convertMapingUnusedColor(rowDefaults)
         setTimeout(() => {
           store.dispatch(fetchLineChartThunk())
-        }, 300)
+        }, 100)
       })
       .addCase(fetchAvancedModeThunk.rejected, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (state.requestIds['fetchAvancedModeThunk'] !== action.meta.requestId) return
         state.tableStatus = LazyStatus.Error
       })
       .addCase(fetchAvancedModeThunk.pending, (state, action) => {
-        state.requestId = action.meta.requestId
+        state.requestIds['fetchAvancedModeThunk'] = action.meta.requestId
         state.tableStatus = LazyStatus.Loading
         state.lineChartStatus = LazyStatus.Loading
       })
 
     builder
       .addCase(fetchLineChartThunk.fulfilled, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (
+          state.requestIds['fetchLineChartThunk'] !== action.meta.requestId ||
+          state.prevAdvenModeRequestId !== state.requestIds['fetchAvancedModeThunk']
+        )
+          return
         state.lineChartStatus = LazyStatus.Loaded
-
         state.lineChart = action.payload.lineChart
         state.dates = action.payload.dates
         state.info = action.payload.info
       })
       .addCase(fetchLineChartThunk.rejected, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (
+          state.requestIds['fetchLineChartThunk'] !== action.meta.requestId ||
+          state.prevAdvenModeRequestId !== state.requestIds['fetchAvancedModeThunk']
+        )
+          return
         state.lineChartStatus = LazyStatus.Error
       })
       .addCase(fetchLineChartThunk.pending, (state, action) => {
-        state.requestId = action.meta.requestId
+        state.requestIds['fetchLineChartThunk'] = action.meta.requestId
+        state.prevAdvenModeRequestId = state.requestIds['fetchAvancedModeThunk']
         state.lineChartStatus = LazyStatus.Loading
       })
 
     builder
       .addCase(fetchAvancedModeConfigThunk.fulfilled, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (state.requestIds['fetchAvancedModeConfigThunk'] !== action.meta.requestId) return
         state.status = LazyStatus.Loaded
 
         state.networks = action.payload.networks
       })
       .addCase(fetchAvancedModeConfigThunk.rejected, (state, action) => {
-        if (state.requestId !== action.meta.requestId) return
+        if (state.requestIds['fetchAvancedModeConfigThunk'] !== action.meta.requestId) return
         state.status = LazyStatus.Error
       })
       .addCase(fetchAvancedModeConfigThunk.pending, (state, action) => {
-        state.requestId = action.meta.requestId
+        state.requestIds['fetchAvancedModeConfigThunk'] = action.meta.requestId
         state.status = LazyStatus.Loading
       })
   }
