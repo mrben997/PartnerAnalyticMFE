@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd ./modules/app-root && yarn dev",
     "build": "cd ./modules/app-root && yarn build",
+    "copy": "./copy_build.bat",
     "lint": "cd ./modules/app-root && yarn lint",
     "lint:fix": "cd ./modules/app-root && yarn lint:fix"
   }
