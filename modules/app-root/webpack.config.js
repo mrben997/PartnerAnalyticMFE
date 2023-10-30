@@ -12,11 +12,16 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const webpack = require('webpack')
 const { ModuleFederationPlugin } = require('webpack').container
 
+const { ModuleProvider } = require('module-config-mfe/ModuleProvider')
+const { ModuleContants } = require('module-config-mfe/module-contants')
+
 // Cái dòng này giúp Editor gợi ý được các giá trị cho dòng code config ngay phía dưới nó
 // (giống như đang dùng Typescript vậy đó 😉)
 /** @type {(env: any, arg: {mode: string}) => import('webpack').Configuration} **/
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
+  const MfProvider = new ModuleProvider({ IsPropduction: isProduction })
+  console.log(MfProvider.getFilename(ModuleContants.analytics), MfProvider.getExpose([ModuleContants.analytics]))
   const isAnalyze = Boolean(env?.analyze)
   /** @type {import('webpack').Configuration} **/
   const config = {
@@ -125,10 +130,11 @@ module.exports = (env, argv) => {
       }),
       new ModuleFederationPlugin({
         name: 'analytics',
-        exposes: {
-          './Analytic': './src/App'
-        },
-        filename: 'remoteEntry.js',
+        // exposes: {
+        //   './Analytic': './src/App'
+        // },
+        exposes: MfProvider.getExpose([ModuleContants.analytics]),
+        filename: MfProvider.getFilename(ModuleContants.analytics),
         shared: {
           react: { requiredVersion: '17.0.2', singleton: true },
           'react-dom': { requiredVersion: '17.0.2', singleton: true },
