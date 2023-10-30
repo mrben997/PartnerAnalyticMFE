@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Box, Link, Typography, styled } from '@mui/material'
-import { formatNumber, formatterUSD, humanNumber } from 'csmfe/helper'
+import { formatNumber, formatterUSD } from 'csmfe/helper'
 import { Checkbox, SxProps, TableCell, TableRow, Theme } from '@mui/material'
-import { IRowData, TOnChangeCheckbox } from '../../utils/SelectedProcessor/type'
-import SelectedProcessor from '../../utils/SelectedProcessor'
+import { IRowData, TOnChangeCheckbox } from '../../../utils/SelectedProcessor/type'
+import SelectedProcessor from '../../../utils/SelectedProcessor'
 
 interface IProps {
   data: IRowData
@@ -18,7 +18,7 @@ interface IProps {
   imageUrl?: string
 }
 
-export default class RowRender extends Component<IProps> {
+export default class ItemRow extends Component<IProps> {
   get isTotal(): boolean {
     return SelectedProcessor.isTotalRow(this.props.data.id as string)
   }

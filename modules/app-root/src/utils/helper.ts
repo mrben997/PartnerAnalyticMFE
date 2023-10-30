@@ -52,7 +52,7 @@ export const cutStringToWidth = (str: string, width: number) => {
 
   let newStr = str
   let isCheck = false
-  while (context.measureText(newStr).width > width) {
+  while (context.measureText(newStr).width > width - 7) {
     newStr = newStr.slice(0, -1)
     isCheck = true
   }

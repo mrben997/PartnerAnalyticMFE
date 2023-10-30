@@ -1,5 +1,5 @@
 import React, { Component, PropsWithChildren } from 'react'
-import { Box, CircularProgress, Fade, styled } from '@mui/material'
+import { Box, CircularProgress, Fade, LinearProgress, styled } from '@mui/material'
 
 type TProps = PropsWithChildren<{
   in?: boolean
@@ -9,7 +9,7 @@ export default class LazySpinner extends Component<TProps> {
     return (
       <Fade in={this.props.in} unmountOnExit timeout={{ enter: 0, exit: 350 }}>
         <ContainerSpinner>
-          <CircularProgress />
+          <LinearProgress />
         </ContainerSpinner>
       </Fade>
     )
@@ -22,8 +22,5 @@ const ContainerSpinner = styled(Box)({
   left: 0,
   bottom: 0,
   right: 0,
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   backgroundColor: '#fff'
 })

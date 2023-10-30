@@ -1,13 +1,13 @@
 import { Graphql } from 'graphql-service-mfe'
 import { Dictionary, createAsyncThunk } from '@reduxjs/toolkit'
 import { authService } from 'OIDC-auth/Components/ApiAuthorization/AuthorizeService'
+import { IAnalyticSliceState } from './type'
+import { ISelectMenu } from '../../../components/type'
 import { IDataInfo, TQueryParams } from '../../../models'
 import { SetupCancel, calculateWatchTime } from '../../../redux/helper'
-import store from '../../../redux'
 import DateOption from '../../../utils/DateOption'
 import AnalyticService from '../../../services/AnalyticService'
 import MediaNetworkService from '../../../services/ComponentService'
-import { ISelectMenu } from '../../../components/type'
 
 const getLineChartData = (dates: string[], networkId: string, signal?: AbortSignal) => {
   let params: TQueryParams = {
@@ -46,9 +46,10 @@ interface IReturn {
 export const fetchAnalyticThunk = createAsyncThunk<IReturn>('fetchAnalyticThunk', async (_, context) => {
   SetupCancel('fetchAnalyticThunk', context.abort)
 
-  const state = store.getState().AnalyticSlice
-  const dateCurrent = DateOption.toStringRequest(DateOption.data[state.dateIndex].value.map((e) => new Date(e)))
-  const networkId = state.networks[state.networkIndex].id
+  const state = context.getState() as { AnalyticSlice: IAnalyticSliceState }
+  const AnalyticSliceState = state.AnalyticSlice
+  const dateCurrent = DateOption.toStringRequest(DateOption.data[AnalyticSliceState.dateIndex].value.map((e) => new Date(e)))
+  const networkId = AnalyticSliceState.networks[AnalyticSliceState.networkIndex].id
 
   const [lineChart, resTopVideos, resTopChannels] = await Promise.all([
     getLineChartData(dateCurrent, networkId, context.signal),

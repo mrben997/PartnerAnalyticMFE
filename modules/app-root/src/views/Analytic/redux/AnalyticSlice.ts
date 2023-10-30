@@ -1,27 +1,10 @@
-import { Dictionary, PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { fetchAnalyticConfigThunk, fetchAnalyticThunk } from './AnalyticThunk'
-import { IDataInfo } from '../../../models'
-import { LazyStatus, TStateRedux } from '../../../redux/type'
-import { ISelectMenu } from '../../../components/SelectMenu/type'
-
-export interface IAnalyticState {
-  networks: ISelectMenu[]
-  networkIndex: number
-  dateIndex: number
-  totals: (string | number)[]
-  data: (string | number)[][]
-  videos: (string | number)[][]
-  channels: (string | number)[][]
-  videoInfos: Dictionary<IDataInfo>
-  channelInfos: Dictionary<IDataInfo>
-}
-
-export interface IAnalyticStateRedux extends TStateRedux, IAnalyticState {
-  chartStatus: LazyStatus
-}
+import { IAnalyticSliceState } from './type'
+import { LazyStatus } from '../../../redux/type'
 
 // Define the initial state using that type
-const initialState: IAnalyticStateRedux = {
+const initialState: IAnalyticSliceState = {
   status: LazyStatus.Loading,
   chartStatus: LazyStatus.Loading,
   networks: [],

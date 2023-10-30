@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "cd ./modules/app-root && yarn dev",
     "build": "cd ./modules/app-root && yarn build",
-    "lint": "cd ./modules/app-root && yarn lint"
+    "lint": "cd ./modules/app-root && yarn lint",
+    "lint:fix": "cd ./modules/app-root && yarn lint:fix"
   }
 }

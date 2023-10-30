@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { humanNumber } from 'csmfe/helper'
 import { Box, Link, Typography, styled } from '@mui/material'
-import { ITopData, ITopDataConfig, ITopDataDTO } from '../../models'
+import { ITopData, ITopDataConfig, ITopDataDTO } from '../../../models'
 
 const configDefault: ITopDataConfig = {
   title: 'Top data title',
@@ -15,7 +15,7 @@ interface IProps {
   baseUrl: string
 }
 
-export class TopData extends Component<IProps> {
+export default class TopData extends Component<IProps> {
   findMax = (data: ITopData[]): ITopData | null => {
     if (data.length < 1) return null
     return data.reduce((max, current) => (current.value > max.value ? current : max))
@@ -27,9 +27,7 @@ export class TopData extends Component<IProps> {
     return arr.sort((a, b) => b.value - a.value)
   }
 
-  getHref = (id: string | number): string => {
-    return this.props.baseUrl + id
-  }
+  getHref = (id: string | number): string => this.props.baseUrl + id
 
   render() {
     const { config = configDefault } = this.props
@@ -73,7 +71,6 @@ export class TopData extends Component<IProps> {
     )
   }
 }
-export default TopData
 
 const widthAmount = '76px'
 

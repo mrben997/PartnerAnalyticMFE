@@ -1,25 +1,16 @@
+import { AnalyticSlice } from './AnalyticSlice'
 import { customConnect } from '../../../redux/hocs'
-import { TStateRedux, TDispatchRedux, RootState, AppDispatch } from '../../../redux/type'
-import Analytic from '..'
-import { AnalyticSlice, IAnalyticStateRedux } from './AnalyticSlice'
+import { RootState, AppDispatch } from '../../../redux/type'
+import { IAnalyticReduxDispatch, IAnalyticReduxState } from './type'
 import { fetchAnalyticThunk, fetchAnalyticConfigThunk } from './AnalyticThunk'
+import AnalyticBase from '../AnalyticBase'
 
-export interface AnalyticReduxState extends TStateRedux {
-  AnalyticSlice: IAnalyticStateRedux
-}
-
-export interface AnalyticReduxDispatch extends TDispatchRedux {
-  fetchChartData: () => { abort: () => void }
-  setNetworkIndex: (params: number) => void
-  setDateIndex: (params: number) => void
-}
-
-const mapStateToProps = (state: RootState): AnalyticReduxState => ({
+const mapStateToProps = (state: RootState): IAnalyticReduxState => ({
   status: state.AnalyticSlice.status,
   AnalyticSlice: state.AnalyticSlice
 })
 
-const appDispatchToProps = (dispatch: AppDispatch): AnalyticReduxDispatch => ({
+const appDispatchToProps = (dispatch: AppDispatch): IAnalyticReduxDispatch => ({
   FetchData: () => {
     return dispatch(fetchAnalyticConfigThunk())
   },
@@ -37,8 +28,8 @@ const appDispatchToProps = (dispatch: AppDispatch): AnalyticReduxDispatch => ({
 })
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export const AnalyticRedux = customConnect<any, AnalyticReduxState, AnalyticReduxDispatch>(
-  Analytic,
+export const AnalyticRedux = customConnect<any, IAnalyticReduxState, IAnalyticReduxDispatch>(
+  AnalyticBase,
   mapStateToProps,
   appDispatchToProps
 )

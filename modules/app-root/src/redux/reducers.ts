@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import { AnalyticSlice } from '../views/Analytic/redux/AnalyticSlice'
-import { AvancedModeSlice } from '../views/AvancedMode/redux/AvancedModeSlice'
+import { AnalyticSlice } from '../views/Analytic'
+import { AvancedModeSlice } from '../views/AvancedMode'
 
 export default combineReducers({
   AnalyticSlice: AnalyticSlice.reducer,

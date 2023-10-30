@@ -1,34 +1,13 @@
-import { Dictionary, PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { ISelectMenu } from '../../../components/type'
-import { LazyStatus, TStateRedux } from '../../../redux/type'
-import { TLineChart } from '../../../utils/LineChartProcessor'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { store } from '../../../redux'
+import { IAvancedModeSliceState } from './type'
+import { LazyStatus } from '../../../redux/type'
+import { TOnChangeCheckboxParams } from '../../../utils/SelectedProcessor/type'
 import { fetchAvancedModeConfigThunk, fetchAvancedModeThunk, fetchLineChartThunk } from './AvancedModeThunk'
-import { IRowData, TOnChangeCheckboxParams, TRowDataProperty } from '../../../utils/SelectedProcessor/type'
-import SelectedProcessor, { TSelectedProcessorMaping } from '../../../utils/SelectedProcessor'
-import { IDataInfo } from '../../../models'
-import store from '../../../redux'
-
-export interface IAvancedModeStateRedux extends TStateRedux {
-  tableStatus: LazyStatus
-  lineChartStatus: LazyStatus
-  networks: ISelectMenu[]
-  networkIndex: number
-  dateIndex: number
-  metricIndex: number
-  tabIndex: number
-  tableData: IRowData[]
-  lineChart: TLineChart
-  dates: TRowDataProperty[]
-  tableDataMaping: TSelectedProcessorMaping
-  tableDataMapingDefault: TSelectedProcessorMaping
-  searchId: string
-  info: Dictionary<IDataInfo>
-  requestIds: Dictionary<string>
-  prevAdvenModeRequestId?: string
-}
+import SelectedProcessor from '../../../utils/SelectedProcessor'
 
 // Define the initial state using that type
-const initialState: IAvancedModeStateRedux = {
+const initialState: IAvancedModeSliceState = {
   status: LazyStatus.Loading,
   tableStatus: LazyStatus.Loading,
   lineChartStatus: LazyStatus.Loading,

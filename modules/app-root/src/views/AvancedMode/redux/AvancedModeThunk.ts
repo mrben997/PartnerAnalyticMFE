@@ -1,18 +1,17 @@
 import { Graphql } from 'graphql-service-mfe'
 import { Dictionary, createAsyncThunk } from '@reduxjs/toolkit'
 import { authService } from 'OIDC-auth/Components/ApiAuthorization/AuthorizeService'
-import { AbortCancel, SetupCancel, calculateWatchTime } from '../../../redux/helper'
+import { IAvancedModeSliceState } from './type'
 import { IDataInfo, TQueryParams } from '../../../models'
-import store from '../../../redux'
-import DateOption from '../../../utils/DateOption'
-import MediaNetworkService from '../../../services/ComponentService'
-import MetricOption from '../../../utils/MetricOption'
-import KindOption, { TKindOptionType } from '../../../utils/KindOption'
-import { IRowData, TRowDataProperty } from '../../../utils/SelectedProcessor/type'
-import AnalyticService from '../../../services/AnalyticService'
-import { totalIdDefault } from '../../../utils/SelectedProcessor'
 import { ISelectMenu } from '../../../components/SelectMenu/type'
+import { IRowData, TRowDataProperty } from '../../../utils/SelectedProcessor/type'
+import { AbortCancel, SetupCancel, calculateWatchTime } from '../../../redux/helper'
+import KindOption, { TKindOptionType } from '../../../utils/KindOption'
 import LineChartProcessor, { TLineChart } from '../../../utils/LineChartProcessor'
+import DateOption from '../../../utils/DateOption'
+import MetricOption from '../../../utils/MetricOption'
+import AnalyticService from '../../../services/AnalyticService'
+import MediaNetworkService from '../../../services/ComponentService'
 
 interface IConfig extends Omit<TQueryParams, 'fields' | 'ids'> {
   dates: string[]
@@ -67,12 +66,13 @@ export const fetchAvancedModeThunk = createAsyncThunk<IReturnTable>('fetchAvance
   AbortCancel('fetchLineChartThunk')
   SetupCancel('fetchAvancedModeThunk', context.abort)
 
-  const state = store.getState().AvancedModeSlice
-  const dates = DateOption.toStringRequest(DateOption.data[state.dateIndex].value.map((e) => new Date(e)))
-  const networkId = state.networks[state.networkIndex].id
-  const kind = KindOption.data[state.tabIndex].id
-  const sortBy = MetricOption.getSortString(MetricOption.data[state.metricIndex].id)
-  const searchId = state.searchId
+  const state = context.getState() as { AvancedModeSlice: IAvancedModeSliceState }
+  const AvancedModeState = state.AvancedModeSlice
+  const dates = DateOption.toStringRequest(DateOption.data[AvancedModeState.dateIndex].value.map((e) => new Date(e)))
+  const networkId = AvancedModeState.networks[AvancedModeState.networkIndex].id
+  const kind = KindOption.data[AvancedModeState.tabIndex].id
+  const sortBy = MetricOption.getSortString(MetricOption.data[AvancedModeState.metricIndex].id)
+  const searchId = AvancedModeState.searchId
 
   const tableDataRes = await getTableData({ dates, networkId, kind, sortBy, ids: searchId ? [searchId] : [] }, context.signal)
   const table = calculateWatchTime((tableDataRes.query?.data ?? []) as (string | number)[][], 2)
@@ -95,12 +95,13 @@ interface ILineChartReturn {
 export const fetchLineChartThunk = createAsyncThunk<ILineChartReturn>('fetchLineChartThunk', async (_, context) => {
   SetupCancel('fetchLineChartThunk', context.abort)
 
-  const state = store.getState().AvancedModeSlice
-  const dates = DateOption.toStringRequest(DateOption.data[state.dateIndex].value.map((e) => new Date(e)))
-  const networkId = state.networks[state.networkIndex].id
-  const kind = KindOption.data[state.tabIndex].id
-  const sortBy = MetricOption.getSortString(MetricOption.data[state.metricIndex].id)
-  const ids = state.tableData.map((e) => e.id as string).slice(1)
+  const state = context.getState() as { AvancedModeSlice: IAvancedModeSliceState }
+  const AvancedModeState = state.AvancedModeSlice
+  const dates = DateOption.toStringRequest(DateOption.data[AvancedModeState.dateIndex].value.map((e) => new Date(e)))
+  const networkId = AvancedModeState.networks[AvancedModeState.networkIndex].id
+  const kind = KindOption.data[AvancedModeState.tabIndex].id
+  const sortBy = MetricOption.getSortString(MetricOption.data[AvancedModeState.metricIndex].id)
+  const ids = AvancedModeState.tableData.map((e) => e.id as string).slice(1)
 
   const [info, lineChart] = await Promise.all([
     getInfo(ids, kind, context.signal).catch(() => ({})),

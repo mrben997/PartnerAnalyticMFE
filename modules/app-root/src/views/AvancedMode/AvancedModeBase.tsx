@@ -3,27 +3,17 @@ import { Box, Button, Container, Fade, IconButton, LinearProgress, TextField, To
 import PollIcon from '@mui/icons-material/Poll'
 import CloseIcon from '@mui/icons-material/Close'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { LineChart } from '../../components/LineChart'
-import { AvancedModeContext } from './AvancedModeContext'
-import TabSection from './TabSection'
-import AvancedModeTable from './AvancedModeTable'
-import FakeDataLocal from '../../utils/FakeDataLocal'
-import SelectMenu from '../../components/SelectMenu'
-import DateOption from '../../utils/DateOption'
-import MetricOption from '../../utils/MetricOption'
-import KindOption from '../../utils/KindOption'
-import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
-import { ChartData } from 'chart.js'
-import { AvancedModeReduxProps } from './redux/type'
-import { cutStringToWidth, hummanDate } from '../../utils/helper'
-import SelectedProcessor, { totalColorDefault, totalIdDefault } from '../../utils/SelectedProcessor'
 import { LazyStatus } from '../../redux'
-
-interface IDataResult {
-  label?: string
-  data: number[]
-  color?: string
-}
+import { AvancedModeReduxProps } from './redux/type'
+import { AvancedModeContext } from './AvancedModeContext'
+import TabSection from './subs/TabSection'
+import TableSection from './subs/TableSection'
+import DateOption from '../../utils/DateOption'
+import KindOption from '../../utils/KindOption'
+import MetricOption from '../../utils/MetricOption'
+import SelectMenu from '../../components/SelectMenu'
+import MultiaxiLineChart from './subs/MultiaxiLineChart'
+import SkeletonLazyWrap from '../../components/SkeletonLazyWrap'
 
 interface IProps extends AvancedModeReduxProps {}
 
@@ -40,64 +30,6 @@ export default class AvancedModeBase extends Component<IProps> {
       return aa > bb ? 1 : aa < bb ? -1 : 0
     })
     return temp
-  }
-
-  getLabels = () => this.props.AvancedModeSlice.dates.map((e) => hummanDate(e.toString()))
-
-  getTotalData = (): IDataResult | undefined => {
-    const { dates, tableDataMaping, lineChart } = this.props.AvancedModeSlice
-    const metric = MetricOption.getMetricString(this.props.AvancedModeSlice.metricIndex)
-    const row = tableDataMaping[totalIdDefault]
-    if (!row || !row.checked) return
-    const data = dates.map<number>((date) => {
-      const lc = lineChart[totalIdDefault]
-      return ((lc && lc[date]?.[metric]) as number) ?? 0
-    })
-    return { color: row.color ?? totalColorDefault, label: totalIdDefault, data }
-  }
-
-  getDatas = (): IDataResult[] => {
-    const dates = this.props.AvancedModeSlice.dates
-    const lineChart = this.props.AvancedModeSlice.lineChart
-    const metric = MetricOption.getMetricString(this.props.AvancedModeSlice.metricIndex)
-
-    const totalData = this.getTotalData()
-    let isDefault = false
-
-    let maping = this.props.AvancedModeSlice.tableDataMaping
-    let ids = SelectedProcessor.getIdActives(maping, true)
-    if (ids.length < 1 || (ids.length < 2 && totalData)) {
-      maping = this.props.AvancedModeSlice.tableDataMapingDefault
-      ids = Object.keys(maping) as string[]
-      isDefault = true
-    }
-    let dataResult = ids.map<IDataResult>((id) => {
-      const item = maping[id]
-      const data = dates.map<number>((date) => {
-        const lc = lineChart[id]
-        return ((lc && lc[date]?.[metric]) as number) ?? 0
-      })
-      const label = (this.props.AvancedModeSlice.info[item?.row.id ?? '']?.Snippet.Title ?? item?.row.id) as string
-      return { color: item?.color, label, data }
-    })
-    if (isDefault && totalData) dataResult = [totalData, ...dataResult]
-    return dataResult
-  }
-
-  generateLineChartData = (): ChartData<'line', number[], string> => {
-    const datasets = this.getDatas().map((item) => ({
-      label: cutStringToWidth(item.label ?? 'None', 200),
-      data: item.data,
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      borderColor: item.color,
-      borderWidth: 2,
-      pointBorderColor: item.color,
-      pointBackgroundColor: item.color,
-      pointHoverBackgroundColor: 'rgb(255, 99, 132)',
-      pointHoverBorderColor: 'white',
-      pointRadius: () => 0
-    }))
-    return { labels: this.getLabels(), datasets }
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -161,12 +93,19 @@ export default class AvancedModeBase extends Component<IProps> {
           <Container maxWidth={false} sx={{ pt: '12px' }}>
             {this.renderSelectMetric()}
             <Box sx={{ flex: 1, display: 'flex', padding: '0 5px', height: '400px' }}>
-              <LineChart options={{ plugins: { legend: { display: false } } }} data={this.generateLineChartData()} />
+              <MultiaxiLineChart
+                dates={this.props.AvancedModeSlice.dates}
+                info={this.props.AvancedModeSlice.info}
+                lineChart={this.props.AvancedModeSlice.lineChart}
+                metricIndex={this.props.AvancedModeSlice.metricIndex}
+                tableDataMaping={this.props.AvancedModeSlice.tableDataMaping}
+                tableDataMapingDefault={this.props.AvancedModeSlice.tableDataMapingDefault}
+              />
             </Box>
           </Container>
         </SkeletonLazyWrap>
         <SkeletonLazyWrap status={this.props.AvancedModeSlice.tableStatus} sxSkeleton={{ opacity: '0.35' }}>
-          <AvancedModeTable
+          <TableSection
             info={this.props.AvancedModeSlice.info}
             tableData={this.props.AvancedModeSlice.tableData}
             tableDataMaping={this.props.AvancedModeSlice.tableDataMaping}

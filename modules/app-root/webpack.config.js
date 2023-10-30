@@ -130,14 +130,9 @@ module.exports = (env, argv) => {
         },
         filename: 'remoteEntry.js',
         shared: {
-          react: {
-            requiredVersion: '17.0.2',
-            singleton: true
-          },
-          'react-dom': {
-            requiredVersion: '17.0.2',
-            singleton: true
-          }
+          react: { requiredVersion: '17.0.2', singleton: true },
+          'react-dom': { requiredVersion: '17.0.2', singleton: true },
+          'OIDC-auth/Components/ApiAuthorization/AuthorizeService': { singleton: true, requiredVersion: '1.0.0' }
         }
       }),
       // Plugin hỗ trợ thêm thẻ style và script vào index.html

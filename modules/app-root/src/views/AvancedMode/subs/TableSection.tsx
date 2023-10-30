@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Dictionary } from '@reduxjs/toolkit'
-import { Container, TableContainer, TableSortLabel, TableSortLabelProps, Typography, styled } from '@mui/material'
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import SelectedProcessor, { TSelectedProcessorMaping } from '../../utils/SelectedProcessor'
-import { IDataInfo } from '../../models'
-import { IRowData, TOnChangeCheckbox } from '../../utils/SelectedProcessor/type'
-import RowRender from './RowRender'
-import { getThumbnailYoutube } from '../../utils/helper'
+import { Container, TableContainer, TableSortLabel, TableSortLabelProps, Typography, styled } from '@mui/material'
+import { IDataInfo } from '../../../models'
+import { getThumbnailYoutube } from '../../../utils/helper'
+import { IRowData, TOnChangeCheckbox } from '../../../utils/SelectedProcessor/type'
+import SelectedProcessor, { TSelectedProcessorMaping } from '../../../utils/SelectedProcessor'
+import ItemRow from './ItemRow'
 
 interface IProps {
   info: Dictionary<IDataInfo>
@@ -19,7 +19,7 @@ interface IProps {
 }
 interface IState {}
 
-export default class AvancedModeTable extends Component<IProps, IState> {
+export default class TableSection extends Component<IProps, IState> {
   getCheckboxControlStatus = () => {
     const ids = SelectedProcessor.getIdActives(this.props.tableDataMaping)
     const checked = ids.length === SelectedProcessor.max
@@ -50,21 +50,19 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     )
   }
 
-  renderHeader = () => {
-    return (
-      <TableHead>
-        <TableRow>
-          <TableCell padding='none' width='42px'>
-            <Checkbox {...this.getCheckboxControlStatus()} onChange={this.handleChangeCheckBoxAll} />
-          </TableCell>
-          <TableCell></TableCell>
-          <CustomTableCellNumber>{this.renderCellHeader('Views', 0)}</CustomTableCellNumber>
-          <CustomTableCellNumber>{this.renderCellHeader('Watch time (hours)', 1)}</CustomTableCellNumber>
-          <CustomTableCellNumber>{this.renderCellHeader('Estimated partner revenue', 2)}</CustomTableCellNumber>
-        </TableRow>
-      </TableHead>
-    )
-  }
+  renderHeader = () => (
+    <TableHead>
+      <TableRow>
+        <TableCell padding='none' width='42px'>
+          <Checkbox {...this.getCheckboxControlStatus()} onChange={this.handleChangeCheckBoxAll} />
+        </TableCell>
+        <TableCell></TableCell>
+        <CustomTableCellNumber>{this.renderCellHeader('Views', 0)}</CustomTableCellNumber>
+        <CustomTableCellNumber>{this.renderCellHeader('Watch time (hours)', 1)}</CustomTableCellNumber>
+        <CustomTableCellNumber>{this.renderCellHeader('Estimated partner revenue', 2)}</CustomTableCellNumber>
+      </TableRow>
+    </TableHead>
+  )
 
   renderCellHeader = (title: string, index: number) => {
     const isActive = this.props.metricIndex === index
@@ -83,7 +81,7 @@ export default class AvancedModeTable extends Component<IProps, IState> {
     const imageUrl = this.props.info[row.id]?.Snippet.Thumbnails.Default__.Url
 
     return (
-      <RowRender
+      <ItemRow
         key={row.id}
         data={row}
         baseUrl={this.props.baseUrl}

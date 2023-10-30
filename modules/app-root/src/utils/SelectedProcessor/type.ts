@@ -25,3 +25,12 @@ export type TOnChangeCheckboxParams = { type: 'unit'; value: IRowData; checked: 
 
 export type TOnChangeCheckbox = (args: TOnChangeCheckboxParams) => void
 export type TOnChangeCheckboxAll = (checked: boolean) => void
+
+export interface ISelectMap {
+  row: IRowData
+  type: 'unit' | 'total'
+  checked: boolean
+  color?: string
+  disabled?: boolean
+}
+export type TSelectedProcessorMaping = Dictionary<ISelectMap>

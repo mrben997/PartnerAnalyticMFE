@@ -50,12 +50,7 @@ export const customConnect = function <
       return this.renderContent()
     }
 
-    isFirst: boolean = true
     renderContent = () => {
-      if (this.isFirst) {
-        this.isFirst = false
-        return <LazySpinner in />
-      }
       switch (this.props.status) {
         case LazyStatus.Loading:
           return <LazySpinner in />

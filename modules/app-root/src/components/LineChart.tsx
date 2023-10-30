@@ -135,6 +135,6 @@ interface LineChartProps {
 }
 export const LineChart: FC<LineChartProps> = (props) => {
   const { data, options: optionProps, ...other } = props
-  const [opt, setOpt] = useState(MergeDeep<ChartOptions<'line'>>({}, options, optionProps ?? {}))
+  const [opt] = useState(MergeDeep<ChartOptions<'line'>>({}, options, optionProps ?? {}))
   return <Line options={opt} data={data} {...other} />
 }
